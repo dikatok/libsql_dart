@@ -1,4 +1,5 @@
-import 'package:libsql_dart/libsql_dart.dart';
+import 'package:libsql_dart/src/rust/api/libsql.dart';
+import 'package:libsql_dart/src/rust/frb_generated.dart';
 
 class LibsqlClient {
   LibsqlClient({

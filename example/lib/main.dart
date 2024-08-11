@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:libsql_dart/libsql_dart.dart';
 
 Future<void> main() async {
-  await RustLib.init();
+  await LibsqlClient.init();
   runApp(const MyApp());
 }
 

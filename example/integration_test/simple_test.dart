@@ -4,6 +4,6 @@ import 'package:libsql_dart/libsql_dart.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  setUpAll(() async => await RustLib.init());
+  setUpAll(() async => await LibsqlClient.init());
   test('Can call rust function', () async {});
 }
