@@ -1,6 +1,6 @@
 name: libsql_dart
-description: "Turso/libsql dart client library"
-version: 0.0.1
+description: "LibSQL Dart client library to interact with LibSQL/Turso database instance."
+version: 0.0.2
 homepage:
 
 environment:
