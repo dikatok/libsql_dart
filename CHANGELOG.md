@@ -1,3 +1,7 @@
+## 0.1.0
+
+- Updated API, allow creation of local, remote, and embedded replica client
+
 ## 0.0.3
 
 - pubspec links
