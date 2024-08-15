@@ -9,31 +9,40 @@ Currently, only embedded replica is supported, others will follow.
 ## Getting Started
 
 - Add it to your `pubspec.yaml`.
+
 ```
-  libsql_dart: 0.0.1
+libsql_dart: 0.1.0
 ```
-- Call `LibsqlClient.init`
+
+- Instantiate the client (below example is for embedded replica)
+
 ```dart
-  await LibsqlClient.init();
+final dir = await getApplicationCacheDirectory();
+final path = '${dir.path}/local.db';
+final client = LibsqlClient(path)
+	..authToken = '<TOKEN>'
+	..syncUrl = '<TURSO_OR_LIBSQL_URL>'
+	..syncIntervalSeconds = 5;
 ```
-- Instantiate the client
+
+- Connect
+
 ```dart
-  final client = LibsqlClient(
-      replicaPath: path,
-      syncUrl: '<TURSO_OR_LIBSQL_URL>',
-      syncToken: '<TOKEN>',
-      syncIntervalMilliseconds: 5000);
-  await client.create();
+await client.connect();
 ```
+
 - Call `sync` if necessary
+
 ```dart
-  await client.sync();
+await client.sync();
 ```
+
 - Read the locally replicated db using `sqflite`
+
 ```dart
-  final db = await openDatabase(path, readOnly: true);
-  final result = await db.rawQuery('select * from customers');
-  print(result);
+final db = await openDatabase(path, readOnly: true);
+final result = await db.rawQuery('select * from customers');
+print(result);
 ```
 
 **Note** Code snippets above also use `path_provider` and `sqflite` packages. When using other sqlite libraries to read the file, you need to make sure that it is done in read only mode, because the replication process assumes exclusive write lock over the file.
