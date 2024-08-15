@@ -9,68 +9,87 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 // These types are ignored because they are not used by any `pub` functions: `DATABASE_REGISTRY`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `deref`, `initialize`
 
-Future<CreateDbResponse> createDb({required CreateDbRequest request}) =>
-    RustLib.instance.api.crateApiLibsqlCreateDb(request: request);
+Future<ConnectResult> connect({required ConnectArgs args}) =>
+    RustLib.instance.api.crateApiLibsqlConnect(args: args);
 
-Future<SyncDbResponse> syncDb({required SyncDbRequest request}) =>
-    RustLib.instance.api.crateApiLibsqlSyncDb(request: request);
+Future<SyncResult> sync({required SyncArgs args}) =>
+    RustLib.instance.api.crateApiLibsqlSync(args: args);
 
-class CreateDbRequest {
-  final String replicaPath;
-  final String syncUrl;
-  final String syncToken;
-  final BigInt? syncIntervalMilliseconds;
+class ConnectArgs {
+  final String url;
+  final String? authToken;
+  final String? syncUrl;
+  final BigInt? syncIntervalSeconds;
+  final String? encryptionKey;
+  final bool? readYourWrites;
+  final LibsqlOpenFlags? openFlags;
 
-  const CreateDbRequest({
-    required this.replicaPath,
-    required this.syncUrl,
-    required this.syncToken,
-    this.syncIntervalMilliseconds,
+  const ConnectArgs({
+    required this.url,
+    this.authToken,
+    this.syncUrl,
+    this.syncIntervalSeconds,
+    this.encryptionKey,
+    this.readYourWrites,
+    this.openFlags,
   });
 
   @override
   int get hashCode =>
-      replicaPath.hashCode ^
+      url.hashCode ^
+      authToken.hashCode ^
       syncUrl.hashCode ^
-      syncToken.hashCode ^
-      syncIntervalMilliseconds.hashCode;
+      syncIntervalSeconds.hashCode ^
+      encryptionKey.hashCode ^
+      readYourWrites.hashCode ^
+      openFlags.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CreateDbRequest &&
+      other is ConnectArgs &&
           runtimeType == other.runtimeType &&
-          replicaPath == other.replicaPath &&
+          url == other.url &&
+          authToken == other.authToken &&
           syncUrl == other.syncUrl &&
-          syncToken == other.syncToken &&
-          syncIntervalMilliseconds == other.syncIntervalMilliseconds;
+          syncIntervalSeconds == other.syncIntervalSeconds &&
+          encryptionKey == other.encryptionKey &&
+          readYourWrites == other.readYourWrites &&
+          openFlags == other.openFlags;
 }
 
-class CreateDbResponse {
-  final bool success;
+class ConnectResult {
+  final String? errorMessage;
   final String? dbId;
 
-  const CreateDbResponse({
-    required this.success,
+  const ConnectResult({
+    this.errorMessage,
     this.dbId,
   });
 
   @override
-  int get hashCode => success.hashCode ^ dbId.hashCode;
+  int get hashCode => errorMessage.hashCode ^ dbId.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CreateDbResponse &&
+      other is ConnectResult &&
           runtimeType == other.runtimeType &&
-          success == other.success &&
+          errorMessage == other.errorMessage &&
           dbId == other.dbId;
 }
 
-class SyncDbRequest {
+enum LibsqlOpenFlags {
+  readOnly,
+  readWrite,
+  create,
+  ;
+}
+
+class SyncArgs {
   final String dbId;
 
-  const SyncDbRequest({
+  const SyncArgs({
     required this.dbId,
   });
 
@@ -80,25 +99,25 @@ class SyncDbRequest {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SyncDbRequest &&
+      other is SyncArgs &&
           runtimeType == other.runtimeType &&
           dbId == other.dbId;
 }
 
-class SyncDbResponse {
-  final bool success;
+class SyncResult {
+  final String? errorMessage;
 
-  const SyncDbResponse({
-    required this.success,
+  const SyncResult({
+    this.errorMessage,
   });
 
   @override
-  int get hashCode => success.hashCode;
+  int get hashCode => errorMessage.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SyncDbResponse &&
+      other is SyncResult &&
           runtimeType == other.runtimeType &&
-          success == other.success;
+          errorMessage == other.errorMessage;
 }

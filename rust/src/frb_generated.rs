@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.2.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1266013800;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -45861085;
 
 // Section: executor
 
@@ -45,7 +45,7 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
-fn wire__crate__api__libsql__create_db_impl(
+fn wire__crate__api__libsql__connect_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -53,7 +53,7 @@ fn wire__crate__api__libsql__create_db_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "create_db",
+            debug_name: "connect",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -67,13 +67,13 @@ fn wire__crate__api__libsql__create_db_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_request = <crate::api::libsql::CreateDbRequest>::sse_decode(&mut deserializer);
+            let api_args = <crate::api::libsql::ConnectArgs>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
                         let output_ok =
-                            Result::<_, ()>::Ok(crate::api::libsql::create_db(api_request).await)?;
+                            Result::<_, ()>::Ok(crate::api::libsql::connect(api_args).await)?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -116,7 +116,7 @@ fn wire__crate__api__libsql__init_app_impl(
         },
     )
 }
-fn wire__crate__api__libsql__sync_db_impl(
+fn wire__crate__api__libsql__sync_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -124,7 +124,7 @@ fn wire__crate__api__libsql__sync_db_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "sync_db",
+            debug_name: "sync",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -138,13 +138,13 @@ fn wire__crate__api__libsql__sync_db_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_request = <crate::api::libsql::SyncDbRequest>::sse_decode(&mut deserializer);
+            let api_args = <crate::api::libsql::SyncArgs>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
                         let output_ok =
-                            Result::<_, ()>::Ok(crate::api::libsql::sync_db(api_request).await)?;
+                            Result::<_, ()>::Ok(crate::api::libsql::sync(api_args).await)?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -171,30 +171,57 @@ impl SseDecode for bool {
     }
 }
 
-impl SseDecode for crate::api::libsql::CreateDbRequest {
+impl SseDecode for crate::api::libsql::ConnectArgs {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_replicaPath = <String>::sse_decode(deserializer);
-        let mut var_syncUrl = <String>::sse_decode(deserializer);
-        let mut var_syncToken = <String>::sse_decode(deserializer);
-        let mut var_syncIntervalMilliseconds = <Option<u64>>::sse_decode(deserializer);
-        return crate::api::libsql::CreateDbRequest {
-            replica_path: var_replicaPath,
+        let mut var_url = <String>::sse_decode(deserializer);
+        let mut var_authToken = <Option<String>>::sse_decode(deserializer);
+        let mut var_syncUrl = <Option<String>>::sse_decode(deserializer);
+        let mut var_syncIntervalSeconds = <Option<u64>>::sse_decode(deserializer);
+        let mut var_encryptionKey = <Option<String>>::sse_decode(deserializer);
+        let mut var_readYourWrites = <Option<bool>>::sse_decode(deserializer);
+        let mut var_openFlags =
+            <Option<crate::api::libsql::LibsqlOpenFlags>>::sse_decode(deserializer);
+        return crate::api::libsql::ConnectArgs {
+            url: var_url,
+            auth_token: var_authToken,
             sync_url: var_syncUrl,
-            sync_token: var_syncToken,
-            sync_interval_milliseconds: var_syncIntervalMilliseconds,
+            sync_interval_seconds: var_syncIntervalSeconds,
+            encryption_key: var_encryptionKey,
+            read_your_writes: var_readYourWrites,
+            open_flags: var_openFlags,
         };
     }
 }
 
-impl SseDecode for crate::api::libsql::CreateDbResponse {
+impl SseDecode for crate::api::libsql::ConnectResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_success = <bool>::sse_decode(deserializer);
+        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
         let mut var_dbId = <Option<String>>::sse_decode(deserializer);
-        return crate::api::libsql::CreateDbResponse {
-            success: var_success,
+        return crate::api::libsql::ConnectResult {
+            error_message: var_errorMessage,
             db_id: var_dbId,
+        };
+    }
+}
+
+impl SseDecode for i32 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_i32::<NativeEndian>().unwrap()
+    }
+}
+
+impl SseDecode for crate::api::libsql::LibsqlOpenFlags {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::libsql::LibsqlOpenFlags::ReadOnly,
+            1 => crate::api::libsql::LibsqlOpenFlags::ReadWrite,
+            2 => crate::api::libsql::LibsqlOpenFlags::Create,
+            _ => unreachable!("Invalid variant for LibsqlOpenFlags: {}", inner),
         };
     }
 }
@@ -222,6 +249,30 @@ impl SseDecode for Option<String> {
     }
 }
 
+impl SseDecode for Option<bool> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<bool>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<crate::api::libsql::LibsqlOpenFlags> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::libsql::LibsqlOpenFlags>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<u64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -233,20 +284,20 @@ impl SseDecode for Option<u64> {
     }
 }
 
-impl SseDecode for crate::api::libsql::SyncDbRequest {
+impl SseDecode for crate::api::libsql::SyncArgs {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_dbId = <String>::sse_decode(deserializer);
-        return crate::api::libsql::SyncDbRequest { db_id: var_dbId };
+        return crate::api::libsql::SyncArgs { db_id: var_dbId };
     }
 }
 
-impl SseDecode for crate::api::libsql::SyncDbResponse {
+impl SseDecode for crate::api::libsql::SyncResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_success = <bool>::sse_decode(deserializer);
-        return crate::api::libsql::SyncDbResponse {
-            success: var_success,
+        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
+        return crate::api::libsql::SyncResult {
+            error_message: var_errorMessage,
         };
     }
 }
@@ -270,13 +321,6 @@ impl SseDecode for () {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {}
 }
 
-impl SseDecode for i32 {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        deserializer.cursor.read_i32::<NativeEndian>().unwrap()
-    }
-}
-
 fn pde_ffi_dispatcher_primary_impl(
     func_id: i32,
     port: flutter_rust_bridge::for_generated::MessagePort,
@@ -286,9 +330,9 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        1 => wire__crate__api__libsql__create_db_impl(port, ptr, rust_vec_len, data_len),
+        1 => wire__crate__api__libsql__connect_impl(port, ptr, rust_vec_len, data_len),
         2 => wire__crate__api__libsql__init_app_impl(port, ptr, rust_vec_len, data_len),
-        3 => wire__crate__api__libsql__sync_db_impl(port, ptr, rust_vec_len, data_len),
+        3 => wire__crate__api__libsql__sync_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -308,80 +352,102 @@ fn pde_ffi_dispatcher_sync_impl(
 // Section: rust2dart
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::CreateDbRequest {
+impl flutter_rust_bridge::IntoDart for crate::api::libsql::ConnectArgs {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.replica_path.into_into_dart().into_dart(),
+            self.url.into_into_dart().into_dart(),
+            self.auth_token.into_into_dart().into_dart(),
             self.sync_url.into_into_dart().into_dart(),
-            self.sync_token.into_into_dart().into_dart(),
-            self.sync_interval_milliseconds.into_into_dart().into_dart(),
+            self.sync_interval_seconds.into_into_dart().into_dart(),
+            self.encryption_key.into_into_dart().into_dart(),
+            self.read_your_writes.into_into_dart().into_dart(),
+            self.open_flags.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::CreateDbRequest
+    for crate::api::libsql::ConnectArgs
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::CreateDbRequest>
-    for crate::api::libsql::CreateDbRequest
+impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::ConnectArgs>
+    for crate::api::libsql::ConnectArgs
 {
-    fn into_into_dart(self) -> crate::api::libsql::CreateDbRequest {
+    fn into_into_dart(self) -> crate::api::libsql::ConnectArgs {
         self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::CreateDbResponse {
+impl flutter_rust_bridge::IntoDart for crate::api::libsql::ConnectResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.success.into_into_dart().into_dart(),
+            self.error_message.into_into_dart().into_dart(),
             self.db_id.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::CreateDbResponse
+    for crate::api::libsql::ConnectResult
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::CreateDbResponse>
-    for crate::api::libsql::CreateDbResponse
+impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::ConnectResult>
+    for crate::api::libsql::ConnectResult
 {
-    fn into_into_dart(self) -> crate::api::libsql::CreateDbResponse {
+    fn into_into_dart(self) -> crate::api::libsql::ConnectResult {
         self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::SyncDbRequest {
+impl flutter_rust_bridge::IntoDart for crate::api::libsql::LibsqlOpenFlags {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::ReadOnly => 0.into_dart(),
+            Self::ReadWrite => 1.into_dart(),
+            Self::Create => 2.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::libsql::LibsqlOpenFlags
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::LibsqlOpenFlags>
+    for crate::api::libsql::LibsqlOpenFlags
+{
+    fn into_into_dart(self) -> crate::api::libsql::LibsqlOpenFlags {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::libsql::SyncArgs {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [self.db_id.into_into_dart().into_dart()].into_dart()
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::SyncDbRequest
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::libsql::SyncArgs {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::SyncArgs>
+    for crate::api::libsql::SyncArgs
 {
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::SyncDbRequest>
-    for crate::api::libsql::SyncDbRequest
-{
-    fn into_into_dart(self) -> crate::api::libsql::SyncDbRequest {
+    fn into_into_dart(self) -> crate::api::libsql::SyncArgs {
         self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::SyncDbResponse {
+impl flutter_rust_bridge::IntoDart for crate::api::libsql::SyncResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.success.into_into_dart().into_dart()].into_dart()
+        [self.error_message.into_into_dart().into_dart()].into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::SyncDbResponse
+    for crate::api::libsql::SyncResult
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::SyncDbResponse>
-    for crate::api::libsql::SyncDbResponse
+impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::SyncResult>
+    for crate::api::libsql::SyncResult
 {
-    fn into_into_dart(self) -> crate::api::libsql::SyncDbResponse {
+    fn into_into_dart(self) -> crate::api::libsql::SyncResult {
         self
     }
 }
@@ -400,21 +466,48 @@ impl SseEncode for bool {
     }
 }
 
-impl SseEncode for crate::api::libsql::CreateDbRequest {
+impl SseEncode for crate::api::libsql::ConnectArgs {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.replica_path, serializer);
-        <String>::sse_encode(self.sync_url, serializer);
-        <String>::sse_encode(self.sync_token, serializer);
-        <Option<u64>>::sse_encode(self.sync_interval_milliseconds, serializer);
+        <String>::sse_encode(self.url, serializer);
+        <Option<String>>::sse_encode(self.auth_token, serializer);
+        <Option<String>>::sse_encode(self.sync_url, serializer);
+        <Option<u64>>::sse_encode(self.sync_interval_seconds, serializer);
+        <Option<String>>::sse_encode(self.encryption_key, serializer);
+        <Option<bool>>::sse_encode(self.read_your_writes, serializer);
+        <Option<crate::api::libsql::LibsqlOpenFlags>>::sse_encode(self.open_flags, serializer);
     }
 }
 
-impl SseEncode for crate::api::libsql::CreateDbResponse {
+impl SseEncode for crate::api::libsql::ConnectResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <bool>::sse_encode(self.success, serializer);
+        <Option<String>>::sse_encode(self.error_message, serializer);
         <Option<String>>::sse_encode(self.db_id, serializer);
+    }
+}
+
+impl SseEncode for i32 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_i32::<NativeEndian>(self).unwrap();
+    }
+}
+
+impl SseEncode for crate::api::libsql::LibsqlOpenFlags {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::libsql::LibsqlOpenFlags::ReadOnly => 0,
+                crate::api::libsql::LibsqlOpenFlags::ReadWrite => 1,
+                crate::api::libsql::LibsqlOpenFlags::Create => 2,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
     }
 }
 
@@ -438,6 +531,26 @@ impl SseEncode for Option<String> {
     }
 }
 
+impl SseEncode for Option<bool> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <bool>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::libsql::LibsqlOpenFlags> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::libsql::LibsqlOpenFlags>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<u64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -448,17 +561,17 @@ impl SseEncode for Option<u64> {
     }
 }
 
-impl SseEncode for crate::api::libsql::SyncDbRequest {
+impl SseEncode for crate::api::libsql::SyncArgs {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.db_id, serializer);
     }
 }
 
-impl SseEncode for crate::api::libsql::SyncDbResponse {
+impl SseEncode for crate::api::libsql::SyncResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <bool>::sse_encode(self.success, serializer);
+        <Option<String>>::sse_encode(self.error_message, serializer);
     }
 }
 
@@ -479,13 +592,6 @@ impl SseEncode for u8 {
 impl SseEncode for () {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
-}
-
-impl SseEncode for i32 {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        serializer.cursor.write_i32::<NativeEndian>(self).unwrap();
-    }
 }
 
 #[cfg(not(target_family = "wasm"))]

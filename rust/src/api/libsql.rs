@@ -1,81 +1,145 @@
-use std::{collections::HashMap, time::Duration};
-
 use async_std::sync::Mutex;
-use libsql::{Builder, Database};
+use libsql::{Builder, Connection, Database, Result};
+use std::{collections::HashMap, time::Duration};
 use uuid::Uuid;
 
 lazy_static::lazy_static! {
-    static ref DATABASE_REGISTRY: Mutex<HashMap<String, Database>> = Mutex::new(HashMap::new());
+    static ref DATABASE_REGISTRY: Mutex<HashMap<String, (Database, Connection)>> = Mutex::new(HashMap::new());
 }
 
-pub struct CreateDbRequest {
-    pub replica_path: String,
-    pub sync_url: String,
-    pub sync_token: String,
-    pub sync_interval_milliseconds: Option<u64>,
+pub enum LibsqlOpenFlags {
+    ReadOnly,
+    ReadWrite,
+    Create,
 }
 
-pub struct CreateDbResponse {
-    pub success: bool,
+pub struct ConnectArgs {
+    pub url: String,
+    pub auth_token: Option<String>,
+    pub sync_url: Option<String>,
+    pub sync_interval_seconds: Option<u64>,
+    pub encryption_key: Option<String>,
+    pub read_your_writes: Option<bool>,
+    pub open_flags: Option<LibsqlOpenFlags>,
+}
+
+pub struct ConnectResult {
+    pub error_message: Option<String>,
     pub db_id: Option<String>,
 }
 
 #[flutter_rust_bridge::frb(dart_async)]
-pub async fn create_db(request: CreateDbRequest) -> CreateDbResponse {
-    let connector = hyper_rustls::HttpsConnectorBuilder::new()
-        .with_webpki_roots()
-        .https_or_http()
-        .enable_http1()
-        .build();
+pub async fn connect(args: ConnectArgs) -> ConnectResult {
+    let database: Result<Database> = if let Some(sync_url) = args.sync_url {
+        let connector = hyper_rustls::HttpsConnectorBuilder::new()
+            .with_webpki_roots()
+            .https_or_http()
+            .enable_http1()
+            .build();
 
-    let mut db_builder =
-        Builder::new_remote_replica(request.replica_path, request.sync_url, request.sync_token)
-            .connector(connector);
+        let mut builder = Builder::new_remote_replica(
+            args.url,
+            sync_url,
+            args.auth_token.unwrap_or("".to_string()),
+        )
+        .connector(connector);
 
-    match request.sync_interval_milliseconds {
-        Some(sync_interval) => {
-            db_builder = db_builder.sync_interval(Duration::from_millis(sync_interval));
+        if let Some(interval) = args.sync_interval_seconds {
+            builder = builder.sync_interval(Duration::from_secs(interval))
         }
-        _ => {}
-    }
 
-    match db_builder.build().await {
+        if let Some(key) = args.encryption_key {
+            builder = builder.encryption_config(libsql::EncryptionConfig::new(
+                libsql::Cipher::Aes256Cbc,
+                key.as_bytes().to_vec().into(),
+            ));
+        }
+
+        builder = builder.read_your_writes(args.read_your_writes.or(Some(true)).unwrap());
+
+        builder.build().await
+    } else if args.url.starts_with("libsql://")
+        || args.url.starts_with("http://")
+        || args.url.starts_with("https://")
+    {
+        let connector = hyper_rustls::HttpsConnectorBuilder::new()
+            .with_webpki_roots()
+            .https_or_http()
+            .enable_http1()
+            .build();
+
+        Builder::new_remote(args.url, args.auth_token.unwrap_or("".to_string()))
+            .connector(connector)
+            .build()
+            .await
+    } else {
+        let mut builder = Builder::new_local(args.url).flags(match args.open_flags {
+            Some(LibsqlOpenFlags::ReadOnly) => libsql::OpenFlags::SQLITE_OPEN_READ_ONLY,
+            Some(LibsqlOpenFlags::ReadWrite) => libsql::OpenFlags::SQLITE_OPEN_READ_WRITE,
+            Some(LibsqlOpenFlags::Create) => libsql::OpenFlags::SQLITE_OPEN_CREATE,
+            None => libsql::OpenFlags::default(),
+        });
+
+        if let Some(key) = args.encryption_key {
+            builder = builder.encryption_config(libsql::EncryptionConfig::new(
+                libsql::Cipher::Aes256Cbc,
+                key.as_bytes().to_vec().into(),
+            ));
+        }
+
+        builder.build().await
+    };
+
+    match database {
         Ok(db) => {
-            let db_id = Uuid::new_v4().to_string();
-
-            DATABASE_REGISTRY.lock().await.insert(db_id.clone(), db);
-
-            return CreateDbResponse {
-                success: true,
-                db_id: Some(db_id),
+            let conn = match db.connect() {
+                Ok(conn) => conn,
+                Err(err) => {
+                    return ConnectResult {
+                        error_message: Some(err.to_string()),
+                        db_id: None,
+                    }
+                }
             };
-        }
-        Err(e) => {
-            log::warn!("{e}");
-            CreateDbResponse {
-                success: false,
-                db_id: Some(e.to_string()),
+            let db_id = Uuid::new_v4().to_string();
+            DATABASE_REGISTRY
+                .lock()
+                .await
+                .insert(db_id.clone(), (db, conn));
+            ConnectResult {
+                error_message: None,
+                db_id: Some(db_id),
             }
         }
+        Err(e) => ConnectResult {
+            error_message: Some(e.to_string()),
+            db_id: None,
+        },
     }
 }
 
-pub struct SyncDbRequest {
+pub struct SyncArgs {
     pub db_id: String,
 }
 
-pub struct SyncDbResponse {
-    pub success: bool,
+pub struct SyncResult {
+    pub error_message: Option<String>,
 }
 
 #[flutter_rust_bridge::frb(dart_async)]
-pub async fn sync_db(request: SyncDbRequest) -> SyncDbResponse {
-    return match DATABASE_REGISTRY.lock().await.get(&request.db_id) {
-        Some(db) => match db.sync().await {
-            Ok(_) => SyncDbResponse { success: true },
-            Err(_) => SyncDbResponse { success: false },
+pub async fn sync(args: SyncArgs) -> SyncResult {
+    return match DATABASE_REGISTRY.lock().await.get(&args.db_id) {
+        Some((db, _)) => match db.sync().await {
+            Ok(_) => SyncResult {
+                error_message: None,
+            },
+            Err(err) => SyncResult {
+                error_message: Some(err.to_string()),
+            },
         },
-        _ => SyncDbResponse { success: false },
+        _ => SyncResult {
+            error_message: Some("DB is not initialized".to_string()),
+        },
     };
 }
 

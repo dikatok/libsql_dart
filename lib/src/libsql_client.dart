@@ -1,43 +1,57 @@
-import 'package:libsql_dart/src/rust/api/libsql.dart';
+import 'package:libsql_dart/src/rust/api/libsql.dart' as libsql;
 import 'package:libsql_dart/src/rust/frb_generated.dart';
 
+export 'package:libsql_dart/src/rust/api/libsql.dart' show LibsqlOpenFlags;
+
 class LibsqlClient {
-  LibsqlClient({
-    required this.replicaPath,
-    required this.syncUrl,
-    required this.syncToken,
-    this.syncIntervalMilliseconds,
+  LibsqlClient(
+    this.url, {
+    this.authToken,
+    this.syncUrl,
+    this.syncIntervalSeconds,
+    this.encryptionKey,
+    this.readYourWrites,
+    this.openFlags,
   });
 
-  final String replicaPath;
-  final String syncUrl;
-  final String syncToken;
-  final int? syncIntervalMilliseconds;
+  final String url;
+  String? authToken;
+  String? syncUrl;
+  int? syncIntervalSeconds;
+  String? encryptionKey;
+  bool? readYourWrites;
+  libsql.LibsqlOpenFlags? openFlags;
 
-  String? dbId;
+  String? _dbId;
 
-  static Future<void> init() async {
-    return RustLib.init();
-  }
-
-  Future<void> create() async {
-    final res = await createDb(
-      request: CreateDbRequest(
-        replicaPath: replicaPath,
+  Future<void> connect() async {
+    if (!RustLib.instance.initialized) {
+      await RustLib.init();
+    }
+    final res = await libsql.connect(
+      args: libsql.ConnectArgs(
+        url: url,
+        authToken: authToken,
         syncUrl: syncUrl,
-        syncToken: syncToken,
-        syncIntervalMilliseconds: syncIntervalMilliseconds == null
+        syncIntervalSeconds: syncIntervalSeconds == null
             ? null
-            : BigInt.from(syncIntervalMilliseconds!),
+            : BigInt.from(syncIntervalSeconds!),
+        encryptionKey: encryptionKey,
+        readYourWrites: readYourWrites,
+        openFlags: openFlags,
       ),
     );
-    if (!res.success) throw Exception('Failed to create db');
-    dbId = res.dbId;
+    if (res.errorMessage?.isNotEmpty ?? false) {
+      throw Exception(res.errorMessage);
+    }
+    _dbId = res.dbId;
   }
 
   Future<void> sync() async {
-    if (dbId == null) throw Exception('Db not created');
-    final res = await syncDb(request: SyncDbRequest(dbId: dbId!));
-    if (!res.success) throw Exception('Failed to sync');
+    if (_dbId == null) throw Exception('Database is not connected');
+    final res = await libsql.sync(args: libsql.SyncArgs(dbId: _dbId!));
+    if (res.errorMessage?.isNotEmpty ?? false) {
+      throw Exception(res.errorMessage);
+    }
   }
 }

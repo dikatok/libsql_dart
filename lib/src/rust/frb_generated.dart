@@ -58,7 +58,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.2.0';
 
   @override
-  int get rustContentHash => 1266013800;
+  int get rustContentHash => -45861085;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -69,12 +69,11 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<CreateDbResponse> crateApiLibsqlCreateDb(
-      {required CreateDbRequest request});
+  Future<ConnectResult> crateApiLibsqlConnect({required ConnectArgs args});
 
   Future<void> crateApiLibsqlInitApp();
 
-  Future<SyncDbResponse> crateApiLibsqlSyncDb({required SyncDbRequest request});
+  Future<SyncResult> crateApiLibsqlSync({required SyncArgs args});
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -86,28 +85,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Future<CreateDbResponse> crateApiLibsqlCreateDb(
-      {required CreateDbRequest request}) {
+  Future<ConnectResult> crateApiLibsqlConnect({required ConnectArgs args}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_create_db_request(request, serializer);
+        sse_encode_box_autoadd_connect_args(args, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 1, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_create_db_response,
+        decodeSuccessData: sse_decode_connect_result,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiLibsqlCreateDbConstMeta,
-      argValues: [request],
+      constMeta: kCrateApiLibsqlConnectConstMeta,
+      argValues: [args],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiLibsqlCreateDbConstMeta => const TaskConstMeta(
-        debugName: "create_db",
-        argNames: ["request"],
+  TaskConstMeta get kCrateApiLibsqlConnectConstMeta => const TaskConstMeta(
+        debugName: "connect",
+        argNames: ["args"],
       );
 
   @override
@@ -134,28 +132,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<SyncDbResponse> crateApiLibsqlSyncDb(
-      {required SyncDbRequest request}) {
+  Future<SyncResult> crateApiLibsqlSync({required SyncArgs args}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_sync_db_request(request, serializer);
+        sse_encode_box_autoadd_sync_args(args, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 3, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_sync_db_response,
+        decodeSuccessData: sse_decode_sync_result,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiLibsqlSyncDbConstMeta,
-      argValues: [request],
+      constMeta: kCrateApiLibsqlSyncConstMeta,
+      argValues: [args],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiLibsqlSyncDbConstMeta => const TaskConstMeta(
-        debugName: "sync_db",
-        argNames: ["request"],
+  TaskConstMeta get kCrateApiLibsqlSyncConstMeta => const TaskConstMeta(
+        debugName: "sync",
+        argNames: ["args"],
       );
 
   @protected
@@ -171,15 +168,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  CreateDbRequest dco_decode_box_autoadd_create_db_request(dynamic raw) {
+  bool dco_decode_box_autoadd_bool(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_create_db_request(raw);
+    return raw as bool;
   }
 
   @protected
-  SyncDbRequest dco_decode_box_autoadd_sync_db_request(dynamic raw) {
+  ConnectArgs dco_decode_box_autoadd_connect_args(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_sync_db_request(raw);
+    return dco_decode_connect_args(raw);
+  }
+
+  @protected
+  LibsqlOpenFlags dco_decode_box_autoadd_libsql_open_flags(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_libsql_open_flags(raw);
+  }
+
+  @protected
+  SyncArgs dco_decode_box_autoadd_sync_args(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_sync_args(raw);
   }
 
   @protected
@@ -189,29 +198,44 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  CreateDbRequest dco_decode_create_db_request(dynamic raw) {
+  ConnectArgs dco_decode_connect_args(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
-    return CreateDbRequest(
-      replicaPath: dco_decode_String(arr[0]),
-      syncUrl: dco_decode_String(arr[1]),
-      syncToken: dco_decode_String(arr[2]),
-      syncIntervalMilliseconds: dco_decode_opt_box_autoadd_u_64(arr[3]),
+    if (arr.length != 7)
+      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
+    return ConnectArgs(
+      url: dco_decode_String(arr[0]),
+      authToken: dco_decode_opt_String(arr[1]),
+      syncUrl: dco_decode_opt_String(arr[2]),
+      syncIntervalSeconds: dco_decode_opt_box_autoadd_u_64(arr[3]),
+      encryptionKey: dco_decode_opt_String(arr[4]),
+      readYourWrites: dco_decode_opt_box_autoadd_bool(arr[5]),
+      openFlags: dco_decode_opt_box_autoadd_libsql_open_flags(arr[6]),
     );
   }
 
   @protected
-  CreateDbResponse dco_decode_create_db_response(dynamic raw) {
+  ConnectResult dco_decode_connect_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 2)
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return CreateDbResponse(
-      success: dco_decode_bool(arr[0]),
+    return ConnectResult(
+      errorMessage: dco_decode_opt_String(arr[0]),
       dbId: dco_decode_opt_String(arr[1]),
     );
+  }
+
+  @protected
+  int dco_decode_i_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
+  }
+
+  @protected
+  LibsqlOpenFlags dco_decode_libsql_open_flags(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return LibsqlOpenFlags.values[raw as int];
   }
 
   @protected
@@ -227,30 +251,42 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  bool? dco_decode_opt_box_autoadd_bool(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_bool(raw);
+  }
+
+  @protected
+  LibsqlOpenFlags? dco_decode_opt_box_autoadd_libsql_open_flags(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_libsql_open_flags(raw);
+  }
+
+  @protected
   BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_u_64(raw);
   }
 
   @protected
-  SyncDbRequest dco_decode_sync_db_request(dynamic raw) {
+  SyncArgs dco_decode_sync_args(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 1)
       throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return SyncDbRequest(
+    return SyncArgs(
       dbId: dco_decode_String(arr[0]),
     );
   }
 
   @protected
-  SyncDbResponse dco_decode_sync_db_response(dynamic raw) {
+  SyncResult dco_decode_sync_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 1)
       throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return SyncDbResponse(
-      success: dco_decode_bool(arr[0]),
+    return SyncResult(
+      errorMessage: dco_decode_opt_String(arr[0]),
     );
   }
 
@@ -286,17 +322,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  CreateDbRequest sse_decode_box_autoadd_create_db_request(
-      SseDeserializer deserializer) {
+  bool sse_decode_box_autoadd_bool(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_create_db_request(deserializer));
+    return (sse_decode_bool(deserializer));
   }
 
   @protected
-  SyncDbRequest sse_decode_box_autoadd_sync_db_request(
+  ConnectArgs sse_decode_box_autoadd_connect_args(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_sync_db_request(deserializer));
+    return (sse_decode_connect_args(deserializer));
+  }
+
+  @protected
+  LibsqlOpenFlags sse_decode_box_autoadd_libsql_open_flags(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_libsql_open_flags(deserializer));
+  }
+
+  @protected
+  SyncArgs sse_decode_box_autoadd_sync_args(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_sync_args(deserializer));
   }
 
   @protected
@@ -306,26 +354,45 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  CreateDbRequest sse_decode_create_db_request(SseDeserializer deserializer) {
+  ConnectArgs sse_decode_connect_args(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_replicaPath = sse_decode_String(deserializer);
-    var var_syncUrl = sse_decode_String(deserializer);
-    var var_syncToken = sse_decode_String(deserializer);
-    var var_syncIntervalMilliseconds =
-        sse_decode_opt_box_autoadd_u_64(deserializer);
-    return CreateDbRequest(
-        replicaPath: var_replicaPath,
+    var var_url = sse_decode_String(deserializer);
+    var var_authToken = sse_decode_opt_String(deserializer);
+    var var_syncUrl = sse_decode_opt_String(deserializer);
+    var var_syncIntervalSeconds = sse_decode_opt_box_autoadd_u_64(deserializer);
+    var var_encryptionKey = sse_decode_opt_String(deserializer);
+    var var_readYourWrites = sse_decode_opt_box_autoadd_bool(deserializer);
+    var var_openFlags =
+        sse_decode_opt_box_autoadd_libsql_open_flags(deserializer);
+    return ConnectArgs(
+        url: var_url,
+        authToken: var_authToken,
         syncUrl: var_syncUrl,
-        syncToken: var_syncToken,
-        syncIntervalMilliseconds: var_syncIntervalMilliseconds);
+        syncIntervalSeconds: var_syncIntervalSeconds,
+        encryptionKey: var_encryptionKey,
+        readYourWrites: var_readYourWrites,
+        openFlags: var_openFlags);
   }
 
   @protected
-  CreateDbResponse sse_decode_create_db_response(SseDeserializer deserializer) {
+  ConnectResult sse_decode_connect_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_success = sse_decode_bool(deserializer);
+    var var_errorMessage = sse_decode_opt_String(deserializer);
     var var_dbId = sse_decode_opt_String(deserializer);
-    return CreateDbResponse(success: var_success, dbId: var_dbId);
+    return ConnectResult(errorMessage: var_errorMessage, dbId: var_dbId);
+  }
+
+  @protected
+  int sse_decode_i_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getInt32();
+  }
+
+  @protected
+  LibsqlOpenFlags sse_decode_libsql_open_flags(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_i_32(deserializer);
+    return LibsqlOpenFlags.values[inner];
   }
 
   @protected
@@ -347,6 +414,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  bool? sse_decode_opt_box_autoadd_bool(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_bool(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  LibsqlOpenFlags? sse_decode_opt_box_autoadd_libsql_open_flags(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_libsql_open_flags(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -358,17 +448,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  SyncDbRequest sse_decode_sync_db_request(SseDeserializer deserializer) {
+  SyncArgs sse_decode_sync_args(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_dbId = sse_decode_String(deserializer);
-    return SyncDbRequest(dbId: var_dbId);
+    return SyncArgs(dbId: var_dbId);
   }
 
   @protected
-  SyncDbResponse sse_decode_sync_db_response(SseDeserializer deserializer) {
+  SyncResult sse_decode_sync_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_success = sse_decode_bool(deserializer);
-    return SyncDbResponse(success: var_success);
+    var var_errorMessage = sse_decode_opt_String(deserializer);
+    return SyncResult(errorMessage: var_errorMessage);
   }
 
   @protected
@@ -389,12 +479,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  int sse_decode_i_32(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getInt32();
-  }
-
-  @protected
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
@@ -407,17 +491,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_box_autoadd_create_db_request(
-      CreateDbRequest self, SseSerializer serializer) {
+  void sse_encode_box_autoadd_bool(bool self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_create_db_request(self, serializer);
+    sse_encode_bool(self, serializer);
   }
 
   @protected
-  void sse_encode_box_autoadd_sync_db_request(
-      SyncDbRequest self, SseSerializer serializer) {
+  void sse_encode_box_autoadd_connect_args(
+      ConnectArgs self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_sync_db_request(self, serializer);
+    sse_encode_connect_args(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_libsql_open_flags(
+      LibsqlOpenFlags self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_libsql_open_flags(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_sync_args(
+      SyncArgs self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_sync_args(self, serializer);
   }
 
   @protected
@@ -427,21 +524,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_create_db_request(
-      CreateDbRequest self, SseSerializer serializer) {
+  void sse_encode_connect_args(ConnectArgs self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.replicaPath, serializer);
-    sse_encode_String(self.syncUrl, serializer);
-    sse_encode_String(self.syncToken, serializer);
-    sse_encode_opt_box_autoadd_u_64(self.syncIntervalMilliseconds, serializer);
+    sse_encode_String(self.url, serializer);
+    sse_encode_opt_String(self.authToken, serializer);
+    sse_encode_opt_String(self.syncUrl, serializer);
+    sse_encode_opt_box_autoadd_u_64(self.syncIntervalSeconds, serializer);
+    sse_encode_opt_String(self.encryptionKey, serializer);
+    sse_encode_opt_box_autoadd_bool(self.readYourWrites, serializer);
+    sse_encode_opt_box_autoadd_libsql_open_flags(self.openFlags, serializer);
   }
 
   @protected
-  void sse_encode_create_db_response(
-      CreateDbResponse self, SseSerializer serializer) {
+  void sse_encode_connect_result(ConnectResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_bool(self.success, serializer);
+    sse_encode_opt_String(self.errorMessage, serializer);
     sse_encode_opt_String(self.dbId, serializer);
+  }
+
+  @protected
+  void sse_encode_i_32(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putInt32(self);
+  }
+
+  @protected
+  void sse_encode_libsql_open_flags(
+      LibsqlOpenFlags self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
   }
 
   @protected
@@ -463,6 +574,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_bool(bool? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_bool(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_libsql_open_flags(
+      LibsqlOpenFlags? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_libsql_open_flags(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -473,17 +605,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_sync_db_request(
-      SyncDbRequest self, SseSerializer serializer) {
+  void sse_encode_sync_args(SyncArgs self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.dbId, serializer);
   }
 
   @protected
-  void sse_encode_sync_db_response(
-      SyncDbResponse self, SseSerializer serializer) {
+  void sse_encode_sync_result(SyncResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_bool(self.success, serializer);
+    sse_encode_opt_String(self.errorMessage, serializer);
   }
 
   @protected
@@ -501,11 +631,5 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_encode_unit(void self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-  }
-
-  @protected
-  void sse_encode_i_32(int self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putInt32(self);
   }
 }
