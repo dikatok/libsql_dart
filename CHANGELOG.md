@@ -1,3 +1,7 @@
+## 0.2.0
+
+- Supports `query` and `execute` statement
+
 ## 0.1.0
 
 - Updated API, allow creation of local, remote, and embedded replica client
