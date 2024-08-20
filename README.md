@@ -4,14 +4,15 @@ LibSQL Dart client library to interact with LibSQL/Turso database instance.
 
 ## Supported Features
 
-Currently, only embedded replica is supported, others will follow.
+- Local, Remote, and Embedded replica
+- Running execute and query SQL statement with named or positional params
 
 ## Getting Started
 
 - Add it to your `pubspec.yaml`.
 
 ```
-libsql_dart: 0.1.0
+libsql_dart: 0.2.0
 ```
 
 - Instantiate the client (below example is for embedded replica)
@@ -22,7 +23,8 @@ final path = '${dir.path}/local.db';
 final client = LibsqlClient(path)
 	..authToken = '<TOKEN>'
 	..syncUrl = '<TURSO_OR_LIBSQL_URL>'
-	..syncIntervalSeconds = 5;
+	..syncIntervalSeconds = 5
+	..readYourWrites = true;
 ```
 
 - Connect
@@ -43,6 +45,19 @@ await client.sync();
 final db = await openDatabase(path, readOnly: true);
 final result = await db.rawQuery('select * from customers');
 print(result);
+```
+
+- Run insert query
+
+```dart
+await client.query("insert into customers(name) values ('John Doe')");
+```
+
+- Query the local replica again
+
+```dart
+final resultAfterInsertion = await db.rawQuery('select * from customers');
+print(resultAfterInsertion);
 ```
 
 **Note** Code snippets above also use `path_provider` and `sqflite` packages. When using other sqlite libraries to read the file, you need to make sure that it is done in read only mode, because the replication process assumes exclusive write lock over the file.
