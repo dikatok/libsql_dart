@@ -4,6 +4,8 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../frb_generated.dart';
+import '../utils/parameters.dart';
+import '../utils/return_value.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These types are ignored because they are not used by any `pub` functions: `DATABASE_REGISTRY`
@@ -14,6 +16,12 @@ Future<ConnectResult> connect({required ConnectArgs args}) =>
 
 Future<SyncResult> sync({required SyncArgs args}) =>
     RustLib.instance.api.crateApiLibsqlSync(args: args);
+
+Future<QueryResult> query({required QueryArgs args}) =>
+    RustLib.instance.api.crateApiLibsqlQuery(args: args);
+
+Future<ExecuteResult> execute({required ExecuteArgs args}) =>
+    RustLib.instance.api.crateApiLibsqlExecute(args: args);
 
 class ConnectArgs {
   final String url;
@@ -79,11 +87,111 @@ class ConnectResult {
           dbId == other.dbId;
 }
 
+class ExecuteArgs {
+  final String dbId;
+  final String sql;
+  final Parameters? parameters;
+
+  const ExecuteArgs({
+    required this.dbId,
+    required this.sql,
+    this.parameters,
+  });
+
+  @override
+  int get hashCode => dbId.hashCode ^ sql.hashCode ^ parameters.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ExecuteArgs &&
+          runtimeType == other.runtimeType &&
+          dbId == other.dbId &&
+          sql == other.sql &&
+          parameters == other.parameters;
+}
+
+class ExecuteResult {
+  final BigInt rowsAffected;
+  final String? errorMessage;
+
+  const ExecuteResult({
+    required this.rowsAffected,
+    this.errorMessage,
+  });
+
+  @override
+  int get hashCode => rowsAffected.hashCode ^ errorMessage.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ExecuteResult &&
+          runtimeType == other.runtimeType &&
+          rowsAffected == other.rowsAffected &&
+          errorMessage == other.errorMessage;
+}
+
 enum LibsqlOpenFlags {
   readOnly,
   readWrite,
   create,
   ;
+}
+
+class QueryArgs {
+  final String dbId;
+  final String sql;
+  final Parameters? parameters;
+
+  const QueryArgs({
+    required this.dbId,
+    required this.sql,
+    this.parameters,
+  });
+
+  @override
+  int get hashCode => dbId.hashCode ^ sql.hashCode ^ parameters.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QueryArgs &&
+          runtimeType == other.runtimeType &&
+          dbId == other.dbId &&
+          sql == other.sql &&
+          parameters == other.parameters;
+}
+
+class QueryResult {
+  final List<Map<String, ReturnValue>> rows;
+  final BigInt rowsAffected;
+  final PlatformInt64 lastInsertRowid;
+  final String? errorMessage;
+
+  const QueryResult({
+    required this.rows,
+    required this.rowsAffected,
+    required this.lastInsertRowid,
+    this.errorMessage,
+  });
+
+  @override
+  int get hashCode =>
+      rows.hashCode ^
+      rowsAffected.hashCode ^
+      lastInsertRowid.hashCode ^
+      errorMessage.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QueryResult &&
+          runtimeType == other.runtimeType &&
+          rows == other.rows &&
+          rowsAffected == other.rowsAffected &&
+          lastInsertRowid == other.lastInsertRowid &&
+          errorMessage == other.errorMessage;
 }
 
 class SyncArgs {

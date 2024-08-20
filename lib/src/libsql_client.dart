@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:libsql_dart/src/rust/api/libsql.dart' as libsql;
 import 'package:libsql_dart/src/rust/frb_generated.dart';
+import 'package:libsql_dart/src/rust/utils/parameters.dart';
 
 export 'package:libsql_dart/src/rust/api/libsql.dart' show LibsqlOpenFlags;
 
@@ -53,5 +56,82 @@ class LibsqlClient {
     if (res.errorMessage?.isNotEmpty ?? false) {
       throw Exception(res.errorMessage);
     }
+  }
+
+  Future<List<Map<String, dynamic>>> query(
+    String sql, {
+    Map<String, dynamic>? named,
+    List<dynamic>? positional,
+  }) async {
+    if (_dbId == null) throw Exception('Database is not connected');
+    final res = await libsql.query(
+      args: libsql.QueryArgs(
+        dbId: _dbId!,
+        sql: sql,
+        parameters: Parameters(
+          named: named?.map((k, v) => MapEntry(k, _toParamValue(v))),
+          positional: positional?.map(_toParamValue).toList(),
+        ),
+      ),
+    );
+    if (res.errorMessage?.isNotEmpty ?? false) {
+      throw Exception(res.errorMessage);
+    }
+    return res.rows
+        .map(
+          (row) => Map.fromEntries(
+            row.entries.map(
+              (entry) => MapEntry(
+                entry.key,
+                entry.value.mapOrNull(
+                  integer: (integer) => integer.field0,
+                  real: (real) => real.field0,
+                  text: (text) => text.field0,
+                  blob: (blob) => blob.field0,
+                  null_: (_) => null,
+                ),
+              ),
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  Future<int> execute(
+    String sql, {
+    Map<String, dynamic>? named,
+    List<dynamic>? positional,
+  }) async {
+    if (_dbId == null) throw Exception('Database is not connected');
+    final res = await libsql.execute(
+      args: libsql.ExecuteArgs(
+        dbId: _dbId!,
+        sql: sql,
+        parameters: Parameters(
+          named: named?.map((k, v) => MapEntry(k, _toParamValue(v))),
+          positional: positional?.map(_toParamValue).toList(),
+        ),
+      ),
+    );
+    if (res.errorMessage?.isNotEmpty ?? false) {
+      throw Exception(res.errorMessage);
+    }
+    return res.rowsAffected.toInt();
+  }
+
+  ParamValue _toParamValue(dynamic value) {
+    if (value is int) {
+      return ParamValue.integer(value);
+    }
+    if (value is double) {
+      return ParamValue.real(value);
+    }
+    if (value is String) {
+      return ParamValue.text(value);
+    }
+    if (value is Uint8List) {
+      return ParamValue.blob(value);
+    }
+    return const ParamValue.null_();
   }
 }

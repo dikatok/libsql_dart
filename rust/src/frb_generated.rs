@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.2.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -45861085;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -2119254;
 
 // Section: executor
 
@@ -82,6 +82,43 @@ fn wire__crate__api__libsql__connect_impl(
         },
     )
 }
+fn wire__crate__api__libsql__execute_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "execute",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_args = <crate::api::libsql::ExecuteArgs>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok =
+                            Result::<_, ()>::Ok(crate::api::libsql::execute(api_args).await)?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__libsql__init_app_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -112,6 +149,43 @@ fn wire__crate__api__libsql__init_app_impl(
                     })?;
                     Ok(output_ok)
                 })())
+            }
+        },
+    )
+}
+fn wire__crate__api__libsql__query_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "query",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_args = <crate::api::libsql::QueryArgs>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok =
+                            Result::<_, ()>::Ok(crate::api::libsql::query(api_args).await)?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -155,6 +229,24 @@ fn wire__crate__api__libsql__sync_impl(
 }
 
 // Section: dart2rust
+
+impl SseDecode for std::collections::HashMap<String, crate::utils::parameters::ParamValue> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner =
+            <Vec<(String, crate::utils::parameters::ParamValue)>>::sse_decode(deserializer);
+        return inner.into_iter().collect();
+    }
+}
+
+impl SseDecode for std::collections::HashMap<String, crate::utils::return_value::ReturnValue> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner =
+            <Vec<(String, crate::utils::return_value::ReturnValue)>>::sse_decode(deserializer);
+        return inner.into_iter().collect();
+    }
+}
 
 impl SseDecode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -206,10 +298,51 @@ impl SseDecode for crate::api::libsql::ConnectResult {
     }
 }
 
+impl SseDecode for crate::api::libsql::ExecuteArgs {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_dbId = <String>::sse_decode(deserializer);
+        let mut var_sql = <String>::sse_decode(deserializer);
+        let mut var_parameters =
+            <Option<crate::utils::parameters::Parameters>>::sse_decode(deserializer);
+        return crate::api::libsql::ExecuteArgs {
+            db_id: var_dbId,
+            sql: var_sql,
+            parameters: var_parameters,
+        };
+    }
+}
+
+impl SseDecode for crate::api::libsql::ExecuteResult {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_rowsAffected = <u64>::sse_decode(deserializer);
+        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
+        return crate::api::libsql::ExecuteResult {
+            rows_affected: var_rowsAffected,
+            error_message: var_errorMessage,
+        };
+    }
+}
+
+impl SseDecode for f64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_f64::<NativeEndian>().unwrap()
+    }
+}
+
 impl SseDecode for i32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_i32::<NativeEndian>().unwrap()
+    }
+}
+
+impl SseDecode for i64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_i64::<NativeEndian>().unwrap()
     }
 }
 
@@ -226,6 +359,35 @@ impl SseDecode for crate::api::libsql::LibsqlOpenFlags {
     }
 }
 
+impl SseDecode for Vec<std::collections::HashMap<String, crate::utils::return_value::ReturnValue>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<std::collections::HashMap<
+                String,
+                crate::utils::return_value::ReturnValue,
+            >>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::utils::parameters::ParamValue> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::utils::parameters::ParamValue>::sse_decode(
+                deserializer,
+            ));
+        }
+        return ans_;
+    }
+}
+
 impl SseDecode for Vec<u8> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -235,6 +397,46 @@ impl SseDecode for Vec<u8> {
             ans_.push(<u8>::sse_decode(deserializer));
         }
         return ans_;
+    }
+}
+
+impl SseDecode for Vec<(String, crate::utils::parameters::ParamValue)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<(String, crate::utils::parameters::ParamValue)>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<(String, crate::utils::return_value::ReturnValue)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(
+                <(String, crate::utils::return_value::ReturnValue)>::sse_decode(deserializer),
+            );
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Option<std::collections::HashMap<String, crate::utils::parameters::ParamValue>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<std::collections::HashMap<
+                String,
+                crate::utils::parameters::ParamValue,
+            >>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
     }
 }
 
@@ -273,6 +475,19 @@ impl SseDecode for Option<crate::api::libsql::LibsqlOpenFlags> {
     }
 }
 
+impl SseDecode for Option<crate::utils::parameters::Parameters> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::utils::parameters::Parameters>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<u64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -280,6 +495,147 @@ impl SseDecode for Option<u64> {
             return Some(<u64>::sse_decode(deserializer));
         } else {
             return None;
+        }
+    }
+}
+
+impl SseDecode for Option<Vec<crate::utils::parameters::ParamValue>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<crate::utils::parameters::ParamValue>>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for crate::utils::parameters::ParamValue {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                let mut var_field0 = <i64>::sse_decode(deserializer);
+                return crate::utils::parameters::ParamValue::Integer(var_field0);
+            }
+            1 => {
+                let mut var_field0 = <f64>::sse_decode(deserializer);
+                return crate::utils::parameters::ParamValue::Real(var_field0);
+            }
+            2 => {
+                let mut var_field0 = <String>::sse_decode(deserializer);
+                return crate::utils::parameters::ParamValue::Text(var_field0);
+            }
+            3 => {
+                let mut var_field0 = <Vec<u8>>::sse_decode(deserializer);
+                return crate::utils::parameters::ParamValue::Blob(var_field0);
+            }
+            4 => {
+                return crate::utils::parameters::ParamValue::Null;
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
+impl SseDecode for crate::utils::parameters::Parameters {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_positional =
+            <Option<Vec<crate::utils::parameters::ParamValue>>>::sse_decode(deserializer);
+        let mut var_named = <Option<
+            std::collections::HashMap<String, crate::utils::parameters::ParamValue>,
+        >>::sse_decode(deserializer);
+        return crate::utils::parameters::Parameters {
+            positional: var_positional,
+            named: var_named,
+        };
+    }
+}
+
+impl SseDecode for crate::api::libsql::QueryArgs {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_dbId = <String>::sse_decode(deserializer);
+        let mut var_sql = <String>::sse_decode(deserializer);
+        let mut var_parameters =
+            <Option<crate::utils::parameters::Parameters>>::sse_decode(deserializer);
+        return crate::api::libsql::QueryArgs {
+            db_id: var_dbId,
+            sql: var_sql,
+            parameters: var_parameters,
+        };
+    }
+}
+
+impl SseDecode for crate::api::libsql::QueryResult {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_rows = <Vec<
+            std::collections::HashMap<String, crate::utils::return_value::ReturnValue>,
+        >>::sse_decode(deserializer);
+        let mut var_rowsAffected = <u64>::sse_decode(deserializer);
+        let mut var_lastInsertRowid = <i64>::sse_decode(deserializer);
+        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
+        return crate::api::libsql::QueryResult {
+            rows: var_rows,
+            rows_affected: var_rowsAffected,
+            last_insert_rowid: var_lastInsertRowid,
+            error_message: var_errorMessage,
+        };
+    }
+}
+
+impl SseDecode for (String, crate::utils::parameters::ParamValue) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <String>::sse_decode(deserializer);
+        let mut var_field1 = <crate::utils::parameters::ParamValue>::sse_decode(deserializer);
+        return (var_field0, var_field1);
+    }
+}
+
+impl SseDecode for (String, crate::utils::return_value::ReturnValue) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <String>::sse_decode(deserializer);
+        let mut var_field1 = <crate::utils::return_value::ReturnValue>::sse_decode(deserializer);
+        return (var_field0, var_field1);
+    }
+}
+
+impl SseDecode for crate::utils::return_value::ReturnValue {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                let mut var_field0 = <i64>::sse_decode(deserializer);
+                return crate::utils::return_value::ReturnValue::Integer(var_field0);
+            }
+            1 => {
+                let mut var_field0 = <f64>::sse_decode(deserializer);
+                return crate::utils::return_value::ReturnValue::Real(var_field0);
+            }
+            2 => {
+                let mut var_field0 = <String>::sse_decode(deserializer);
+                return crate::utils::return_value::ReturnValue::Text(var_field0);
+            }
+            3 => {
+                let mut var_field0 = <Vec<u8>>::sse_decode(deserializer);
+                return crate::utils::return_value::ReturnValue::Blob(var_field0);
+            }
+            4 => {
+                return crate::utils::return_value::ReturnValue::Null;
+            }
+            _ => {
+                unimplemented!("");
+            }
         }
     }
 }
@@ -331,8 +687,10 @@ fn pde_ffi_dispatcher_primary_impl(
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
         1 => wire__crate__api__libsql__connect_impl(port, ptr, rust_vec_len, data_len),
-        2 => wire__crate__api__libsql__init_app_impl(port, ptr, rust_vec_len, data_len),
-        3 => wire__crate__api__libsql__sync_impl(port, ptr, rust_vec_len, data_len),
+        2 => wire__crate__api__libsql__execute_impl(port, ptr, rust_vec_len, data_len),
+        3 => wire__crate__api__libsql__init_app_impl(port, ptr, rust_vec_len, data_len),
+        4 => wire__crate__api__libsql__query_impl(port, ptr, rust_vec_len, data_len),
+        5 => wire__crate__api__libsql__sync_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -399,6 +757,49 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::ConnectResult>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::libsql::ExecuteArgs {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.db_id.into_into_dart().into_dart(),
+            self.sql.into_into_dart().into_dart(),
+            self.parameters.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::libsql::ExecuteArgs
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::ExecuteArgs>
+    for crate::api::libsql::ExecuteArgs
+{
+    fn into_into_dart(self) -> crate::api::libsql::ExecuteArgs {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::libsql::ExecuteResult {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.rows_affected.into_into_dart().into_dart(),
+            self.error_message.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::libsql::ExecuteResult
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::ExecuteResult>
+    for crate::api::libsql::ExecuteResult
+{
+    fn into_into_dart(self) -> crate::api::libsql::ExecuteResult {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::libsql::LibsqlOpenFlags {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
@@ -417,6 +818,137 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::LibsqlOpenFlags>
     for crate::api::libsql::LibsqlOpenFlags
 {
     fn into_into_dart(self) -> crate::api::libsql::LibsqlOpenFlags {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::utils::parameters::ParamValue {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::utils::parameters::ParamValue::Integer(field0) => {
+                [0.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::utils::parameters::ParamValue::Real(field0) => {
+                [1.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::utils::parameters::ParamValue::Text(field0) => {
+                [2.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::utils::parameters::ParamValue::Blob(field0) => {
+                [3.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::utils::parameters::ParamValue::Null => [4.into_dart()].into_dart(),
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::utils::parameters::ParamValue
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::utils::parameters::ParamValue>
+    for crate::utils::parameters::ParamValue
+{
+    fn into_into_dart(self) -> crate::utils::parameters::ParamValue {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::utils::parameters::Parameters {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.positional.into_into_dart().into_dart(),
+            self.named.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::utils::parameters::Parameters
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::utils::parameters::Parameters>
+    for crate::utils::parameters::Parameters
+{
+    fn into_into_dart(self) -> crate::utils::parameters::Parameters {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::libsql::QueryArgs {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.db_id.into_into_dart().into_dart(),
+            self.sql.into_into_dart().into_dart(),
+            self.parameters.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::libsql::QueryArgs {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::QueryArgs>
+    for crate::api::libsql::QueryArgs
+{
+    fn into_into_dart(self) -> crate::api::libsql::QueryArgs {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::libsql::QueryResult {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.rows.into_into_dart().into_dart(),
+            self.rows_affected.into_into_dart().into_dart(),
+            self.last_insert_rowid.into_into_dart().into_dart(),
+            self.error_message.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::libsql::QueryResult
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::QueryResult>
+    for crate::api::libsql::QueryResult
+{
+    fn into_into_dart(self) -> crate::api::libsql::QueryResult {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::utils::return_value::ReturnValue {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::utils::return_value::ReturnValue::Integer(field0) => {
+                [0.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::utils::return_value::ReturnValue::Real(field0) => {
+                [1.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::utils::return_value::ReturnValue::Text(field0) => {
+                [2.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::utils::return_value::ReturnValue::Blob(field0) => {
+                [3.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::utils::return_value::ReturnValue::Null => [4.into_dart()].into_dart(),
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::utils::return_value::ReturnValue
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::utils::return_value::ReturnValue>
+    for crate::utils::return_value::ReturnValue
+{
+    fn into_into_dart(self) -> crate::utils::return_value::ReturnValue {
         self
     }
 }
@@ -449,6 +981,26 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::SyncResult>
 {
     fn into_into_dart(self) -> crate::api::libsql::SyncResult {
         self
+    }
+}
+
+impl SseEncode for std::collections::HashMap<String, crate::utils::parameters::ParamValue> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<(String, crate::utils::parameters::ParamValue)>>::sse_encode(
+            self.into_iter().collect(),
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for std::collections::HashMap<String, crate::utils::return_value::ReturnValue> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<(String, crate::utils::return_value::ReturnValue)>>::sse_encode(
+            self.into_iter().collect(),
+            serializer,
+        );
     }
 }
 
@@ -487,10 +1039,41 @@ impl SseEncode for crate::api::libsql::ConnectResult {
     }
 }
 
+impl SseEncode for crate::api::libsql::ExecuteArgs {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.db_id, serializer);
+        <String>::sse_encode(self.sql, serializer);
+        <Option<crate::utils::parameters::Parameters>>::sse_encode(self.parameters, serializer);
+    }
+}
+
+impl SseEncode for crate::api::libsql::ExecuteResult {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <u64>::sse_encode(self.rows_affected, serializer);
+        <Option<String>>::sse_encode(self.error_message, serializer);
+    }
+}
+
+impl SseEncode for f64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_f64::<NativeEndian>(self).unwrap();
+    }
+}
+
 impl SseEncode for i32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         serializer.cursor.write_i32::<NativeEndian>(self).unwrap();
+    }
+}
+
+impl SseEncode for i64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_i64::<NativeEndian>(self).unwrap();
     }
 }
 
@@ -511,12 +1094,64 @@ impl SseEncode for crate::api::libsql::LibsqlOpenFlags {
     }
 }
 
+impl SseEncode for Vec<std::collections::HashMap<String, crate::utils::return_value::ReturnValue>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <std::collections::HashMap<String, crate::utils::return_value::ReturnValue>>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::utils::parameters::ParamValue> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::utils::parameters::ParamValue>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for Vec<u8> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <u8>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<(String, crate::utils::parameters::ParamValue)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <(String, crate::utils::parameters::ParamValue)>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<(String, crate::utils::return_value::ReturnValue)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <(String, crate::utils::return_value::ReturnValue)>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<std::collections::HashMap<String, crate::utils::parameters::ParamValue>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <std::collections::HashMap<String, crate::utils::parameters::ParamValue>>::sse_encode(
+                value, serializer,
+            );
         }
     }
 }
@@ -551,12 +1186,138 @@ impl SseEncode for Option<crate::api::libsql::LibsqlOpenFlags> {
     }
 }
 
+impl SseEncode for Option<crate::utils::parameters::Parameters> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::utils::parameters::Parameters>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<u64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <u64>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<Vec<crate::utils::parameters::ParamValue>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<crate::utils::parameters::ParamValue>>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for crate::utils::parameters::ParamValue {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::utils::parameters::ParamValue::Integer(field0) => {
+                <i32>::sse_encode(0, serializer);
+                <i64>::sse_encode(field0, serializer);
+            }
+            crate::utils::parameters::ParamValue::Real(field0) => {
+                <i32>::sse_encode(1, serializer);
+                <f64>::sse_encode(field0, serializer);
+            }
+            crate::utils::parameters::ParamValue::Text(field0) => {
+                <i32>::sse_encode(2, serializer);
+                <String>::sse_encode(field0, serializer);
+            }
+            crate::utils::parameters::ParamValue::Blob(field0) => {
+                <i32>::sse_encode(3, serializer);
+                <Vec<u8>>::sse_encode(field0, serializer);
+            }
+            crate::utils::parameters::ParamValue::Null => {
+                <i32>::sse_encode(4, serializer);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
+impl SseEncode for crate::utils::parameters::Parameters {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Option<Vec<crate::utils::parameters::ParamValue>>>::sse_encode(
+            self.positional,
+            serializer,
+        );
+        <Option<std::collections::HashMap<String, crate::utils::parameters::ParamValue>>>::sse_encode(self.named, serializer);
+    }
+}
+
+impl SseEncode for crate::api::libsql::QueryArgs {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.db_id, serializer);
+        <String>::sse_encode(self.sql, serializer);
+        <Option<crate::utils::parameters::Parameters>>::sse_encode(self.parameters, serializer);
+    }
+}
+
+impl SseEncode for crate::api::libsql::QueryResult {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<std::collections::HashMap<String, crate::utils::return_value::ReturnValue>>>::sse_encode(self.rows, serializer);
+        <u64>::sse_encode(self.rows_affected, serializer);
+        <i64>::sse_encode(self.last_insert_rowid, serializer);
+        <Option<String>>::sse_encode(self.error_message, serializer);
+    }
+}
+
+impl SseEncode for (String, crate::utils::parameters::ParamValue) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.0, serializer);
+        <crate::utils::parameters::ParamValue>::sse_encode(self.1, serializer);
+    }
+}
+
+impl SseEncode for (String, crate::utils::return_value::ReturnValue) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.0, serializer);
+        <crate::utils::return_value::ReturnValue>::sse_encode(self.1, serializer);
+    }
+}
+
+impl SseEncode for crate::utils::return_value::ReturnValue {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::utils::return_value::ReturnValue::Integer(field0) => {
+                <i32>::sse_encode(0, serializer);
+                <i64>::sse_encode(field0, serializer);
+            }
+            crate::utils::return_value::ReturnValue::Real(field0) => {
+                <i32>::sse_encode(1, serializer);
+                <f64>::sse_encode(field0, serializer);
+            }
+            crate::utils::return_value::ReturnValue::Text(field0) => {
+                <i32>::sse_encode(2, serializer);
+                <String>::sse_encode(field0, serializer);
+            }
+            crate::utils::return_value::ReturnValue::Blob(field0) => {
+                <i32>::sse_encode(3, serializer);
+                <Vec<u8>>::sse_encode(field0, serializer);
+            }
+            crate::utils::return_value::ReturnValue::Null => {
+                <i32>::sse_encode(4, serializer);
+            }
+            _ => {
+                unimplemented!("");
+            }
         }
     }
 }

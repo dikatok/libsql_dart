@@ -10,6 +10,8 @@ import 'frb_generated.dart';
 import 'frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'utils/parameters.dart';
+import 'utils/return_value.dart';
 
 /// Main entrypoint of the Rust API
 class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
@@ -58,7 +60,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.2.0';
 
   @override
-  int get rustContentHash => -45861085;
+  int get rustContentHash => -2119254;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -71,7 +73,11 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 abstract class RustLibApi extends BaseApi {
   Future<ConnectResult> crateApiLibsqlConnect({required ConnectArgs args});
 
+  Future<ExecuteResult> crateApiLibsqlExecute({required ExecuteArgs args});
+
   Future<void> crateApiLibsqlInitApp();
+
+  Future<QueryResult> crateApiLibsqlQuery({required QueryArgs args});
 
   Future<SyncResult> crateApiLibsqlSync({required SyncArgs args});
 }
@@ -109,12 +115,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<ExecuteResult> crateApiLibsqlExecute({required ExecuteArgs args}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_execute_args(args, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 2, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_execute_result,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiLibsqlExecuteConstMeta,
+      argValues: [args],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLibsqlExecuteConstMeta => const TaskConstMeta(
+        debugName: "execute",
+        argNames: ["args"],
+      );
+
+  @override
   Future<void> crateApiLibsqlInitApp() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 2, port: port_);
+            funcId: 3, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -132,13 +162,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<QueryResult> crateApiLibsqlQuery({required QueryArgs args}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_query_args(args, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 4, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_query_result,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiLibsqlQueryConstMeta,
+      argValues: [args],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLibsqlQueryConstMeta => const TaskConstMeta(
+        debugName: "query",
+        argNames: ["args"],
+      );
+
+  @override
   Future<SyncResult> crateApiLibsqlSync({required SyncArgs args}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_sync_args(args, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
+            funcId: 5, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_sync_result,
@@ -154,6 +208,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         debugName: "sync",
         argNames: ["args"],
       );
+
+  @protected
+  Map<String, ParamValue> dco_decode_Map_String_param_value(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return Map.fromEntries(dco_decode_list_record_string_param_value(raw)
+        .map((e) => MapEntry(e.$1, e.$2)));
+  }
+
+  @protected
+  Map<String, ReturnValue> dco_decode_Map_String_return_value(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return Map.fromEntries(dco_decode_list_record_string_return_value(raw)
+        .map((e) => MapEntry(e.$1, e.$2)));
+  }
 
   @protected
   String dco_decode_String(dynamic raw) {
@@ -180,9 +248,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ExecuteArgs dco_decode_box_autoadd_execute_args(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_execute_args(raw);
+  }
+
+  @protected
   LibsqlOpenFlags dco_decode_box_autoadd_libsql_open_flags(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_libsql_open_flags(raw);
+  }
+
+  @protected
+  Parameters dco_decode_box_autoadd_parameters(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_parameters(raw);
+  }
+
+  @protected
+  QueryArgs dco_decode_box_autoadd_query_args(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_query_args(raw);
   }
 
   @protected
@@ -227,9 +313,46 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ExecuteArgs dco_decode_execute_args(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return ExecuteArgs(
+      dbId: dco_decode_String(arr[0]),
+      sql: dco_decode_String(arr[1]),
+      parameters: dco_decode_opt_box_autoadd_parameters(arr[2]),
+    );
+  }
+
+  @protected
+  ExecuteResult dco_decode_execute_result(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return ExecuteResult(
+      rowsAffected: dco_decode_u_64(arr[0]),
+      errorMessage: dco_decode_opt_String(arr[1]),
+    );
+  }
+
+  @protected
+  double dco_decode_f_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as double;
+  }
+
+  @protected
   int dco_decode_i_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as int;
+  }
+
+  @protected
+  PlatformInt64 dco_decode_i_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeI64(raw);
   }
 
   @protected
@@ -239,9 +362,48 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<Map<String, ReturnValue>> dco_decode_list_Map_String_return_value(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>)
+        .map(dco_decode_Map_String_return_value)
+        .toList();
+  }
+
+  @protected
+  List<ParamValue> dco_decode_list_param_value(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_param_value).toList();
+  }
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
+  }
+
+  @protected
+  List<(String, ParamValue)> dco_decode_list_record_string_param_value(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>)
+        .map(dco_decode_record_string_param_value)
+        .toList();
+  }
+
+  @protected
+  List<(String, ReturnValue)> dco_decode_list_record_string_return_value(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>)
+        .map(dco_decode_record_string_return_value)
+        .toList();
+  }
+
+  @protected
+  Map<String, ParamValue>? dco_decode_opt_Map_String_param_value(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_Map_String_param_value(raw);
   }
 
   @protected
@@ -263,9 +425,140 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Parameters? dco_decode_opt_box_autoadd_parameters(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_parameters(raw);
+  }
+
+  @protected
   BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_u_64(raw);
+  }
+
+  @protected
+  List<ParamValue>? dco_decode_opt_list_param_value(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_list_param_value(raw);
+  }
+
+  @protected
+  ParamValue dco_decode_param_value(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return ParamValue_Integer(
+          dco_decode_i_64(raw[1]),
+        );
+      case 1:
+        return ParamValue_Real(
+          dco_decode_f_64(raw[1]),
+        );
+      case 2:
+        return ParamValue_Text(
+          dco_decode_String(raw[1]),
+        );
+      case 3:
+        return ParamValue_Blob(
+          dco_decode_list_prim_u_8_strict(raw[1]),
+        );
+      case 4:
+        return ParamValue_Null();
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
+  Parameters dco_decode_parameters(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return Parameters(
+      positional: dco_decode_opt_list_param_value(arr[0]),
+      named: dco_decode_opt_Map_String_param_value(arr[1]),
+    );
+  }
+
+  @protected
+  QueryArgs dco_decode_query_args(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return QueryArgs(
+      dbId: dco_decode_String(arr[0]),
+      sql: dco_decode_String(arr[1]),
+      parameters: dco_decode_opt_box_autoadd_parameters(arr[2]),
+    );
+  }
+
+  @protected
+  QueryResult dco_decode_query_result(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return QueryResult(
+      rows: dco_decode_list_Map_String_return_value(arr[0]),
+      rowsAffected: dco_decode_u_64(arr[1]),
+      lastInsertRowid: dco_decode_i_64(arr[2]),
+      errorMessage: dco_decode_opt_String(arr[3]),
+    );
+  }
+
+  @protected
+  (String, ParamValue) dco_decode_record_string_param_value(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_String(arr[0]),
+      dco_decode_param_value(arr[1]),
+    );
+  }
+
+  @protected
+  (String, ReturnValue) dco_decode_record_string_return_value(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_String(arr[0]),
+      dco_decode_return_value(arr[1]),
+    );
+  }
+
+  @protected
+  ReturnValue dco_decode_return_value(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return ReturnValue_Integer(
+          dco_decode_i_64(raw[1]),
+        );
+      case 1:
+        return ReturnValue_Real(
+          dco_decode_f_64(raw[1]),
+        );
+      case 2:
+        return ReturnValue_Text(
+          dco_decode_String(raw[1]),
+        );
+      case 3:
+        return ReturnValue_Blob(
+          dco_decode_list_prim_u_8_strict(raw[1]),
+        );
+      case 4:
+        return ReturnValue_Null();
+      default:
+        throw Exception("unreachable");
+    }
   }
 
   @protected
@@ -309,6 +602,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Map<String, ParamValue> sse_decode_Map_String_param_value(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_list_record_string_param_value(deserializer);
+    return Map.fromEntries(inner.map((e) => MapEntry(e.$1, e.$2)));
+  }
+
+  @protected
+  Map<String, ReturnValue> sse_decode_Map_String_return_value(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_list_record_string_return_value(deserializer);
+    return Map.fromEntries(inner.map((e) => MapEntry(e.$1, e.$2)));
+  }
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_list_prim_u_8_strict(deserializer);
@@ -335,10 +644,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ExecuteArgs sse_decode_box_autoadd_execute_args(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_execute_args(deserializer));
+  }
+
+  @protected
   LibsqlOpenFlags sse_decode_box_autoadd_libsql_open_flags(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_libsql_open_flags(deserializer));
+  }
+
+  @protected
+  Parameters sse_decode_box_autoadd_parameters(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_parameters(deserializer));
+  }
+
+  @protected
+  QueryArgs sse_decode_box_autoadd_query_args(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_query_args(deserializer));
   }
 
   @protected
@@ -383,9 +711,40 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ExecuteArgs sse_decode_execute_args(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_dbId = sse_decode_String(deserializer);
+    var var_sql = sse_decode_String(deserializer);
+    var var_parameters = sse_decode_opt_box_autoadd_parameters(deserializer);
+    return ExecuteArgs(
+        dbId: var_dbId, sql: var_sql, parameters: var_parameters);
+  }
+
+  @protected
+  ExecuteResult sse_decode_execute_result(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_rowsAffected = sse_decode_u_64(deserializer);
+    var var_errorMessage = sse_decode_opt_String(deserializer);
+    return ExecuteResult(
+        rowsAffected: var_rowsAffected, errorMessage: var_errorMessage);
+  }
+
+  @protected
+  double sse_decode_f_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getFloat64();
+  }
+
+  @protected
   int sse_decode_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getInt32();
+  }
+
+  @protected
+  PlatformInt64 sse_decode_i_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getPlatformInt64();
   }
 
   @protected
@@ -396,10 +755,73 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<Map<String, ReturnValue>> sse_decode_list_Map_String_return_value(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <Map<String, ReturnValue>>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_Map_String_return_value(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<ParamValue> sse_decode_list_param_value(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <ParamValue>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_param_value(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  List<(String, ParamValue)> sse_decode_list_record_string_param_value(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <(String, ParamValue)>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_record_string_param_value(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<(String, ReturnValue)> sse_decode_list_record_string_return_value(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <(String, ReturnValue)>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_record_string_return_value(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  Map<String, ParamValue>? sse_decode_opt_Map_String_param_value(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_Map_String_param_value(deserializer));
+    } else {
+      return null;
+    }
   }
 
   @protected
@@ -437,6 +859,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Parameters? sse_decode_opt_box_autoadd_parameters(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_parameters(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -444,6 +878,117 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       return (sse_decode_box_autoadd_u_64(deserializer));
     } else {
       return null;
+    }
+  }
+
+  @protected
+  List<ParamValue>? sse_decode_opt_list_param_value(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_param_value(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  ParamValue sse_decode_param_value(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_field0 = sse_decode_i_64(deserializer);
+        return ParamValue_Integer(var_field0);
+      case 1:
+        var var_field0 = sse_decode_f_64(deserializer);
+        return ParamValue_Real(var_field0);
+      case 2:
+        var var_field0 = sse_decode_String(deserializer);
+        return ParamValue_Text(var_field0);
+      case 3:
+        var var_field0 = sse_decode_list_prim_u_8_strict(deserializer);
+        return ParamValue_Blob(var_field0);
+      case 4:
+        return ParamValue_Null();
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
+  Parameters sse_decode_parameters(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_positional = sse_decode_opt_list_param_value(deserializer);
+    var var_named = sse_decode_opt_Map_String_param_value(deserializer);
+    return Parameters(positional: var_positional, named: var_named);
+  }
+
+  @protected
+  QueryArgs sse_decode_query_args(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_dbId = sse_decode_String(deserializer);
+    var var_sql = sse_decode_String(deserializer);
+    var var_parameters = sse_decode_opt_box_autoadd_parameters(deserializer);
+    return QueryArgs(dbId: var_dbId, sql: var_sql, parameters: var_parameters);
+  }
+
+  @protected
+  QueryResult sse_decode_query_result(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_rows = sse_decode_list_Map_String_return_value(deserializer);
+    var var_rowsAffected = sse_decode_u_64(deserializer);
+    var var_lastInsertRowid = sse_decode_i_64(deserializer);
+    var var_errorMessage = sse_decode_opt_String(deserializer);
+    return QueryResult(
+        rows: var_rows,
+        rowsAffected: var_rowsAffected,
+        lastInsertRowid: var_lastInsertRowid,
+        errorMessage: var_errorMessage);
+  }
+
+  @protected
+  (String, ParamValue) sse_decode_record_string_param_value(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 = sse_decode_String(deserializer);
+    var var_field1 = sse_decode_param_value(deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
+  (String, ReturnValue) sse_decode_record_string_return_value(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 = sse_decode_String(deserializer);
+    var var_field1 = sse_decode_return_value(deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
+  ReturnValue sse_decode_return_value(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_field0 = sse_decode_i_64(deserializer);
+        return ReturnValue_Integer(var_field0);
+      case 1:
+        var var_field0 = sse_decode_f_64(deserializer);
+        return ReturnValue_Real(var_field0);
+      case 2:
+        var var_field0 = sse_decode_String(deserializer);
+        return ReturnValue_Text(var_field0);
+      case 3:
+        var var_field0 = sse_decode_list_prim_u_8_strict(deserializer);
+        return ReturnValue_Blob(var_field0);
+      case 4:
+        return ReturnValue_Null();
+      default:
+        throw UnimplementedError('');
     }
   }
 
@@ -479,6 +1024,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_Map_String_param_value(
+      Map<String, ParamValue> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_record_string_param_value(
+        self.entries.map((e) => (e.key, e.value)).toList(), serializer);
+  }
+
+  @protected
+  void sse_encode_Map_String_return_value(
+      Map<String, ReturnValue> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_record_string_return_value(
+        self.entries.map((e) => (e.key, e.value)).toList(), serializer);
+  }
+
+  @protected
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
@@ -504,10 +1065,31 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_execute_args(
+      ExecuteArgs self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_execute_args(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_libsql_open_flags(
       LibsqlOpenFlags self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_libsql_open_flags(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_parameters(
+      Parameters self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_parameters(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_query_args(
+      QueryArgs self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_query_args(self, serializer);
   }
 
   @protected
@@ -543,9 +1125,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_execute_args(ExecuteArgs self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.dbId, serializer);
+    sse_encode_String(self.sql, serializer);
+    sse_encode_opt_box_autoadd_parameters(self.parameters, serializer);
+  }
+
+  @protected
+  void sse_encode_execute_result(ExecuteResult self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_64(self.rowsAffected, serializer);
+    sse_encode_opt_String(self.errorMessage, serializer);
+  }
+
+  @protected
+  void sse_encode_f_64(double self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putFloat64(self);
+  }
+
+  @protected
   void sse_encode_i_32(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putInt32(self);
+  }
+
+  @protected
+  void sse_encode_i_64(PlatformInt64 self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putPlatformInt64(self);
   }
 
   @protected
@@ -556,11 +1165,62 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_Map_String_return_value(
+      List<Map<String, ReturnValue>> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_Map_String_return_value(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_param_value(
+      List<ParamValue> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_param_value(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_list_prim_u_8_strict(
       Uint8List self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_list_record_string_param_value(
+      List<(String, ParamValue)> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_record_string_param_value(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_record_string_return_value(
+      List<(String, ReturnValue)> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_record_string_return_value(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_Map_String_param_value(
+      Map<String, ParamValue>? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_Map_String_param_value(self, serializer);
+    }
   }
 
   @protected
@@ -595,12 +1255,120 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_parameters(
+      Parameters? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_parameters(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_u_64(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_list_param_value(
+      List<ParamValue>? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_param_value(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_param_value(ParamValue self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case ParamValue_Integer(field0: final field0):
+        sse_encode_i_32(0, serializer);
+        sse_encode_i_64(field0, serializer);
+      case ParamValue_Real(field0: final field0):
+        sse_encode_i_32(1, serializer);
+        sse_encode_f_64(field0, serializer);
+      case ParamValue_Text(field0: final field0):
+        sse_encode_i_32(2, serializer);
+        sse_encode_String(field0, serializer);
+      case ParamValue_Blob(field0: final field0):
+        sse_encode_i_32(3, serializer);
+        sse_encode_list_prim_u_8_strict(field0, serializer);
+      case ParamValue_Null():
+        sse_encode_i_32(4, serializer);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
+  void sse_encode_parameters(Parameters self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_opt_list_param_value(self.positional, serializer);
+    sse_encode_opt_Map_String_param_value(self.named, serializer);
+  }
+
+  @protected
+  void sse_encode_query_args(QueryArgs self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.dbId, serializer);
+    sse_encode_String(self.sql, serializer);
+    sse_encode_opt_box_autoadd_parameters(self.parameters, serializer);
+  }
+
+  @protected
+  void sse_encode_query_result(QueryResult self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_Map_String_return_value(self.rows, serializer);
+    sse_encode_u_64(self.rowsAffected, serializer);
+    sse_encode_i_64(self.lastInsertRowid, serializer);
+    sse_encode_opt_String(self.errorMessage, serializer);
+  }
+
+  @protected
+  void sse_encode_record_string_param_value(
+      (String, ParamValue) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.$1, serializer);
+    sse_encode_param_value(self.$2, serializer);
+  }
+
+  @protected
+  void sse_encode_record_string_return_value(
+      (String, ReturnValue) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.$1, serializer);
+    sse_encode_return_value(self.$2, serializer);
+  }
+
+  @protected
+  void sse_encode_return_value(ReturnValue self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case ReturnValue_Integer(field0: final field0):
+        sse_encode_i_32(0, serializer);
+        sse_encode_i_64(field0, serializer);
+      case ReturnValue_Real(field0: final field0):
+        sse_encode_i_32(1, serializer);
+        sse_encode_f_64(field0, serializer);
+      case ReturnValue_Text(field0: final field0):
+        sse_encode_i_32(2, serializer);
+        sse_encode_String(field0, serializer);
+      case ReturnValue_Blob(field0: final field0):
+        sse_encode_i_32(3, serializer);
+        sse_encode_list_prim_u_8_strict(field0, serializer);
+      case ReturnValue_Null():
+        sse_encode_i_32(4, serializer);
+      default:
+        throw UnimplementedError('');
     }
   }
 
