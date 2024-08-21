@@ -53,6 +53,21 @@ print(result);
 await client.query("insert into customers(name) values ('John Doe')");
 ```
 
+- Run batch transaction
+
+```dart
+await client.batch("""insert into customers (name) values ('Jane Doe');
+	insert into customers (name) values ('Jake Doe');""");
+```
+
+- Create prepared statement
+
+```dart
+final statement = await client
+	.prepare("select * from customers where id = ?");
+await statement.query(positional: [1])
+```
+
 - Query the local replica again
 
 ```dart

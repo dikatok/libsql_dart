@@ -1,6 +1,6 @@
 name: libsql_dart
 description: "LibSQL Dart client library to interact with LibSQL/Turso database instance."
-version: 0.2.0
+version: 0.3.0
 homepage:
 repository: https://github.com/dikatok/libsql_dart
 issue_tracker: https://github.com/dikatok/libsql_dart/issues
