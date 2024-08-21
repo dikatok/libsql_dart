@@ -1,12 +1,18 @@
 use async_std::sync::Mutex;
-use libsql::{Builder, Connection, Database, Result};
+use libsql::{Builder, Connection, Database, Result, Statement};
 use std::{collections::HashMap, time::Duration};
 use uuid::Uuid;
-
+extern crate lazy_static;
 use crate::utils::{parameters::Parameters, return_value::ReturnValue};
 
 lazy_static::lazy_static! {
-    static ref DATABASE_REGISTRY: Mutex<HashMap<String, (Database, Connection)>> = Mutex::new(HashMap::new());
+   pub static ref DATABASE_REGISTRY: Mutex<HashMap<String, (Database,  Connection)>> = Mutex::new(HashMap::new());
+   pub static ref STATEMENT_REGISTRY: Mutex<HashMap<String, Statement>> = Mutex::new(HashMap::new());
+}
+
+#[flutter_rust_bridge::frb(init)]
+pub fn init_app() {
+    flutter_rust_bridge::setup_default_user_utils();
 }
 
 pub enum LibsqlOpenFlags {
@@ -241,7 +247,170 @@ pub async fn execute(args: ExecuteArgs) -> ExecuteResult {
     };
 }
 
-#[flutter_rust_bridge::frb(init)]
-pub fn init_app() {
-    flutter_rust_bridge::setup_default_user_utils();
+pub struct PrepareArgs {
+    pub db_id: String,
+    pub sql: String,
+}
+
+pub struct PrepareResult {
+    pub statement_id: Option<String>,
+    pub error_message: Option<String>,
+}
+
+pub async fn prepare(args: PrepareArgs) -> PrepareResult {
+    return match DATABASE_REGISTRY.lock().await.get(&args.db_id) {
+        Some((_, conn)) => match conn.prepare(&args.sql).await {
+            Ok(statement) => {
+                let statement_id = Uuid::new_v4().to_string();
+                STATEMENT_REGISTRY
+                    .lock()
+                    .await
+                    .insert(statement_id.clone(), statement);
+                PrepareResult {
+                    statement_id: Some(statement_id),
+                    error_message: None,
+                }
+            }
+            Err(err) => PrepareResult {
+                statement_id: None,
+                error_message: Some(err.to_string()),
+            },
+        },
+        _ => PrepareResult {
+            statement_id: None,
+            error_message: Some("DB is not initialized".to_string()),
+        },
+    };
+}
+
+pub async fn statement_finalize(statement_id: String) {
+    match STATEMENT_REGISTRY.lock().await.remove(&statement_id) {
+        Some(mut statement) => statement.finalize(),
+        _ => {}
+    };
+}
+
+pub async fn statement_reset(statement_id: String) {
+    match STATEMENT_REGISTRY.lock().await.remove(&statement_id) {
+        Some(mut statement) => statement.reset(),
+        _ => {}
+    };
+}
+
+pub struct StatementQueryArgs {
+    pub statement_id: String,
+    pub parameters: Option<Parameters>,
+}
+
+pub struct StatementQueryResult {
+    pub rows: Vec<HashMap<String, ReturnValue>>,
+    pub rows_affected: u64,
+    pub last_insert_rowid: i64,
+    pub error_message: Option<String>,
+}
+
+pub async fn statement_query(args: StatementQueryArgs) -> StatementQueryResult {
+    match STATEMENT_REGISTRY.lock().await.remove(&args.statement_id) {
+        Some(mut statement) => {
+            let params: libsql::params::Params = if let Some(p) = args.parameters {
+                p.into()
+            } else {
+                libsql::params::Params::None
+            };
+
+            match statement.query(params).await {
+                Ok(mut result) => {
+                    let mut rows: Vec<HashMap<String, ReturnValue>> = Vec::new();
+                    while let Ok(Some(result_row)) = result.next().await {
+                        let mut row = HashMap::new();
+                        for idx in 0..result_row.column_count() as i32 {
+                            let column_name = result_row.column_name(idx).unwrap();
+                            let value = result_row.get_value(idx).unwrap().into();
+                            row.insert(column_name.to_string(), value);
+                        }
+                        rows.push(row);
+                    }
+                    StatementQueryResult {
+                        rows,
+                        rows_affected: 0,
+                        last_insert_rowid: 0,
+                        error_message: None,
+                    }
+                }
+                Err(err) => StatementQueryResult {
+                    rows: vec![],
+                    rows_affected: 0,
+                    last_insert_rowid: 0,
+                    error_message: Some(err.to_string()),
+                },
+            }
+        }
+        _ => StatementQueryResult {
+            rows: vec![],
+            rows_affected: 0,
+            last_insert_rowid: 0,
+            error_message: Some("Statement not found".to_string()),
+        },
+    }
+}
+
+pub struct StatementExecuteArgs {
+    pub statement_id: String,
+    pub parameters: Option<Parameters>,
+}
+
+pub struct StatementExecuteResult {
+    pub rows_affected: u64,
+    pub error_message: Option<String>,
+}
+
+pub async fn statement_execute(args: StatementExecuteArgs) -> StatementExecuteResult {
+    match STATEMENT_REGISTRY.lock().await.remove(&args.statement_id) {
+        Some(mut statement) => {
+            let params: libsql::params::Params = if let Some(p) = args.parameters {
+                p.into()
+            } else {
+                libsql::params::Params::None
+            };
+
+            match statement.execute(params).await {
+                Ok(_) => StatementExecuteResult {
+                    rows_affected: 0,
+                    error_message: None,
+                },
+                Err(err) => StatementExecuteResult {
+                    rows_affected: 0,
+                    error_message: Some(err.to_string()),
+                },
+            }
+        }
+        _ => StatementExecuteResult {
+            rows_affected: 0,
+            error_message: Some("Statement not found".to_string()),
+        },
+    }
+}
+pub struct BatchArgs {
+    pub db_id: String,
+    pub sql: String,
+}
+
+pub struct BatchResult {
+    pub error_message: Option<String>,
+}
+
+pub async fn batch(args: BatchArgs) -> BatchResult {
+    return match DATABASE_REGISTRY.lock().await.get(&args.db_id) {
+        Some((_, conn)) => match conn.execute_batch(&args.sql).await {
+            Ok(_) => BatchResult {
+                error_message: None,
+            },
+            Err(err) => BatchResult {
+                error_message: Some(err.to_string()),
+            },
+        },
+        _ => BatchResult {
+            error_message: Some("DB is not initialized".to_string()),
+        },
+    };
 }

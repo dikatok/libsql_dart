@@ -30,7 +30,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
+  BatchArgs dco_decode_batch_args(dynamic raw);
+
+  @protected
+  BatchResult dco_decode_batch_result(dynamic raw);
+
+  @protected
   bool dco_decode_bool(dynamic raw);
+
+  @protected
+  BatchArgs dco_decode_box_autoadd_batch_args(dynamic raw);
 
   @protected
   bool dco_decode_box_autoadd_bool(dynamic raw);
@@ -48,7 +57,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Parameters dco_decode_box_autoadd_parameters(dynamic raw);
 
   @protected
+  PrepareArgs dco_decode_box_autoadd_prepare_args(dynamic raw);
+
+  @protected
   QueryArgs dco_decode_box_autoadd_query_args(dynamic raw);
+
+  @protected
+  StatementExecuteArgs dco_decode_box_autoadd_statement_execute_args(
+      dynamic raw);
+
+  @protected
+  StatementQueryArgs dco_decode_box_autoadd_statement_query_args(dynamic raw);
 
   @protected
   SyncArgs dco_decode_box_autoadd_sync_args(dynamic raw);
@@ -126,6 +145,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Parameters dco_decode_parameters(dynamic raw);
 
   @protected
+  PrepareArgs dco_decode_prepare_args(dynamic raw);
+
+  @protected
+  PrepareResult dco_decode_prepare_result(dynamic raw);
+
+  @protected
   QueryArgs dco_decode_query_args(dynamic raw);
 
   @protected
@@ -139,6 +164,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ReturnValue dco_decode_return_value(dynamic raw);
+
+  @protected
+  StatementExecuteArgs dco_decode_statement_execute_args(dynamic raw);
+
+  @protected
+  StatementExecuteResult dco_decode_statement_execute_result(dynamic raw);
+
+  @protected
+  StatementQueryArgs dco_decode_statement_query_args(dynamic raw);
+
+  @protected
+  StatementQueryResult dco_decode_statement_query_result(dynamic raw);
 
   @protected
   SyncArgs dco_decode_sync_args(dynamic raw);
@@ -167,7 +204,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
+  BatchArgs sse_decode_batch_args(SseDeserializer deserializer);
+
+  @protected
+  BatchResult sse_decode_batch_result(SseDeserializer deserializer);
+
+  @protected
   bool sse_decode_bool(SseDeserializer deserializer);
+
+  @protected
+  BatchArgs sse_decode_box_autoadd_batch_args(SseDeserializer deserializer);
 
   @protected
   bool sse_decode_box_autoadd_bool(SseDeserializer deserializer);
@@ -186,7 +232,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Parameters sse_decode_box_autoadd_parameters(SseDeserializer deserializer);
 
   @protected
+  PrepareArgs sse_decode_box_autoadd_prepare_args(SseDeserializer deserializer);
+
+  @protected
   QueryArgs sse_decode_box_autoadd_query_args(SseDeserializer deserializer);
+
+  @protected
+  StatementExecuteArgs sse_decode_box_autoadd_statement_execute_args(
+      SseDeserializer deserializer);
+
+  @protected
+  StatementQueryArgs sse_decode_box_autoadd_statement_query_args(
+      SseDeserializer deserializer);
 
   @protected
   SyncArgs sse_decode_box_autoadd_sync_args(SseDeserializer deserializer);
@@ -268,6 +325,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Parameters sse_decode_parameters(SseDeserializer deserializer);
 
   @protected
+  PrepareArgs sse_decode_prepare_args(SseDeserializer deserializer);
+
+  @protected
+  PrepareResult sse_decode_prepare_result(SseDeserializer deserializer);
+
+  @protected
   QueryArgs sse_decode_query_args(SseDeserializer deserializer);
 
   @protected
@@ -283,6 +346,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ReturnValue sse_decode_return_value(SseDeserializer deserializer);
+
+  @protected
+  StatementExecuteArgs sse_decode_statement_execute_args(
+      SseDeserializer deserializer);
+
+  @protected
+  StatementExecuteResult sse_decode_statement_execute_result(
+      SseDeserializer deserializer);
+
+  @protected
+  StatementQueryArgs sse_decode_statement_query_args(
+      SseDeserializer deserializer);
+
+  @protected
+  StatementQueryResult sse_decode_statement_query_result(
+      SseDeserializer deserializer);
 
   @protected
   SyncArgs sse_decode_sync_args(SseDeserializer deserializer);
@@ -311,7 +390,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
+  void sse_encode_batch_args(BatchArgs self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_batch_result(BatchResult self, SseSerializer serializer);
+
+  @protected
   void sse_encode_bool(bool self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_batch_args(
+      BatchArgs self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_bool(bool self, SseSerializer serializer);
@@ -333,8 +422,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       Parameters self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_prepare_args(
+      PrepareArgs self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_query_args(
       QueryArgs self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_statement_execute_args(
+      StatementExecuteArgs self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_statement_query_args(
+      StatementQueryArgs self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_sync_args(
@@ -420,6 +521,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_parameters(Parameters self, SseSerializer serializer);
 
   @protected
+  void sse_encode_prepare_args(PrepareArgs self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_prepare_result(PrepareResult self, SseSerializer serializer);
+
+  @protected
   void sse_encode_query_args(QueryArgs self, SseSerializer serializer);
 
   @protected
@@ -435,6 +542,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_return_value(ReturnValue self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_statement_execute_args(
+      StatementExecuteArgs self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_statement_execute_result(
+      StatementExecuteResult self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_statement_query_args(
+      StatementQueryArgs self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_statement_query_result(
+      StatementQueryResult self, SseSerializer serializer);
 
   @protected
   void sse_encode_sync_args(SyncArgs self, SseSerializer serializer);

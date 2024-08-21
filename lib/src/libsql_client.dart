@@ -1,5 +1,5 @@
-import 'dart:typed_data';
-
+import 'package:libsql_dart/src/helpers.dart';
+import 'package:libsql_dart/src/libsql_statement.dart';
 import 'package:libsql_dart/src/rust/api/libsql.dart' as libsql;
 import 'package:libsql_dart/src/rust/frb_generated.dart';
 import 'package:libsql_dart/src/rust/utils/parameters.dart';
@@ -69,8 +69,8 @@ class LibsqlClient {
         dbId: _dbId!,
         sql: sql,
         parameters: Parameters(
-          named: named?.map((k, v) => MapEntry(k, _toParamValue(v))),
-          positional: positional?.map(_toParamValue).toList(),
+          named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
+          positional: positional?.map(toParamValue).toList(),
         ),
       ),
     );
@@ -108,8 +108,8 @@ class LibsqlClient {
         dbId: _dbId!,
         sql: sql,
         parameters: Parameters(
-          named: named?.map((k, v) => MapEntry(k, _toParamValue(v))),
-          positional: positional?.map(_toParamValue).toList(),
+          named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
+          positional: positional?.map(toParamValue).toList(),
         ),
       ),
     );
@@ -119,19 +119,27 @@ class LibsqlClient {
     return res.rowsAffected.toInt();
   }
 
-  ParamValue _toParamValue(dynamic value) {
-    if (value is int) {
-      return ParamValue.integer(value);
+  Future<LibSQLStatement> prepare(String sql) async {
+    if (_dbId == null) throw Exception('Database is not connected');
+    final res = await libsql.prepare(
+      args: libsql.PrepareArgs(
+        dbId: _dbId!,
+        sql: sql,
+      ),
+    );
+    if (res.errorMessage?.isNotEmpty ?? false) {
+      throw Exception(res.errorMessage);
     }
-    if (value is double) {
-      return ParamValue.real(value);
+    return LibSQLStatement(res.statementId!);
+  }
+
+  Future<libsql.BatchResult> batch(String sql) async {
+    if (_dbId == null) throw Exception('Database is not connected');
+    final res =
+        await libsql.batch(args: libsql.BatchArgs(dbId: _dbId!, sql: sql));
+    if (res.errorMessage?.isNotEmpty ?? false) {
+      throw Exception(res.errorMessage);
     }
-    if (value is String) {
-      return ParamValue.text(value);
-    }
-    if (value is Uint8List) {
-      return ParamValue.blob(value);
-    }
-    return const ParamValue.null_();
+    return res;
   }
 }

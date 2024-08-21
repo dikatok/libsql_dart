@@ -8,8 +8,8 @@ import '../utils/parameters.dart';
 import '../utils/return_value.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These types are ignored because they are not used by any `pub` functions: `DATABASE_REGISTRY`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `deref`, `initialize`
+// These types are ignored because they are not used by any `pub` functions: `DATABASE_REGISTRY`, `STATEMENT_REGISTRY`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `deref`, `deref`, `initialize`, `initialize`
 
 Future<ConnectResult> connect({required ConnectArgs args}) =>
     RustLib.instance.api.crateApiLibsqlConnect(args: args);
@@ -22,6 +22,66 @@ Future<QueryResult> query({required QueryArgs args}) =>
 
 Future<ExecuteResult> execute({required ExecuteArgs args}) =>
     RustLib.instance.api.crateApiLibsqlExecute(args: args);
+
+Future<PrepareResult> prepare({required PrepareArgs args}) =>
+    RustLib.instance.api.crateApiLibsqlPrepare(args: args);
+
+Future<void> statementFinalize({required String statementId}) =>
+    RustLib.instance.api
+        .crateApiLibsqlStatementFinalize(statementId: statementId);
+
+Future<void> statementReset({required String statementId}) =>
+    RustLib.instance.api.crateApiLibsqlStatementReset(statementId: statementId);
+
+Future<StatementQueryResult> statementQuery(
+        {required StatementQueryArgs args}) =>
+    RustLib.instance.api.crateApiLibsqlStatementQuery(args: args);
+
+Future<StatementExecuteResult> statementExecute(
+        {required StatementExecuteArgs args}) =>
+    RustLib.instance.api.crateApiLibsqlStatementExecute(args: args);
+
+Future<BatchResult> batch({required BatchArgs args}) =>
+    RustLib.instance.api.crateApiLibsqlBatch(args: args);
+
+class BatchArgs {
+  final String dbId;
+  final String sql;
+
+  const BatchArgs({
+    required this.dbId,
+    required this.sql,
+  });
+
+  @override
+  int get hashCode => dbId.hashCode ^ sql.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BatchArgs &&
+          runtimeType == other.runtimeType &&
+          dbId == other.dbId &&
+          sql == other.sql;
+}
+
+class BatchResult {
+  final String? errorMessage;
+
+  const BatchResult({
+    this.errorMessage,
+  });
+
+  @override
+  int get hashCode => errorMessage.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BatchResult &&
+          runtimeType == other.runtimeType &&
+          errorMessage == other.errorMessage;
+}
 
 class ConnectArgs {
   final String url;
@@ -139,6 +199,48 @@ enum LibsqlOpenFlags {
   ;
 }
 
+class PrepareArgs {
+  final String dbId;
+  final String sql;
+
+  const PrepareArgs({
+    required this.dbId,
+    required this.sql,
+  });
+
+  @override
+  int get hashCode => dbId.hashCode ^ sql.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PrepareArgs &&
+          runtimeType == other.runtimeType &&
+          dbId == other.dbId &&
+          sql == other.sql;
+}
+
+class PrepareResult {
+  final String? statementId;
+  final String? errorMessage;
+
+  const PrepareResult({
+    this.statementId,
+    this.errorMessage,
+  });
+
+  @override
+  int get hashCode => statementId.hashCode ^ errorMessage.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PrepareResult &&
+          runtimeType == other.runtimeType &&
+          statementId == other.statementId &&
+          errorMessage == other.errorMessage;
+}
+
 class QueryArgs {
   final String dbId;
   final String sql;
@@ -187,6 +289,100 @@ class QueryResult {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is QueryResult &&
+          runtimeType == other.runtimeType &&
+          rows == other.rows &&
+          rowsAffected == other.rowsAffected &&
+          lastInsertRowid == other.lastInsertRowid &&
+          errorMessage == other.errorMessage;
+}
+
+class StatementExecuteArgs {
+  final String statementId;
+  final Parameters? parameters;
+
+  const StatementExecuteArgs({
+    required this.statementId,
+    this.parameters,
+  });
+
+  @override
+  int get hashCode => statementId.hashCode ^ parameters.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StatementExecuteArgs &&
+          runtimeType == other.runtimeType &&
+          statementId == other.statementId &&
+          parameters == other.parameters;
+}
+
+class StatementExecuteResult {
+  final BigInt rowsAffected;
+  final String? errorMessage;
+
+  const StatementExecuteResult({
+    required this.rowsAffected,
+    this.errorMessage,
+  });
+
+  @override
+  int get hashCode => rowsAffected.hashCode ^ errorMessage.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StatementExecuteResult &&
+          runtimeType == other.runtimeType &&
+          rowsAffected == other.rowsAffected &&
+          errorMessage == other.errorMessage;
+}
+
+class StatementQueryArgs {
+  final String statementId;
+  final Parameters? parameters;
+
+  const StatementQueryArgs({
+    required this.statementId,
+    this.parameters,
+  });
+
+  @override
+  int get hashCode => statementId.hashCode ^ parameters.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StatementQueryArgs &&
+          runtimeType == other.runtimeType &&
+          statementId == other.statementId &&
+          parameters == other.parameters;
+}
+
+class StatementQueryResult {
+  final List<Map<String, ReturnValue>> rows;
+  final BigInt rowsAffected;
+  final PlatformInt64 lastInsertRowid;
+  final String? errorMessage;
+
+  const StatementQueryResult({
+    required this.rows,
+    required this.rowsAffected,
+    required this.lastInsertRowid,
+    this.errorMessage,
+  });
+
+  @override
+  int get hashCode =>
+      rows.hashCode ^
+      rowsAffected.hashCode ^
+      lastInsertRowid.hashCode ^
+      errorMessage.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StatementQueryResult &&
           runtimeType == other.runtimeType &&
           rows == other.rows &&
           rowsAffected == other.rowsAffected &&
