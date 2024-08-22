@@ -1,3 +1,9 @@
+## 0.3.1
+
+- Fix return object of prepared statement query
+- Expose rows affected for prepared statement execute
+- Docs~
+
 ## 0.3.0
 
 - Supports `batch` and `prepare`
