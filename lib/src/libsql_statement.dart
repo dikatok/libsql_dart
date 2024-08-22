@@ -15,11 +15,11 @@ class LibSQLStatement {
     libsql.statementReset(statementId: statementId);
   }
 
-  Future<libsql.StatementQueryResult> query({
+  Future<List<Map<String, dynamic>>> query({
     Map<String, dynamic>? named,
     List<dynamic>? positional,
   }) async {
-    return libsql.statementQuery(
+    final res = await libsql.statementQuery(
       args: libsql.StatementQueryArgs(
         statementId: statementId,
         parameters: Parameters(
@@ -28,13 +28,34 @@ class LibSQLStatement {
         ),
       ),
     );
+    if (res.errorMessage?.isNotEmpty ?? false) {
+      throw Exception(res.errorMessage);
+    }
+    return res.rows
+        .map(
+          (row) => Map.fromEntries(
+            row.entries.map(
+              (entry) => MapEntry(
+                entry.key,
+                entry.value.mapOrNull(
+                  integer: (integer) => integer.field0,
+                  real: (real) => real.field0,
+                  text: (text) => text.field0,
+                  blob: (blob) => blob.field0,
+                  null_: (_) => null,
+                ),
+              ),
+            ),
+          ),
+        )
+        .toList();
   }
 
-  Future<libsql.StatementExecuteResult> execute({
+  Future<int> execute({
     Map<String, dynamic>? named,
     List<dynamic>? positional,
   }) async {
-    return libsql.statementExecute(
+    final res = await libsql.statementExecute(
       args: libsql.StatementExecuteArgs(
         statementId: statementId,
         parameters: Parameters(
@@ -43,5 +64,9 @@ class LibSQLStatement {
         ),
       ),
     );
+    if (res.errorMessage?.isNotEmpty ?? false) {
+      throw Exception(res.errorMessage);
+    }
+    return res.rowsAffected.toInt();
   }
 }
