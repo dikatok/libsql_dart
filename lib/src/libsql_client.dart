@@ -6,6 +6,37 @@ import 'package:libsql_dart/src/rust/utils/parameters.dart';
 
 export 'package:libsql_dart/src/rust/api/libsql.dart' show LibsqlOpenFlags;
 
+/// A client class to interact with LibSQL/Turso database instance.
+/// All variants of database types can be created using this class.
+/// Below is supported configuration for each variants
+///
+/// # In memory database
+/// ```dart
+/// final client = LibsqlClient(':memory:');
+/// await client.connect();
+/// ```
+///
+/// # Local database
+/// ```dart
+/// final dir = await getApplicationCacheDirectory();
+/// final path = '${dir.path}/local.db';
+/// final client = LibsqlClient(path, openFlags: libsql.LibsqlOpenFlags.readWrite);
+/// await client.connect();
+/// ```
+///
+/// # Remote database
+/// ```dart
+/// final client = LibsqlClient('<TURSO_OR_LIBSQL_URL>', authToken: '<TOKEN>');
+/// await client.connect();
+/// ```
+///
+/// # Embedded replica
+/// ```dart
+/// final dir = await getApplicationCacheDirectory();
+/// final path = '${dir.path}/replica.db';
+/// final client = LibsqlClient(path, syncUrl: '<TURSO_OR_LIBSQL_URL>', authToken: '<TOKEN>', readYourWrites: true, syncIntervalSeconds: 30);
+/// await client.connect();
+/// ```
 class LibsqlClient {
   LibsqlClient(
     this.url, {
@@ -17,16 +48,23 @@ class LibsqlClient {
     this.openFlags,
   });
 
+  // :memory:, <LOCAL_PATH>, libsql://<URL>, http://<URL>, or https://<URL>
   final String url;
+  // Auth token for remote or embedded replica
   String? authToken;
+  // Must be provided when using embedded replica
   String? syncUrl;
+  // Sync interval in seconds when using embedded replica
   int? syncIntervalSeconds;
   String? encryptionKey;
+  // Ensure embedded replica is updated after each write
   bool? readYourWrites;
+  // Open flags for local database only
   libsql.LibsqlOpenFlags? openFlags;
 
   String? _dbId;
 
+  /// Connect the database, must be called first after creation
   Future<void> connect() async {
     if (!RustLib.instance.initialized) {
       await RustLib.init();
@@ -50,6 +88,7 @@ class LibsqlClient {
     _dbId = res.dbId;
   }
 
+  // Sync the embedded replica
   Future<void> sync() async {
     if (_dbId == null) throw Exception('Database is not connected');
     final res = await libsql.sync(args: libsql.SyncArgs(dbId: _dbId!));
@@ -58,6 +97,15 @@ class LibsqlClient {
     }
   }
 
+  /// Query the database, you can provide either named or positional parameters
+  ///
+  /// # Args
+  /// * `sql` - SQL query
+  /// * `named` - Named parameters
+  /// * `positional` - Positional parameters
+  ///
+  /// # Returns
+  /// Returns a list of object, eg: [{'id': 1, 'name': 'John'}, {'id': 2, 'name': 'Jane'}]
   Future<List<Map<String, dynamic>>> query(
     String sql, {
     Map<String, dynamic>? named,
@@ -97,6 +145,15 @@ class LibsqlClient {
         .toList();
   }
 
+  /// Execute the statement, you can provide either named or positional parameters
+  ///
+  /// # Args
+  /// * `sql` - SQL query
+  /// * `named` - Named parameters
+  /// * `positional` - Positional parameters
+  ///
+  /// # Returns
+  /// Number of rows affected by the statement
   Future<int> execute(
     String sql, {
     Map<String, dynamic>? named,
@@ -119,6 +176,13 @@ class LibsqlClient {
     return res.rowsAffected.toInt();
   }
 
+  /// Create a prepared statement
+  ///
+  /// # Args
+  /// * `sql` - SQL query
+  ///
+  /// # Returns
+  /// Statement object
   Future<LibSQLStatement> prepare(String sql) async {
     if (_dbId == null) throw Exception('Database is not connected');
     final res = await libsql.prepare(
@@ -133,6 +197,13 @@ class LibsqlClient {
     return LibSQLStatement(res.statementId!);
   }
 
+  /// Run a batch transaction
+  ///
+  /// # Args
+  /// * `sql` - batch SQL query, each statement is separated by a semicolon
+  ///
+  /// # Returns
+  /// Batch result
   Future<libsql.BatchResult> batch(String sql) async {
     if (_dbId == null) throw Exception('Database is not connected');
     final res =

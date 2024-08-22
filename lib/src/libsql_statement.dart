@@ -2,19 +2,30 @@ import 'package:libsql_dart/src/helpers.dart';
 import 'package:libsql_dart/src/rust/api/libsql.dart' as libsql;
 import 'package:libsql_dart/src/rust/utils/parameters.dart';
 
+// This is for internal only
 class LibSQLStatement {
   LibSQLStatement(this.statementId);
 
   final String statementId;
 
+  // Finalize statement
   Future<void> finalize() async {
     libsql.statementFinalize(statementId: statementId);
   }
 
+  // Reset statement
   Future<void> reset() async {
     libsql.statementReset(statementId: statementId);
   }
 
+  /// Query the statement, you can provide either named or positional parameters
+  ///
+  /// # Args
+  /// * `named` - Named parameters
+  /// * `positional` - Positional parameters
+  ///
+  /// # Returns
+  /// Returns a list of object, eg: [{'id': 1, 'name': 'John'}, {'id': 2, 'name': 'Jane'}]
   Future<List<Map<String, dynamic>>> query({
     Map<String, dynamic>? named,
     List<dynamic>? positional,
@@ -51,6 +62,15 @@ class LibSQLStatement {
         .toList();
   }
 
+  /// Execute the statement, you can provide either named or positional parameters
+  ///
+  /// # Args
+  /// * `sql` - SQL query
+  /// * `named` - Named parameters
+  /// * `positional` - Positional parameters
+  ///
+  /// # Returns
+  /// Number of rows affected by the statement
   Future<int> execute({
     Map<String, dynamic>? named,
     List<dynamic>? positional,
