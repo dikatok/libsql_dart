@@ -1,10 +1,9 @@
 import 'package:libsql_dart/src/helpers.dart';
 import 'package:libsql_dart/src/libsql_statement.dart';
-import 'package:libsql_dart/src/rust/api/libsql.dart' as libsql;
+import 'package:libsql_dart/src/rust/api/api.dart' as libsql;
+import 'package:libsql_dart/src/rust/api/api.dart';
 import 'package:libsql_dart/src/rust/frb_generated.dart';
 import 'package:libsql_dart/src/rust/utils/parameters.dart';
-
-export 'package:libsql_dart/src/rust/api/libsql.dart' show LibsqlOpenFlags;
 
 /// A client class to interact with LibSQL/Turso database instance.
 /// All variants of database types can be created using this class.
@@ -60,9 +59,9 @@ class LibsqlClient {
   // Ensure embedded replica is updated after each write
   bool? readYourWrites;
   // Open flags for local database only
-  libsql.LibsqlOpenFlags? openFlags;
+  LibsqlOpenFlags? openFlags;
 
-  String? _dbId;
+  LibsqlConnection? _connection;
 
   /// Connect the database, must be called first after creation
   Future<void> connect() async {
@@ -70,7 +69,7 @@ class LibsqlClient {
       await RustLib.init();
     }
     final res = await libsql.connect(
-      args: libsql.ConnectArgs(
+      args: ConnectArgs(
         url: url,
         authToken: authToken,
         syncUrl: syncUrl,
@@ -85,13 +84,13 @@ class LibsqlClient {
     if (res.errorMessage?.isNotEmpty ?? false) {
       throw Exception(res.errorMessage);
     }
-    _dbId = res.dbId;
+    _connection = res.connection;
   }
 
   // Sync the embedded replica
   Future<void> sync() async {
-    if (_dbId == null) throw Exception('Database is not connected');
-    final res = await libsql.sync(args: libsql.SyncArgs(dbId: _dbId!));
+    if (_connection == null) throw Exception('Database is not connected');
+    final res = await _connection!.sync_();
     if (res.errorMessage?.isNotEmpty ?? false) {
       throw Exception(res.errorMessage);
     }
@@ -111,15 +110,12 @@ class LibsqlClient {
     Map<String, dynamic>? named,
     List<dynamic>? positional,
   }) async {
-    if (_dbId == null) throw Exception('Database is not connected');
-    final res = await libsql.query(
-      args: libsql.QueryArgs(
-        dbId: _dbId!,
-        sql: sql,
-        parameters: Parameters(
-          named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
-          positional: positional?.map(toParamValue).toList(),
-        ),
+    if (_connection == null) throw Exception('Database is not connected');
+    final res = await _connection!.query(
+      sql: sql,
+      parameters: Parameters(
+        named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
+        positional: positional?.map(toParamValue).toList(),
       ),
     );
     if (res.errorMessage?.isNotEmpty ?? false) {
@@ -159,15 +155,12 @@ class LibsqlClient {
     Map<String, dynamic>? named,
     List<dynamic>? positional,
   }) async {
-    if (_dbId == null) throw Exception('Database is not connected');
-    final res = await libsql.execute(
-      args: libsql.ExecuteArgs(
-        dbId: _dbId!,
-        sql: sql,
-        parameters: Parameters(
-          named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
-          positional: positional?.map(toParamValue).toList(),
-        ),
+    if (_connection == null) throw Exception('Database is not connected');
+    final res = await _connection!.execute(
+      sql: sql,
+      parameters: Parameters(
+        named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
+        positional: positional?.map(toParamValue).toList(),
       ),
     );
     if (res.errorMessage?.isNotEmpty ?? false) {
@@ -183,18 +176,15 @@ class LibsqlClient {
   ///
   /// # Returns
   /// Statement object
-  Future<LibSQLStatement> prepare(String sql) async {
-    if (_dbId == null) throw Exception('Database is not connected');
-    final res = await libsql.prepare(
-      args: libsql.PrepareArgs(
-        dbId: _dbId!,
-        sql: sql,
-      ),
+  Future<Statement> prepare(String sql) async {
+    if (_connection == null) throw Exception('Database is not connected');
+    final res = await _connection!.prepare(
+      sql: sql,
     );
     if (res.errorMessage?.isNotEmpty ?? false) {
       throw Exception(res.errorMessage);
     }
-    return LibSQLStatement(res.statementId!);
+    return Statement(res.statement!);
   }
 
   /// Run a batch transaction
@@ -202,17 +192,15 @@ class LibsqlClient {
   /// # Args
   /// * `sql` - batch SQL query, each statement is separated by a semicolon
   Future<void> batch(String sql) async {
-    if (_dbId == null) throw Exception('Database is not connected');
-    final res =
-        await libsql.batch(args: libsql.BatchArgs(dbId: _dbId!, sql: sql));
+    if (_connection == null) throw Exception('Database is not connected');
+    final res = await _connection!.batch(sql: sql);
     if (res.errorMessage?.isNotEmpty ?? false) {
       throw Exception(res.errorMessage);
     }
   }
 
   /// Close the database
-  Future<void> dispose() {
-    if (_dbId == null) throw Exception('Database is not connected');
-    return libsql.close(dbId: _dbId!);
+  Future<void> dispose() async {
+    _connection?.close();
   }
 }

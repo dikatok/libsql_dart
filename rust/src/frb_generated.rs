@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.2.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -759774325;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1746826291;
 
 // Section: executor
 
@@ -45,7 +45,7 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
-fn wire__crate__api__libsql__batch_impl(
+fn wire__crate__api__connection__libsql_connection_batch_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -53,7 +53,7 @@ fn wire__crate__api__libsql__batch_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "batch",
+            debug_name: "libsql_connection_batch",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -67,13 +67,17 @@ fn wire__crate__api__libsql__batch_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_args = <crate::api::libsql::BatchArgs>::sse_decode(&mut deserializer);
+            let api_that =
+                <crate::api::connection::LibsqlConnection>::sse_decode(&mut deserializer);
+            let api_sql = <String>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
-                        let output_ok =
-                            Result::<_, ()>::Ok(crate::api::libsql::batch(api_args).await)?;
+                        let output_ok = Result::<_, ()>::Ok(
+                            crate::api::connection::LibsqlConnection::batch(&api_that, api_sql)
+                                .await,
+                        )?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -82,7 +86,7 @@ fn wire__crate__api__libsql__batch_impl(
         },
     )
 }
-fn wire__crate__api__libsql__close_impl(
+fn wire__crate__api__connection__libsql_connection_close_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -90,7 +94,7 @@ fn wire__crate__api__libsql__close_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "close",
+            debug_name: "libsql_connection_close",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -104,14 +108,189 @@ fn wire__crate__api__libsql__close_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_db_id = <String>::sse_decode(&mut deserializer);
+            let api_that =
+                <crate::api::connection::LibsqlConnection>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
                         let output_ok = Result::<_, ()>::Ok({
-                            crate::api::libsql::close(api_db_id).await;
+                            crate::api::connection::LibsqlConnection::close(&api_that).await;
                         })?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__connection__libsql_connection_execute_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "libsql_connection_execute",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that =
+                <crate::api::connection::LibsqlConnection>::sse_decode(&mut deserializer);
+            let api_sql = <String>::sse_decode(&mut deserializer);
+            let api_parameters =
+                <Option<crate::utils::parameters::Parameters>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok = Result::<_, ()>::Ok(
+                            crate::api::connection::LibsqlConnection::execute(
+                                &api_that,
+                                api_sql,
+                                api_parameters,
+                            )
+                            .await,
+                        )?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__connection__libsql_connection_prepare_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "libsql_connection_prepare",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that =
+                <crate::api::connection::LibsqlConnection>::sse_decode(&mut deserializer);
+            let api_sql = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok = Result::<_, ()>::Ok(
+                            crate::api::connection::LibsqlConnection::prepare(&api_that, api_sql)
+                                .await,
+                        )?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__connection__libsql_connection_query_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "libsql_connection_query",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that =
+                <crate::api::connection::LibsqlConnection>::sse_decode(&mut deserializer);
+            let api_sql = <String>::sse_decode(&mut deserializer);
+            let api_parameters =
+                <Option<crate::utils::parameters::Parameters>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok = Result::<_, ()>::Ok(
+                            crate::api::connection::LibsqlConnection::query(
+                                &api_that,
+                                api_sql,
+                                api_parameters,
+                            )
+                            .await,
+                        )?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__connection__libsql_connection_sync_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "libsql_connection_sync",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that =
+                <crate::api::connection::LibsqlConnection>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok = Result::<_, ()>::Ok(
+                            crate::api::connection::LibsqlConnection::sync(&api_that).await,
+                        )?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -157,43 +336,6 @@ fn wire__crate__api__libsql__connect_impl(
         },
     )
 }
-fn wire__crate__api__libsql__execute_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "execute",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_args = <crate::api::libsql::ExecuteArgs>::sse_decode(&mut deserializer);
-            deserializer.end();
-            move |context| async move {
-                transform_result_sse::<_, ()>(
-                    (move || async move {
-                        let output_ok =
-                            Result::<_, ()>::Ok(crate::api::libsql::execute(api_args).await)?;
-                        Ok(output_ok)
-                    })()
-                    .await,
-                )
-            }
-        },
-    )
-}
 fn wire__crate__api__libsql__init_app_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -228,7 +370,7 @@ fn wire__crate__api__libsql__init_app_impl(
         },
     )
 }
-fn wire__crate__api__libsql__prepare_impl(
+fn wire__crate__api__statement__libsql_statement_execute_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -236,7 +378,7 @@ fn wire__crate__api__libsql__prepare_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "prepare",
+            debug_name: "libsql_statement_execute",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -250,88 +392,19 @@ fn wire__crate__api__libsql__prepare_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_args = <crate::api::libsql::PrepareArgs>::sse_decode(&mut deserializer);
-            deserializer.end();
-            move |context| async move {
-                transform_result_sse::<_, ()>(
-                    (move || async move {
-                        let output_ok =
-                            Result::<_, ()>::Ok(crate::api::libsql::prepare(api_args).await)?;
-                        Ok(output_ok)
-                    })()
-                    .await,
-                )
-            }
-        },
-    )
-}
-fn wire__crate__api__libsql__query_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "query",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_args = <crate::api::libsql::QueryArgs>::sse_decode(&mut deserializer);
-            deserializer.end();
-            move |context| async move {
-                transform_result_sse::<_, ()>(
-                    (move || async move {
-                        let output_ok =
-                            Result::<_, ()>::Ok(crate::api::libsql::query(api_args).await)?;
-                        Ok(output_ok)
-                    })()
-                    .await,
-                )
-            }
-        },
-    )
-}
-fn wire__crate__api__libsql__statement_execute_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "statement_execute",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_args =
-                <crate::api::libsql::StatementExecuteArgs>::sse_decode(&mut deserializer);
+            let api_that = <crate::api::statement::LibsqlStatement>::sse_decode(&mut deserializer);
+            let api_parameters =
+                <Option<crate::utils::parameters::Parameters>>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
                         let output_ok = Result::<_, ()>::Ok(
-                            crate::api::libsql::statement_execute(api_args).await,
+                            crate::api::statement::LibsqlStatement::execute(
+                                &api_that,
+                                api_parameters,
+                            )
+                            .await,
                         )?;
                         Ok(output_ok)
                     })()
@@ -341,7 +414,7 @@ fn wire__crate__api__libsql__statement_execute_impl(
         },
     )
 }
-fn wire__crate__api__libsql__statement_finalize_impl(
+fn wire__crate__api__statement__libsql_statement_finalize_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -349,7 +422,7 @@ fn wire__crate__api__libsql__statement_finalize_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "statement_finalize",
+            debug_name: "libsql_statement_finalize",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -363,13 +436,13 @@ fn wire__crate__api__libsql__statement_finalize_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_statement_id = <String>::sse_decode(&mut deserializer);
+            let api_that = <crate::api::statement::LibsqlStatement>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
                         let output_ok = Result::<_, ()>::Ok({
-                            crate::api::libsql::statement_finalize(api_statement_id).await;
+                            crate::api::statement::LibsqlStatement::finalize(&api_that).await;
                         })?;
                         Ok(output_ok)
                     })()
@@ -379,7 +452,7 @@ fn wire__crate__api__libsql__statement_finalize_impl(
         },
     )
 }
-fn wire__crate__api__libsql__statement_query_impl(
+fn wire__crate__api__statement__libsql_statement_query_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -387,7 +460,7 @@ fn wire__crate__api__libsql__statement_query_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "statement_query",
+            debug_name: "libsql_statement_query",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -401,13 +474,19 @@ fn wire__crate__api__libsql__statement_query_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_args = <crate::api::libsql::StatementQueryArgs>::sse_decode(&mut deserializer);
+            let api_that = <crate::api::statement::LibsqlStatement>::sse_decode(&mut deserializer);
+            let api_parameters =
+                <Option<crate::utils::parameters::Parameters>>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
                         let output_ok = Result::<_, ()>::Ok(
-                            crate::api::libsql::statement_query(api_args).await,
+                            crate::api::statement::LibsqlStatement::query(
+                                &api_that,
+                                api_parameters,
+                            )
+                            .await,
                         )?;
                         Ok(output_ok)
                     })()
@@ -417,7 +496,7 @@ fn wire__crate__api__libsql__statement_query_impl(
         },
     )
 }
-fn wire__crate__api__libsql__statement_reset_impl(
+fn wire__crate__api__statement__libsql_statement_reset_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -425,7 +504,7 @@ fn wire__crate__api__libsql__statement_reset_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "statement_reset",
+            debug_name: "libsql_statement_reset",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -439,51 +518,14 @@ fn wire__crate__api__libsql__statement_reset_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_statement_id = <String>::sse_decode(&mut deserializer);
+            let api_that = <crate::api::statement::LibsqlStatement>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
                         let output_ok = Result::<_, ()>::Ok({
-                            crate::api::libsql::statement_reset(api_statement_id).await;
+                            crate::api::statement::LibsqlStatement::reset(&api_that).await;
                         })?;
-                        Ok(output_ok)
-                    })()
-                    .await,
-                )
-            }
-        },
-    )
-}
-fn wire__crate__api__libsql__sync_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "sync",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_args = <crate::api::libsql::SyncArgs>::sse_decode(&mut deserializer);
-            deserializer.end();
-            move |context| async move {
-                transform_result_sse::<_, ()>(
-                    (move || async move {
-                        let output_ok =
-                            Result::<_, ()>::Ok(crate::api::libsql::sync(api_args).await)?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -521,23 +563,11 @@ impl SseDecode for String {
     }
 }
 
-impl SseDecode for crate::api::libsql::BatchArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_dbId = <String>::sse_decode(deserializer);
-        let mut var_sql = <String>::sse_decode(deserializer);
-        return crate::api::libsql::BatchArgs {
-            db_id: var_dbId,
-            sql: var_sql,
-        };
-    }
-}
-
-impl SseDecode for crate::api::libsql::BatchResult {
+impl SseDecode for crate::utils::result::BatchResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::api::libsql::BatchResult {
+        return crate::utils::result::BatchResult {
             error_message: var_errorMessage,
         };
     }
@@ -573,39 +603,25 @@ impl SseDecode for crate::api::libsql::ConnectArgs {
     }
 }
 
-impl SseDecode for crate::api::libsql::ConnectResult {
+impl SseDecode for crate::utils::result::ConnectResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_connection =
+            <Option<crate::api::connection::LibsqlConnection>>::sse_decode(deserializer);
         let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        let mut var_dbId = <Option<String>>::sse_decode(deserializer);
-        return crate::api::libsql::ConnectResult {
+        return crate::utils::result::ConnectResult {
+            connection: var_connection,
             error_message: var_errorMessage,
-            db_id: var_dbId,
         };
     }
 }
 
-impl SseDecode for crate::api::libsql::ExecuteArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_dbId = <String>::sse_decode(deserializer);
-        let mut var_sql = <String>::sse_decode(deserializer);
-        let mut var_parameters =
-            <Option<crate::utils::parameters::Parameters>>::sse_decode(deserializer);
-        return crate::api::libsql::ExecuteArgs {
-            db_id: var_dbId,
-            sql: var_sql,
-            parameters: var_parameters,
-        };
-    }
-}
-
-impl SseDecode for crate::api::libsql::ExecuteResult {
+impl SseDecode for crate::utils::result::ExecuteResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_rowsAffected = <u64>::sse_decode(deserializer);
         let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::api::libsql::ExecuteResult {
+        return crate::utils::result::ExecuteResult {
             rows_affected: var_rowsAffected,
             error_message: var_errorMessage,
         };
@@ -633,6 +649,14 @@ impl SseDecode for i64 {
     }
 }
 
+impl SseDecode for crate::api::connection::LibsqlConnection {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_dbId = <String>::sse_decode(deserializer);
+        return crate::api::connection::LibsqlConnection { db_id: var_dbId };
+    }
+}
+
 impl SseDecode for crate::api::libsql::LibsqlOpenFlags {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -642,6 +666,16 @@ impl SseDecode for crate::api::libsql::LibsqlOpenFlags {
             1 => crate::api::libsql::LibsqlOpenFlags::ReadWrite,
             2 => crate::api::libsql::LibsqlOpenFlags::Create,
             _ => unreachable!("Invalid variant for LibsqlOpenFlags: {}", inner),
+        };
+    }
+}
+
+impl SseDecode for crate::api::statement::LibsqlStatement {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_statementId = <String>::sse_decode(deserializer);
+        return crate::api::statement::LibsqlStatement {
+            statement_id: var_statementId,
         };
     }
 }
@@ -656,6 +690,18 @@ impl SseDecode for Vec<std::collections::HashMap<String, crate::utils::return_va
                 String,
                 crate::utils::return_value::ReturnValue,
             >>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<String>::sse_decode(deserializer));
         }
         return ans_;
     }
@@ -749,11 +795,37 @@ impl SseDecode for Option<bool> {
     }
 }
 
+impl SseDecode for Option<crate::api::connection::LibsqlConnection> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::connection::LibsqlConnection>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<crate::api::libsql::LibsqlOpenFlags> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<crate::api::libsql::LibsqlOpenFlags>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<crate::api::statement::LibsqlStatement> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::statement::LibsqlStatement>::sse_decode(
                 deserializer,
             ));
         } else {
@@ -845,56 +917,32 @@ impl SseDecode for crate::utils::parameters::Parameters {
     }
 }
 
-impl SseDecode for crate::api::libsql::PrepareArgs {
+impl SseDecode for crate::utils::result::PrepareResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_dbId = <String>::sse_decode(deserializer);
-        let mut var_sql = <String>::sse_decode(deserializer);
-        return crate::api::libsql::PrepareArgs {
-            db_id: var_dbId,
-            sql: var_sql,
-        };
-    }
-}
-
-impl SseDecode for crate::api::libsql::PrepareResult {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_statementId = <Option<String>>::sse_decode(deserializer);
+        let mut var_statement =
+            <Option<crate::api::statement::LibsqlStatement>>::sse_decode(deserializer);
         let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::api::libsql::PrepareResult {
-            statement_id: var_statementId,
+        return crate::utils::result::PrepareResult {
+            statement: var_statement,
             error_message: var_errorMessage,
         };
     }
 }
 
-impl SseDecode for crate::api::libsql::QueryArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_dbId = <String>::sse_decode(deserializer);
-        let mut var_sql = <String>::sse_decode(deserializer);
-        let mut var_parameters =
-            <Option<crate::utils::parameters::Parameters>>::sse_decode(deserializer);
-        return crate::api::libsql::QueryArgs {
-            db_id: var_dbId,
-            sql: var_sql,
-            parameters: var_parameters,
-        };
-    }
-}
-
-impl SseDecode for crate::api::libsql::QueryResult {
+impl SseDecode for crate::utils::result::QueryResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_rows = <Vec<
             std::collections::HashMap<String, crate::utils::return_value::ReturnValue>,
         >>::sse_decode(deserializer);
+        let mut var_columns = <Vec<String>>::sse_decode(deserializer);
         let mut var_rowsAffected = <u64>::sse_decode(deserializer);
         let mut var_lastInsertRowid = <i64>::sse_decode(deserializer);
         let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::api::libsql::QueryResult {
+        return crate::utils::result::QueryResult {
             rows: var_rows,
+            columns: var_columns,
             rows_affected: var_rowsAffected,
             last_insert_rowid: var_lastInsertRowid,
             error_message: var_errorMessage,
@@ -951,75 +999,11 @@ impl SseDecode for crate::utils::return_value::ReturnValue {
     }
 }
 
-impl SseDecode for crate::api::libsql::StatementExecuteArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_statementId = <String>::sse_decode(deserializer);
-        let mut var_parameters =
-            <Option<crate::utils::parameters::Parameters>>::sse_decode(deserializer);
-        return crate::api::libsql::StatementExecuteArgs {
-            statement_id: var_statementId,
-            parameters: var_parameters,
-        };
-    }
-}
-
-impl SseDecode for crate::api::libsql::StatementExecuteResult {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_rowsAffected = <u64>::sse_decode(deserializer);
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::api::libsql::StatementExecuteResult {
-            rows_affected: var_rowsAffected,
-            error_message: var_errorMessage,
-        };
-    }
-}
-
-impl SseDecode for crate::api::libsql::StatementQueryArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_statementId = <String>::sse_decode(deserializer);
-        let mut var_parameters =
-            <Option<crate::utils::parameters::Parameters>>::sse_decode(deserializer);
-        return crate::api::libsql::StatementQueryArgs {
-            statement_id: var_statementId,
-            parameters: var_parameters,
-        };
-    }
-}
-
-impl SseDecode for crate::api::libsql::StatementQueryResult {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_rows = <Vec<
-            std::collections::HashMap<String, crate::utils::return_value::ReturnValue>,
-        >>::sse_decode(deserializer);
-        let mut var_rowsAffected = <u64>::sse_decode(deserializer);
-        let mut var_lastInsertRowid = <i64>::sse_decode(deserializer);
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::api::libsql::StatementQueryResult {
-            rows: var_rows,
-            rows_affected: var_rowsAffected,
-            last_insert_rowid: var_lastInsertRowid,
-            error_message: var_errorMessage,
-        };
-    }
-}
-
-impl SseDecode for crate::api::libsql::SyncArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_dbId = <String>::sse_decode(deserializer);
-        return crate::api::libsql::SyncArgs { db_id: var_dbId };
-    }
-}
-
-impl SseDecode for crate::api::libsql::SyncResult {
+impl SseDecode for crate::utils::result::SyncResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::api::libsql::SyncResult {
+        return crate::utils::result::SyncResult {
             error_message: var_errorMessage,
         };
     }
@@ -1053,18 +1037,68 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        1 => wire__crate__api__libsql__batch_impl(port, ptr, rust_vec_len, data_len),
-        2 => wire__crate__api__libsql__close_impl(port, ptr, rust_vec_len, data_len),
-        3 => wire__crate__api__libsql__connect_impl(port, ptr, rust_vec_len, data_len),
-        4 => wire__crate__api__libsql__execute_impl(port, ptr, rust_vec_len, data_len),
-        5 => wire__crate__api__libsql__init_app_impl(port, ptr, rust_vec_len, data_len),
-        6 => wire__crate__api__libsql__prepare_impl(port, ptr, rust_vec_len, data_len),
-        7 => wire__crate__api__libsql__query_impl(port, ptr, rust_vec_len, data_len),
-        8 => wire__crate__api__libsql__statement_execute_impl(port, ptr, rust_vec_len, data_len),
-        9 => wire__crate__api__libsql__statement_finalize_impl(port, ptr, rust_vec_len, data_len),
-        10 => wire__crate__api__libsql__statement_query_impl(port, ptr, rust_vec_len, data_len),
-        11 => wire__crate__api__libsql__statement_reset_impl(port, ptr, rust_vec_len, data_len),
-        12 => wire__crate__api__libsql__sync_impl(port, ptr, rust_vec_len, data_len),
+        1 => wire__crate__api__connection__libsql_connection_batch_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        2 => wire__crate__api__connection__libsql_connection_close_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        3 => wire__crate__api__connection__libsql_connection_execute_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        4 => wire__crate__api__connection__libsql_connection_prepare_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        5 => wire__crate__api__connection__libsql_connection_query_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        6 => wire__crate__api__connection__libsql_connection_sync_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        7 => wire__crate__api__libsql__connect_impl(port, ptr, rust_vec_len, data_len),
+        8 => wire__crate__api__libsql__init_app_impl(port, ptr, rust_vec_len, data_len),
+        9 => wire__crate__api__statement__libsql_statement_execute_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        10 => wire__crate__api__statement__libsql_statement_finalize_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        11 => wire__crate__api__statement__libsql_statement_query_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        12 => wire__crate__api__statement__libsql_statement_reset_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
         _ => unreachable!(),
     }
 }
@@ -1084,37 +1118,19 @@ fn pde_ffi_dispatcher_sync_impl(
 // Section: rust2dart
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::BatchArgs {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.db_id.into_into_dart().into_dart(),
-            self.sql.into_into_dart().into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::libsql::BatchArgs {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::BatchArgs>
-    for crate::api::libsql::BatchArgs
-{
-    fn into_into_dart(self) -> crate::api::libsql::BatchArgs {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::BatchResult {
+impl flutter_rust_bridge::IntoDart for crate::utils::result::BatchResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [self.error_message.into_into_dart().into_dart()].into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::BatchResult
+    for crate::utils::result::BatchResult
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::BatchResult>
-    for crate::api::libsql::BatchResult
+impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::BatchResult>
+    for crate::utils::result::BatchResult
 {
-    fn into_into_dart(self) -> crate::api::libsql::BatchResult {
+    fn into_into_dart(self) -> crate::utils::result::BatchResult {
         self
     }
 }
@@ -1145,50 +1161,28 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::ConnectArgs>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::ConnectResult {
+impl flutter_rust_bridge::IntoDart for crate::utils::result::ConnectResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
+            self.connection.into_into_dart().into_dart(),
             self.error_message.into_into_dart().into_dart(),
-            self.db_id.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::ConnectResult
+    for crate::utils::result::ConnectResult
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::ConnectResult>
-    for crate::api::libsql::ConnectResult
+impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::ConnectResult>
+    for crate::utils::result::ConnectResult
 {
-    fn into_into_dart(self) -> crate::api::libsql::ConnectResult {
+    fn into_into_dart(self) -> crate::utils::result::ConnectResult {
         self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::ExecuteArgs {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.db_id.into_into_dart().into_dart(),
-            self.sql.into_into_dart().into_dart(),
-            self.parameters.into_into_dart().into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::ExecuteArgs
-{
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::ExecuteArgs>
-    for crate::api::libsql::ExecuteArgs
-{
-    fn into_into_dart(self) -> crate::api::libsql::ExecuteArgs {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::ExecuteResult {
+impl flutter_rust_bridge::IntoDart for crate::utils::result::ExecuteResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.rows_affected.into_into_dart().into_dart(),
@@ -1198,13 +1192,30 @@ impl flutter_rust_bridge::IntoDart for crate::api::libsql::ExecuteResult {
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::ExecuteResult
+    for crate::utils::result::ExecuteResult
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::ExecuteResult>
-    for crate::api::libsql::ExecuteResult
+impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::ExecuteResult>
+    for crate::utils::result::ExecuteResult
 {
-    fn into_into_dart(self) -> crate::api::libsql::ExecuteResult {
+    fn into_into_dart(self) -> crate::utils::result::ExecuteResult {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::connection::LibsqlConnection {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [self.db_id.into_into_dart().into_dart()].into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::connection::LibsqlConnection
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::connection::LibsqlConnection>
+    for crate::api::connection::LibsqlConnection
+{
+    fn into_into_dart(self) -> crate::api::connection::LibsqlConnection {
         self
     }
 }
@@ -1227,6 +1238,23 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::LibsqlOpenFlags>
     for crate::api::libsql::LibsqlOpenFlags
 {
     fn into_into_dart(self) -> crate::api::libsql::LibsqlOpenFlags {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::statement::LibsqlStatement {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [self.statement_id.into_into_dart().into_dart()].into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::statement::LibsqlStatement
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::statement::LibsqlStatement>
+    for crate::api::statement::LibsqlStatement
+{
+    fn into_into_dart(self) -> crate::api::statement::LibsqlStatement {
         self
     }
 }
@@ -1286,71 +1314,32 @@ impl flutter_rust_bridge::IntoIntoDart<crate::utils::parameters::Parameters>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::PrepareArgs {
+impl flutter_rust_bridge::IntoDart for crate::utils::result::PrepareResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.db_id.into_into_dart().into_dart(),
-            self.sql.into_into_dart().into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::PrepareArgs
-{
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::PrepareArgs>
-    for crate::api::libsql::PrepareArgs
-{
-    fn into_into_dart(self) -> crate::api::libsql::PrepareArgs {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::PrepareResult {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.statement_id.into_into_dart().into_dart(),
+            self.statement.into_into_dart().into_dart(),
             self.error_message.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::PrepareResult
+    for crate::utils::result::PrepareResult
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::PrepareResult>
-    for crate::api::libsql::PrepareResult
+impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::PrepareResult>
+    for crate::utils::result::PrepareResult
 {
-    fn into_into_dart(self) -> crate::api::libsql::PrepareResult {
+    fn into_into_dart(self) -> crate::utils::result::PrepareResult {
         self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::QueryArgs {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.db_id.into_into_dart().into_dart(),
-            self.sql.into_into_dart().into_dart(),
-            self.parameters.into_into_dart().into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::libsql::QueryArgs {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::QueryArgs>
-    for crate::api::libsql::QueryArgs
-{
-    fn into_into_dart(self) -> crate::api::libsql::QueryArgs {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::QueryResult {
+impl flutter_rust_bridge::IntoDart for crate::utils::result::QueryResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.rows.into_into_dart().into_dart(),
+            self.columns.into_into_dart().into_dart(),
             self.rows_affected.into_into_dart().into_dart(),
             self.last_insert_rowid.into_into_dart().into_dart(),
             self.error_message.into_into_dart().into_dart(),
@@ -1359,13 +1348,13 @@ impl flutter_rust_bridge::IntoDart for crate::api::libsql::QueryResult {
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::QueryResult
+    for crate::utils::result::QueryResult
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::QueryResult>
-    for crate::api::libsql::QueryResult
+impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::QueryResult>
+    for crate::utils::result::QueryResult
 {
-    fn into_into_dart(self) -> crate::api::libsql::QueryResult {
+    fn into_into_dart(self) -> crate::utils::result::QueryResult {
         self
     }
 }
@@ -1404,119 +1393,19 @@ impl flutter_rust_bridge::IntoIntoDart<crate::utils::return_value::ReturnValue>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::StatementExecuteArgs {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.statement_id.into_into_dart().into_dart(),
-            self.parameters.into_into_dart().into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::StatementExecuteArgs
-{
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::StatementExecuteArgs>
-    for crate::api::libsql::StatementExecuteArgs
-{
-    fn into_into_dart(self) -> crate::api::libsql::StatementExecuteArgs {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::StatementExecuteResult {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.rows_affected.into_into_dart().into_dart(),
-            self.error_message.into_into_dart().into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::StatementExecuteResult
-{
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::StatementExecuteResult>
-    for crate::api::libsql::StatementExecuteResult
-{
-    fn into_into_dart(self) -> crate::api::libsql::StatementExecuteResult {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::StatementQueryArgs {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.statement_id.into_into_dart().into_dart(),
-            self.parameters.into_into_dart().into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::StatementQueryArgs
-{
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::StatementQueryArgs>
-    for crate::api::libsql::StatementQueryArgs
-{
-    fn into_into_dart(self) -> crate::api::libsql::StatementQueryArgs {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::StatementQueryResult {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.rows.into_into_dart().into_dart(),
-            self.rows_affected.into_into_dart().into_dart(),
-            self.last_insert_rowid.into_into_dart().into_dart(),
-            self.error_message.into_into_dart().into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::StatementQueryResult
-{
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::StatementQueryResult>
-    for crate::api::libsql::StatementQueryResult
-{
-    fn into_into_dart(self) -> crate::api::libsql::StatementQueryResult {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::SyncArgs {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.db_id.into_into_dart().into_dart()].into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::libsql::SyncArgs {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::SyncArgs>
-    for crate::api::libsql::SyncArgs
-{
-    fn into_into_dart(self) -> crate::api::libsql::SyncArgs {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::libsql::SyncResult {
+impl flutter_rust_bridge::IntoDart for crate::utils::result::SyncResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [self.error_message.into_into_dart().into_dart()].into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::libsql::SyncResult
+    for crate::utils::result::SyncResult
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::SyncResult>
-    for crate::api::libsql::SyncResult
+impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::SyncResult>
+    for crate::utils::result::SyncResult
 {
-    fn into_into_dart(self) -> crate::api::libsql::SyncResult {
+    fn into_into_dart(self) -> crate::utils::result::SyncResult {
         self
     }
 }
@@ -1548,15 +1437,7 @@ impl SseEncode for String {
     }
 }
 
-impl SseEncode for crate::api::libsql::BatchArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.db_id, serializer);
-        <String>::sse_encode(self.sql, serializer);
-    }
-}
-
-impl SseEncode for crate::api::libsql::BatchResult {
+impl SseEncode for crate::utils::result::BatchResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Option<String>>::sse_encode(self.error_message, serializer);
@@ -1583,24 +1464,15 @@ impl SseEncode for crate::api::libsql::ConnectArgs {
     }
 }
 
-impl SseEncode for crate::api::libsql::ConnectResult {
+impl SseEncode for crate::utils::result::ConnectResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Option<crate::api::connection::LibsqlConnection>>::sse_encode(self.connection, serializer);
         <Option<String>>::sse_encode(self.error_message, serializer);
-        <Option<String>>::sse_encode(self.db_id, serializer);
     }
 }
 
-impl SseEncode for crate::api::libsql::ExecuteArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.db_id, serializer);
-        <String>::sse_encode(self.sql, serializer);
-        <Option<crate::utils::parameters::Parameters>>::sse_encode(self.parameters, serializer);
-    }
-}
-
-impl SseEncode for crate::api::libsql::ExecuteResult {
+impl SseEncode for crate::utils::result::ExecuteResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.rows_affected, serializer);
@@ -1629,6 +1501,13 @@ impl SseEncode for i64 {
     }
 }
 
+impl SseEncode for crate::api::connection::LibsqlConnection {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.db_id, serializer);
+    }
+}
+
 impl SseEncode for crate::api::libsql::LibsqlOpenFlags {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1646,12 +1525,29 @@ impl SseEncode for crate::api::libsql::LibsqlOpenFlags {
     }
 }
 
+impl SseEncode for crate::api::statement::LibsqlStatement {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.statement_id, serializer);
+    }
+}
+
 impl SseEncode for Vec<std::collections::HashMap<String, crate::utils::return_value::ReturnValue>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <std::collections::HashMap<String, crate::utils::return_value::ReturnValue>>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <String>::sse_encode(item, serializer);
         }
     }
 }
@@ -1728,12 +1624,32 @@ impl SseEncode for Option<bool> {
     }
 }
 
+impl SseEncode for Option<crate::api::connection::LibsqlConnection> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::connection::LibsqlConnection>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<crate::api::libsql::LibsqlOpenFlags> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <crate::api::libsql::LibsqlOpenFlags>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::statement::LibsqlStatement> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::statement::LibsqlStatement>::sse_encode(value, serializer);
         }
     }
 }
@@ -1809,35 +1725,19 @@ impl SseEncode for crate::utils::parameters::Parameters {
     }
 }
 
-impl SseEncode for crate::api::libsql::PrepareArgs {
+impl SseEncode for crate::utils::result::PrepareResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.db_id, serializer);
-        <String>::sse_encode(self.sql, serializer);
-    }
-}
-
-impl SseEncode for crate::api::libsql::PrepareResult {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<String>>::sse_encode(self.statement_id, serializer);
+        <Option<crate::api::statement::LibsqlStatement>>::sse_encode(self.statement, serializer);
         <Option<String>>::sse_encode(self.error_message, serializer);
     }
 }
 
-impl SseEncode for crate::api::libsql::QueryArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.db_id, serializer);
-        <String>::sse_encode(self.sql, serializer);
-        <Option<crate::utils::parameters::Parameters>>::sse_encode(self.parameters, serializer);
-    }
-}
-
-impl SseEncode for crate::api::libsql::QueryResult {
+impl SseEncode for crate::utils::result::QueryResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<std::collections::HashMap<String, crate::utils::return_value::ReturnValue>>>::sse_encode(self.rows, serializer);
+        <Vec<String>>::sse_encode(self.columns, serializer);
         <u64>::sse_encode(self.rows_affected, serializer);
         <i64>::sse_encode(self.last_insert_rowid, serializer);
         <Option<String>>::sse_encode(self.error_message, serializer);
@@ -1890,48 +1790,7 @@ impl SseEncode for crate::utils::return_value::ReturnValue {
     }
 }
 
-impl SseEncode for crate::api::libsql::StatementExecuteArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.statement_id, serializer);
-        <Option<crate::utils::parameters::Parameters>>::sse_encode(self.parameters, serializer);
-    }
-}
-
-impl SseEncode for crate::api::libsql::StatementExecuteResult {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <u64>::sse_encode(self.rows_affected, serializer);
-        <Option<String>>::sse_encode(self.error_message, serializer);
-    }
-}
-
-impl SseEncode for crate::api::libsql::StatementQueryArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.statement_id, serializer);
-        <Option<crate::utils::parameters::Parameters>>::sse_encode(self.parameters, serializer);
-    }
-}
-
-impl SseEncode for crate::api::libsql::StatementQueryResult {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Vec<std::collections::HashMap<String, crate::utils::return_value::ReturnValue>>>::sse_encode(self.rows, serializer);
-        <u64>::sse_encode(self.rows_affected, serializer);
-        <i64>::sse_encode(self.last_insert_rowid, serializer);
-        <Option<String>>::sse_encode(self.error_message, serializer);
-    }
-}
-
-impl SseEncode for crate::api::libsql::SyncArgs {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.db_id, serializer);
-    }
-}
-
-impl SseEncode for crate::api::libsql::SyncResult {
+impl SseEncode for crate::utils::result::SyncResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Option<String>>::sse_encode(self.error_message, serializer);

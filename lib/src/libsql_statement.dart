@@ -1,21 +1,21 @@
 import 'package:libsql_dart/src/helpers.dart';
-import 'package:libsql_dart/src/rust/api/libsql.dart' as libsql;
+import 'package:libsql_dart/src/rust/api/api.dart';
 import 'package:libsql_dart/src/rust/utils/parameters.dart';
 
 // This is for internal only
-class LibSQLStatement {
-  LibSQLStatement(this.statementId);
+class Statement {
+  Statement(this.statement);
 
-  final String statementId;
+  final LibsqlStatement statement;
 
   // Finalize statement
   Future<void> finalize() async {
-    libsql.statementFinalize(statementId: statementId);
+    statement.finalize();
   }
 
   // Reset statement
   Future<void> reset() async {
-    libsql.statementReset(statementId: statementId);
+    statement.reset();
   }
 
   /// Query the statement, you can provide either named or positional parameters
@@ -30,13 +30,10 @@ class LibSQLStatement {
     Map<String, dynamic>? named,
     List<dynamic>? positional,
   }) async {
-    final res = await libsql.statementQuery(
-      args: libsql.StatementQueryArgs(
-        statementId: statementId,
-        parameters: Parameters(
-          named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
-          positional: positional?.map(toParamValue).toList(),
-        ),
+    final res = await statement.query(
+      parameters: Parameters(
+        named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
+        positional: positional?.map(toParamValue).toList(),
       ),
     );
     if (res.errorMessage?.isNotEmpty ?? false) {
@@ -75,13 +72,10 @@ class LibSQLStatement {
     Map<String, dynamic>? named,
     List<dynamic>? positional,
   }) async {
-    final res = await libsql.statementExecute(
-      args: libsql.StatementExecuteArgs(
-        statementId: statementId,
-        parameters: Parameters(
-          named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
-          positional: positional?.map(toParamValue).toList(),
-        ),
+    final res = await statement.execute(
+      parameters: Parameters(
+        named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
+        positional: positional?.map(toParamValue).toList(),
       ),
     );
     if (res.errorMessage?.isNotEmpty ?? false) {

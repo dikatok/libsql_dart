@@ -3,7 +3,9 @@
 
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
+import 'api/connection.dart';
 import 'api/libsql.dart';
+import 'api/statement.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'frb_generated.dart';
@@ -11,6 +13,7 @@ import 'frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'utils/parameters.dart';
+import 'utils/result.dart';
 import 'utils/return_value.dart';
 
 /// Main entrypoint of the Rust API
@@ -60,7 +63,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.2.0';
 
   @override
-  int get rustContentHash => -759774325;
+  int get rustContentHash => -1746826291;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -71,31 +74,43 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<BatchResult> crateApiLibsqlBatch({required BatchArgs args});
+  Future<BatchResult> crateApiConnectionLibsqlConnectionBatch(
+      {required LibsqlConnection that, required String sql});
 
-  Future<void> crateApiLibsqlClose({required String dbId});
+  Future<void> crateApiConnectionLibsqlConnectionClose(
+      {required LibsqlConnection that});
+
+  Future<ExecuteResult> crateApiConnectionLibsqlConnectionExecute(
+      {required LibsqlConnection that,
+      required String sql,
+      Parameters? parameters});
+
+  Future<PrepareResult> crateApiConnectionLibsqlConnectionPrepare(
+      {required LibsqlConnection that, required String sql});
+
+  Future<QueryResult> crateApiConnectionLibsqlConnectionQuery(
+      {required LibsqlConnection that,
+      required String sql,
+      Parameters? parameters});
+
+  Future<SyncResult> crateApiConnectionLibsqlConnectionSync(
+      {required LibsqlConnection that});
 
   Future<ConnectResult> crateApiLibsqlConnect({required ConnectArgs args});
 
-  Future<ExecuteResult> crateApiLibsqlExecute({required ExecuteArgs args});
-
   Future<void> crateApiLibsqlInitApp();
 
-  Future<PrepareResult> crateApiLibsqlPrepare({required PrepareArgs args});
+  Future<ExecuteResult> crateApiStatementLibsqlStatementExecute(
+      {required LibsqlStatement that, Parameters? parameters});
 
-  Future<QueryResult> crateApiLibsqlQuery({required QueryArgs args});
+  Future<void> crateApiStatementLibsqlStatementFinalize(
+      {required LibsqlStatement that});
 
-  Future<StatementExecuteResult> crateApiLibsqlStatementExecute(
-      {required StatementExecuteArgs args});
+  Future<QueryResult> crateApiStatementLibsqlStatementQuery(
+      {required LibsqlStatement that, Parameters? parameters});
 
-  Future<void> crateApiLibsqlStatementFinalize({required String statementId});
-
-  Future<StatementQueryResult> crateApiLibsqlStatementQuery(
-      {required StatementQueryArgs args});
-
-  Future<void> crateApiLibsqlStatementReset({required String statementId});
-
-  Future<SyncResult> crateApiLibsqlSync({required SyncArgs args});
+  Future<void> crateApiStatementLibsqlStatementReset(
+      {required LibsqlStatement that});
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -107,11 +122,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Future<BatchResult> crateApiLibsqlBatch({required BatchArgs args}) {
+  Future<BatchResult> crateApiConnectionLibsqlConnectionBatch(
+      {required LibsqlConnection that, required String sql}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_batch_args(args, serializer);
+        sse_encode_box_autoadd_libsql_connection(that, serializer);
+        sse_encode_String(sql, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 1, port: port_);
       },
@@ -119,23 +136,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_batch_result,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiLibsqlBatchConstMeta,
-      argValues: [args],
+      constMeta: kCrateApiConnectionLibsqlConnectionBatchConstMeta,
+      argValues: [that, sql],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiLibsqlBatchConstMeta => const TaskConstMeta(
-        debugName: "batch",
-        argNames: ["args"],
+  TaskConstMeta get kCrateApiConnectionLibsqlConnectionBatchConstMeta =>
+      const TaskConstMeta(
+        debugName: "libsql_connection_batch",
+        argNames: ["that", "sql"],
       );
 
   @override
-  Future<void> crateApiLibsqlClose({required String dbId}) {
+  Future<void> crateApiConnectionLibsqlConnectionClose(
+      {required LibsqlConnection that}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(dbId, serializer);
+        sse_encode_box_autoadd_libsql_connection(that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 2, port: port_);
       },
@@ -143,15 +162,129 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiLibsqlCloseConstMeta,
-      argValues: [dbId],
+      constMeta: kCrateApiConnectionLibsqlConnectionCloseConstMeta,
+      argValues: [that],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiLibsqlCloseConstMeta => const TaskConstMeta(
-        debugName: "close",
-        argNames: ["dbId"],
+  TaskConstMeta get kCrateApiConnectionLibsqlConnectionCloseConstMeta =>
+      const TaskConstMeta(
+        debugName: "libsql_connection_close",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<ExecuteResult> crateApiConnectionLibsqlConnectionExecute(
+      {required LibsqlConnection that,
+      required String sql,
+      Parameters? parameters}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_libsql_connection(that, serializer);
+        sse_encode_String(sql, serializer);
+        sse_encode_opt_box_autoadd_parameters(parameters, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 3, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_execute_result,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiConnectionLibsqlConnectionExecuteConstMeta,
+      argValues: [that, sql, parameters],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiConnectionLibsqlConnectionExecuteConstMeta =>
+      const TaskConstMeta(
+        debugName: "libsql_connection_execute",
+        argNames: ["that", "sql", "parameters"],
+      );
+
+  @override
+  Future<PrepareResult> crateApiConnectionLibsqlConnectionPrepare(
+      {required LibsqlConnection that, required String sql}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_libsql_connection(that, serializer);
+        sse_encode_String(sql, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 4, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_prepare_result,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiConnectionLibsqlConnectionPrepareConstMeta,
+      argValues: [that, sql],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiConnectionLibsqlConnectionPrepareConstMeta =>
+      const TaskConstMeta(
+        debugName: "libsql_connection_prepare",
+        argNames: ["that", "sql"],
+      );
+
+  @override
+  Future<QueryResult> crateApiConnectionLibsqlConnectionQuery(
+      {required LibsqlConnection that,
+      required String sql,
+      Parameters? parameters}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_libsql_connection(that, serializer);
+        sse_encode_String(sql, serializer);
+        sse_encode_opt_box_autoadd_parameters(parameters, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 5, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_query_result,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiConnectionLibsqlConnectionQueryConstMeta,
+      argValues: [that, sql, parameters],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiConnectionLibsqlConnectionQueryConstMeta =>
+      const TaskConstMeta(
+        debugName: "libsql_connection_query",
+        argNames: ["that", "sql", "parameters"],
+      );
+
+  @override
+  Future<SyncResult> crateApiConnectionLibsqlConnectionSync(
+      {required LibsqlConnection that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_libsql_connection(that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 6, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_sync_result,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiConnectionLibsqlConnectionSyncConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiConnectionLibsqlConnectionSyncConstMeta =>
+      const TaskConstMeta(
+        debugName: "libsql_connection_sync",
+        argNames: ["that"],
       );
 
   @override
@@ -161,7 +294,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_connect_args(args, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
+            funcId: 7, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_connect_result,
@@ -179,36 +312,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<ExecuteResult> crateApiLibsqlExecute({required ExecuteArgs args}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_execute_args(args, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 4, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_execute_result,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiLibsqlExecuteConstMeta,
-      argValues: [args],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLibsqlExecuteConstMeta => const TaskConstMeta(
-        debugName: "execute",
-        argNames: ["args"],
-      );
-
-  @override
   Future<void> crateApiLibsqlInitApp() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 5, port: port_);
+            funcId: 8, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -226,177 +335,109 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<PrepareResult> crateApiLibsqlPrepare({required PrepareArgs args}) {
+  Future<ExecuteResult> crateApiStatementLibsqlStatementExecute(
+      {required LibsqlStatement that, Parameters? parameters}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_prepare_args(args, serializer);
+        sse_encode_box_autoadd_libsql_statement(that, serializer);
+        sse_encode_opt_box_autoadd_parameters(parameters, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 6, port: port_);
+            funcId: 9, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_prepare_result,
+        decodeSuccessData: sse_decode_execute_result,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiLibsqlPrepareConstMeta,
-      argValues: [args],
+      constMeta: kCrateApiStatementLibsqlStatementExecuteConstMeta,
+      argValues: [that, parameters],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiLibsqlPrepareConstMeta => const TaskConstMeta(
-        debugName: "prepare",
-        argNames: ["args"],
+  TaskConstMeta get kCrateApiStatementLibsqlStatementExecuteConstMeta =>
+      const TaskConstMeta(
+        debugName: "libsql_statement_execute",
+        argNames: ["that", "parameters"],
       );
 
   @override
-  Future<QueryResult> crateApiLibsqlQuery({required QueryArgs args}) {
+  Future<void> crateApiStatementLibsqlStatementFinalize(
+      {required LibsqlStatement that}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_query_args(args, serializer);
+        sse_encode_box_autoadd_libsql_statement(that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 7, port: port_);
+            funcId: 10, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiStatementLibsqlStatementFinalizeConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiStatementLibsqlStatementFinalizeConstMeta =>
+      const TaskConstMeta(
+        debugName: "libsql_statement_finalize",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<QueryResult> crateApiStatementLibsqlStatementQuery(
+      {required LibsqlStatement that, Parameters? parameters}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_libsql_statement(that, serializer);
+        sse_encode_opt_box_autoadd_parameters(parameters, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 11, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_query_result,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiLibsqlQueryConstMeta,
-      argValues: [args],
+      constMeta: kCrateApiStatementLibsqlStatementQueryConstMeta,
+      argValues: [that, parameters],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiLibsqlQueryConstMeta => const TaskConstMeta(
-        debugName: "query",
-        argNames: ["args"],
-      );
-
-  @override
-  Future<StatementExecuteResult> crateApiLibsqlStatementExecute(
-      {required StatementExecuteArgs args}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_statement_execute_args(args, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 8, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_statement_execute_result,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiLibsqlStatementExecuteConstMeta,
-      argValues: [args],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLibsqlStatementExecuteConstMeta =>
+  TaskConstMeta get kCrateApiStatementLibsqlStatementQueryConstMeta =>
       const TaskConstMeta(
-        debugName: "statement_execute",
-        argNames: ["args"],
+        debugName: "libsql_statement_query",
+        argNames: ["that", "parameters"],
       );
 
   @override
-  Future<void> crateApiLibsqlStatementFinalize({required String statementId}) {
+  Future<void> crateApiStatementLibsqlStatementReset(
+      {required LibsqlStatement that}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(statementId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 9, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiLibsqlStatementFinalizeConstMeta,
-      argValues: [statementId],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLibsqlStatementFinalizeConstMeta =>
-      const TaskConstMeta(
-        debugName: "statement_finalize",
-        argNames: ["statementId"],
-      );
-
-  @override
-  Future<StatementQueryResult> crateApiLibsqlStatementQuery(
-      {required StatementQueryArgs args}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_statement_query_args(args, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 10, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_statement_query_result,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiLibsqlStatementQueryConstMeta,
-      argValues: [args],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLibsqlStatementQueryConstMeta =>
-      const TaskConstMeta(
-        debugName: "statement_query",
-        argNames: ["args"],
-      );
-
-  @override
-  Future<void> crateApiLibsqlStatementReset({required String statementId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(statementId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 11, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiLibsqlStatementResetConstMeta,
-      argValues: [statementId],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLibsqlStatementResetConstMeta =>
-      const TaskConstMeta(
-        debugName: "statement_reset",
-        argNames: ["statementId"],
-      );
-
-  @override
-  Future<SyncResult> crateApiLibsqlSync({required SyncArgs args}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_sync_args(args, serializer);
+        sse_encode_box_autoadd_libsql_statement(that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 12, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_sync_result,
+        decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiLibsqlSyncConstMeta,
-      argValues: [args],
+      constMeta: kCrateApiStatementLibsqlStatementResetConstMeta,
+      argValues: [that],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiLibsqlSyncConstMeta => const TaskConstMeta(
-        debugName: "sync",
-        argNames: ["args"],
+  TaskConstMeta get kCrateApiStatementLibsqlStatementResetConstMeta =>
+      const TaskConstMeta(
+        debugName: "libsql_statement_reset",
+        argNames: ["that"],
       );
 
   @protected
@@ -420,18 +461,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  BatchArgs dco_decode_batch_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return BatchArgs(
-      dbId: dco_decode_String(arr[0]),
-      sql: dco_decode_String(arr[1]),
-    );
-  }
-
-  @protected
   BatchResult dco_decode_batch_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -449,12 +478,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  BatchArgs dco_decode_box_autoadd_batch_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_batch_args(raw);
-  }
-
-  @protected
   bool dco_decode_box_autoadd_bool(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as bool;
@@ -467,9 +490,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  ExecuteArgs dco_decode_box_autoadd_execute_args(dynamic raw) {
+  LibsqlConnection dco_decode_box_autoadd_libsql_connection(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_execute_args(raw);
+    return dco_decode_libsql_connection(raw);
   }
 
   @protected
@@ -479,40 +502,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  LibsqlStatement dco_decode_box_autoadd_libsql_statement(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_libsql_statement(raw);
+  }
+
+  @protected
   Parameters dco_decode_box_autoadd_parameters(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_parameters(raw);
-  }
-
-  @protected
-  PrepareArgs dco_decode_box_autoadd_prepare_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_prepare_args(raw);
-  }
-
-  @protected
-  QueryArgs dco_decode_box_autoadd_query_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_query_args(raw);
-  }
-
-  @protected
-  StatementExecuteArgs dco_decode_box_autoadd_statement_execute_args(
-      dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_statement_execute_args(raw);
-  }
-
-  @protected
-  StatementQueryArgs dco_decode_box_autoadd_statement_query_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_statement_query_args(raw);
-  }
-
-  @protected
-  SyncArgs dco_decode_box_autoadd_sync_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_sync_args(raw);
   }
 
   @protected
@@ -545,21 +543,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (arr.length != 2)
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return ConnectResult(
-      errorMessage: dco_decode_opt_String(arr[0]),
-      dbId: dco_decode_opt_String(arr[1]),
-    );
-  }
-
-  @protected
-  ExecuteArgs dco_decode_execute_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
-    return ExecuteArgs(
-      dbId: dco_decode_String(arr[0]),
-      sql: dco_decode_String(arr[1]),
-      parameters: dco_decode_opt_box_autoadd_parameters(arr[2]),
+      connection: dco_decode_opt_box_autoadd_libsql_connection(arr[0]),
+      errorMessage: dco_decode_opt_String(arr[1]),
     );
   }
 
@@ -594,9 +579,31 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  LibsqlConnection dco_decode_libsql_connection(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return LibsqlConnection(
+      dbId: dco_decode_String(arr[0]),
+    );
+  }
+
+  @protected
   LibsqlOpenFlags dco_decode_libsql_open_flags(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return LibsqlOpenFlags.values[raw as int];
+  }
+
+  @protected
+  LibsqlStatement dco_decode_libsql_statement(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return LibsqlStatement(
+      statementId: dco_decode_String(arr[0]),
+    );
   }
 
   @protected
@@ -606,6 +613,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return (raw as List<dynamic>)
         .map(dco_decode_Map_String_return_value)
         .toList();
+  }
+
+  @protected
+  List<String> dco_decode_list_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_String).toList();
   }
 
   @protected
@@ -657,9 +670,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  LibsqlConnection? dco_decode_opt_box_autoadd_libsql_connection(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_libsql_connection(raw);
+  }
+
+  @protected
   LibsqlOpenFlags? dco_decode_opt_box_autoadd_libsql_open_flags(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_libsql_open_flags(raw);
+  }
+
+  @protected
+  LibsqlStatement? dco_decode_opt_box_autoadd_libsql_statement(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_libsql_statement(raw);
   }
 
   @protected
@@ -720,39 +745,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  PrepareArgs dco_decode_prepare_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return PrepareArgs(
-      dbId: dco_decode_String(arr[0]),
-      sql: dco_decode_String(arr[1]),
-    );
-  }
-
-  @protected
   PrepareResult dco_decode_prepare_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 2)
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return PrepareResult(
-      statementId: dco_decode_opt_String(arr[0]),
+      statement: dco_decode_opt_box_autoadd_libsql_statement(arr[0]),
       errorMessage: dco_decode_opt_String(arr[1]),
-    );
-  }
-
-  @protected
-  QueryArgs dco_decode_query_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
-    return QueryArgs(
-      dbId: dco_decode_String(arr[0]),
-      sql: dco_decode_String(arr[1]),
-      parameters: dco_decode_opt_box_autoadd_parameters(arr[2]),
     );
   }
 
@@ -760,13 +760,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   QueryResult dco_decode_query_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return QueryResult(
       rows: dco_decode_list_Map_String_return_value(arr[0]),
-      rowsAffected: dco_decode_u_64(arr[1]),
-      lastInsertRowid: dco_decode_i_64(arr[2]),
-      errorMessage: dco_decode_opt_String(arr[3]),
+      columns: dco_decode_list_String(arr[1]),
+      rowsAffected: dco_decode_u_64(arr[2]),
+      lastInsertRowid: dco_decode_i_64(arr[3]),
+      errorMessage: dco_decode_opt_String(arr[4]),
     );
   }
 
@@ -824,67 +825,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  StatementExecuteArgs dco_decode_statement_execute_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return StatementExecuteArgs(
-      statementId: dco_decode_String(arr[0]),
-      parameters: dco_decode_opt_box_autoadd_parameters(arr[1]),
-    );
-  }
-
-  @protected
-  StatementExecuteResult dco_decode_statement_execute_result(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return StatementExecuteResult(
-      rowsAffected: dco_decode_u_64(arr[0]),
-      errorMessage: dco_decode_opt_String(arr[1]),
-    );
-  }
-
-  @protected
-  StatementQueryArgs dco_decode_statement_query_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return StatementQueryArgs(
-      statementId: dco_decode_String(arr[0]),
-      parameters: dco_decode_opt_box_autoadd_parameters(arr[1]),
-    );
-  }
-
-  @protected
-  StatementQueryResult dco_decode_statement_query_result(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
-    return StatementQueryResult(
-      rows: dco_decode_list_Map_String_return_value(arr[0]),
-      rowsAffected: dco_decode_u_64(arr[1]),
-      lastInsertRowid: dco_decode_i_64(arr[2]),
-      errorMessage: dco_decode_opt_String(arr[3]),
-    );
-  }
-
-  @protected
-  SyncArgs dco_decode_sync_args(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return SyncArgs(
-      dbId: dco_decode_String(arr[0]),
-    );
-  }
-
-  @protected
   SyncResult dco_decode_sync_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -937,14 +877,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  BatchArgs sse_decode_batch_args(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_dbId = sse_decode_String(deserializer);
-    var var_sql = sse_decode_String(deserializer);
-    return BatchArgs(dbId: var_dbId, sql: var_sql);
-  }
-
-  @protected
   BatchResult sse_decode_batch_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_errorMessage = sse_decode_opt_String(deserializer);
@@ -955,12 +887,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   bool sse_decode_bool(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getUint8() != 0;
-  }
-
-  @protected
-  BatchArgs sse_decode_box_autoadd_batch_args(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_batch_args(deserializer));
   }
 
   @protected
@@ -977,10 +903,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  ExecuteArgs sse_decode_box_autoadd_execute_args(
+  LibsqlConnection sse_decode_box_autoadd_libsql_connection(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_execute_args(deserializer));
+    return (sse_decode_libsql_connection(deserializer));
   }
 
   @protected
@@ -991,42 +917,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  LibsqlStatement sse_decode_box_autoadd_libsql_statement(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_libsql_statement(deserializer));
+  }
+
+  @protected
   Parameters sse_decode_box_autoadd_parameters(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_parameters(deserializer));
-  }
-
-  @protected
-  PrepareArgs sse_decode_box_autoadd_prepare_args(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_prepare_args(deserializer));
-  }
-
-  @protected
-  QueryArgs sse_decode_box_autoadd_query_args(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_query_args(deserializer));
-  }
-
-  @protected
-  StatementExecuteArgs sse_decode_box_autoadd_statement_execute_args(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_statement_execute_args(deserializer));
-  }
-
-  @protected
-  StatementQueryArgs sse_decode_box_autoadd_statement_query_args(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_statement_query_args(deserializer));
-  }
-
-  @protected
-  SyncArgs sse_decode_box_autoadd_sync_args(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_sync_args(deserializer));
   }
 
   @protected
@@ -1059,19 +959,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   ConnectResult sse_decode_connect_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_connection =
+        sse_decode_opt_box_autoadd_libsql_connection(deserializer);
     var var_errorMessage = sse_decode_opt_String(deserializer);
-    var var_dbId = sse_decode_opt_String(deserializer);
-    return ConnectResult(errorMessage: var_errorMessage, dbId: var_dbId);
-  }
-
-  @protected
-  ExecuteArgs sse_decode_execute_args(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_dbId = sse_decode_String(deserializer);
-    var var_sql = sse_decode_String(deserializer);
-    var var_parameters = sse_decode_opt_box_autoadd_parameters(deserializer);
-    return ExecuteArgs(
-        dbId: var_dbId, sql: var_sql, parameters: var_parameters);
+    return ConnectResult(
+        connection: var_connection, errorMessage: var_errorMessage);
   }
 
   @protected
@@ -1102,10 +994,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  LibsqlConnection sse_decode_libsql_connection(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_dbId = sse_decode_String(deserializer);
+    return LibsqlConnection(dbId: var_dbId);
+  }
+
+  @protected
   LibsqlOpenFlags sse_decode_libsql_open_flags(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_i_32(deserializer);
     return LibsqlOpenFlags.values[inner];
+  }
+
+  @protected
+  LibsqlStatement sse_decode_libsql_statement(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_statementId = sse_decode_String(deserializer);
+    return LibsqlStatement(statementId: var_statementId);
   }
 
   @protected
@@ -1117,6 +1023,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var ans_ = <Map<String, ReturnValue>>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_Map_String_return_value(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<String> sse_decode_list_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <String>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_String(deserializer));
     }
     return ans_;
   }
@@ -1201,12 +1119,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  LibsqlConnection? sse_decode_opt_box_autoadd_libsql_connection(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_libsql_connection(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   LibsqlOpenFlags? sse_decode_opt_box_autoadd_libsql_open_flags(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_box_autoadd_libsql_open_flags(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  LibsqlStatement? sse_decode_opt_box_autoadd_libsql_statement(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_libsql_statement(deserializer));
     } else {
       return null;
     }
@@ -1281,40 +1223,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  PrepareArgs sse_decode_prepare_args(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_dbId = sse_decode_String(deserializer);
-    var var_sql = sse_decode_String(deserializer);
-    return PrepareArgs(dbId: var_dbId, sql: var_sql);
-  }
-
-  @protected
   PrepareResult sse_decode_prepare_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_statementId = sse_decode_opt_String(deserializer);
+    var var_statement =
+        sse_decode_opt_box_autoadd_libsql_statement(deserializer);
     var var_errorMessage = sse_decode_opt_String(deserializer);
     return PrepareResult(
-        statementId: var_statementId, errorMessage: var_errorMessage);
-  }
-
-  @protected
-  QueryArgs sse_decode_query_args(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_dbId = sse_decode_String(deserializer);
-    var var_sql = sse_decode_String(deserializer);
-    var var_parameters = sse_decode_opt_box_autoadd_parameters(deserializer);
-    return QueryArgs(dbId: var_dbId, sql: var_sql, parameters: var_parameters);
+        statement: var_statement, errorMessage: var_errorMessage);
   }
 
   @protected
   QueryResult sse_decode_query_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_rows = sse_decode_list_Map_String_return_value(deserializer);
+    var var_columns = sse_decode_list_String(deserializer);
     var var_rowsAffected = sse_decode_u_64(deserializer);
     var var_lastInsertRowid = sse_decode_i_64(deserializer);
     var var_errorMessage = sse_decode_opt_String(deserializer);
     return QueryResult(
         rows: var_rows,
+        columns: var_columns,
         rowsAffected: var_rowsAffected,
         lastInsertRowid: var_lastInsertRowid,
         errorMessage: var_errorMessage);
@@ -1364,58 +1292,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  StatementExecuteArgs sse_decode_statement_execute_args(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_statementId = sse_decode_String(deserializer);
-    var var_parameters = sse_decode_opt_box_autoadd_parameters(deserializer);
-    return StatementExecuteArgs(
-        statementId: var_statementId, parameters: var_parameters);
-  }
-
-  @protected
-  StatementExecuteResult sse_decode_statement_execute_result(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_rowsAffected = sse_decode_u_64(deserializer);
-    var var_errorMessage = sse_decode_opt_String(deserializer);
-    return StatementExecuteResult(
-        rowsAffected: var_rowsAffected, errorMessage: var_errorMessage);
-  }
-
-  @protected
-  StatementQueryArgs sse_decode_statement_query_args(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_statementId = sse_decode_String(deserializer);
-    var var_parameters = sse_decode_opt_box_autoadd_parameters(deserializer);
-    return StatementQueryArgs(
-        statementId: var_statementId, parameters: var_parameters);
-  }
-
-  @protected
-  StatementQueryResult sse_decode_statement_query_result(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_rows = sse_decode_list_Map_String_return_value(deserializer);
-    var var_rowsAffected = sse_decode_u_64(deserializer);
-    var var_lastInsertRowid = sse_decode_i_64(deserializer);
-    var var_errorMessage = sse_decode_opt_String(deserializer);
-    return StatementQueryResult(
-        rows: var_rows,
-        rowsAffected: var_rowsAffected,
-        lastInsertRowid: var_lastInsertRowid,
-        errorMessage: var_errorMessage);
-  }
-
-  @protected
-  SyncArgs sse_decode_sync_args(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_dbId = sse_decode_String(deserializer);
-    return SyncArgs(dbId: var_dbId);
-  }
-
-  @protected
   SyncResult sse_decode_sync_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_errorMessage = sse_decode_opt_String(deserializer);
@@ -1462,13 +1338,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_batch_args(BatchArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.dbId, serializer);
-    sse_encode_String(self.sql, serializer);
-  }
-
-  @protected
   void sse_encode_batch_result(BatchResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_opt_String(self.errorMessage, serializer);
@@ -1478,13 +1347,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_bool(bool self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putUint8(self ? 1 : 0);
-  }
-
-  @protected
-  void sse_encode_box_autoadd_batch_args(
-      BatchArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_batch_args(self, serializer);
   }
 
   @protected
@@ -1501,10 +1363,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_box_autoadd_execute_args(
-      ExecuteArgs self, SseSerializer serializer) {
+  void sse_encode_box_autoadd_libsql_connection(
+      LibsqlConnection self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_execute_args(self, serializer);
+    sse_encode_libsql_connection(self, serializer);
   }
 
   @protected
@@ -1515,45 +1377,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_libsql_statement(
+      LibsqlStatement self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_libsql_statement(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_parameters(
       Parameters self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_parameters(self, serializer);
-  }
-
-  @protected
-  void sse_encode_box_autoadd_prepare_args(
-      PrepareArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_prepare_args(self, serializer);
-  }
-
-  @protected
-  void sse_encode_box_autoadd_query_args(
-      QueryArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_query_args(self, serializer);
-  }
-
-  @protected
-  void sse_encode_box_autoadd_statement_execute_args(
-      StatementExecuteArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_statement_execute_args(self, serializer);
-  }
-
-  @protected
-  void sse_encode_box_autoadd_statement_query_args(
-      StatementQueryArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_statement_query_args(self, serializer);
-  }
-
-  @protected
-  void sse_encode_box_autoadd_sync_args(
-      SyncArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_sync_args(self, serializer);
   }
 
   @protected
@@ -1577,16 +1411,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_encode_connect_result(ConnectResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_opt_box_autoadd_libsql_connection(self.connection, serializer);
     sse_encode_opt_String(self.errorMessage, serializer);
-    sse_encode_opt_String(self.dbId, serializer);
-  }
-
-  @protected
-  void sse_encode_execute_args(ExecuteArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.dbId, serializer);
-    sse_encode_String(self.sql, serializer);
-    sse_encode_opt_box_autoadd_parameters(self.parameters, serializer);
   }
 
   @protected
@@ -1615,10 +1441,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_libsql_connection(
+      LibsqlConnection self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.dbId, serializer);
+  }
+
+  @protected
   void sse_encode_libsql_open_flags(
       LibsqlOpenFlags self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void sse_encode_libsql_statement(
+      LibsqlStatement self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.statementId, serializer);
   }
 
   @protected
@@ -1628,6 +1468,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
       sse_encode_Map_String_return_value(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_String(List<String> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_String(item, serializer);
     }
   }
 
@@ -1701,6 +1550,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_libsql_connection(
+      LibsqlConnection? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_libsql_connection(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_libsql_open_flags(
       LibsqlOpenFlags? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1708,6 +1568,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_libsql_open_flags(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_libsql_statement(
+      LibsqlStatement? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_libsql_statement(self, serializer);
     }
   }
 
@@ -1774,31 +1645,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_prepare_args(PrepareArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.dbId, serializer);
-    sse_encode_String(self.sql, serializer);
-  }
-
-  @protected
   void sse_encode_prepare_result(PrepareResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_String(self.statementId, serializer);
+    sse_encode_opt_box_autoadd_libsql_statement(self.statement, serializer);
     sse_encode_opt_String(self.errorMessage, serializer);
-  }
-
-  @protected
-  void sse_encode_query_args(QueryArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.dbId, serializer);
-    sse_encode_String(self.sql, serializer);
-    sse_encode_opt_box_autoadd_parameters(self.parameters, serializer);
   }
 
   @protected
   void sse_encode_query_result(QueryResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_Map_String_return_value(self.rows, serializer);
+    sse_encode_list_String(self.columns, serializer);
     sse_encode_u_64(self.rowsAffected, serializer);
     sse_encode_i_64(self.lastInsertRowid, serializer);
     sse_encode_opt_String(self.errorMessage, serializer);
@@ -1841,46 +1698,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       default:
         throw UnimplementedError('');
     }
-  }
-
-  @protected
-  void sse_encode_statement_execute_args(
-      StatementExecuteArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.statementId, serializer);
-    sse_encode_opt_box_autoadd_parameters(self.parameters, serializer);
-  }
-
-  @protected
-  void sse_encode_statement_execute_result(
-      StatementExecuteResult self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_u_64(self.rowsAffected, serializer);
-    sse_encode_opt_String(self.errorMessage, serializer);
-  }
-
-  @protected
-  void sse_encode_statement_query_args(
-      StatementQueryArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.statementId, serializer);
-    sse_encode_opt_box_autoadd_parameters(self.parameters, serializer);
-  }
-
-  @protected
-  void sse_encode_statement_query_result(
-      StatementQueryResult self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_list_Map_String_return_value(self.rows, serializer);
-    sse_encode_u_64(self.rowsAffected, serializer);
-    sse_encode_i_64(self.lastInsertRowid, serializer);
-    sse_encode_opt_String(self.errorMessage, serializer);
-  }
-
-  @protected
-  void sse_encode_sync_args(SyncArgs self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.dbId, serializer);
   }
 
   @protected
