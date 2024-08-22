@@ -374,8 +374,8 @@ pub async fn statement_execute(args: StatementExecuteArgs) -> StatementExecuteRe
             };
 
             match statement.execute(params).await {
-                Ok(_) => StatementExecuteResult {
-                    rows_affected: 0,
+                Ok(result) => StatementExecuteResult {
+                    rows_affected: result as u64,
                     error_message: None,
                 },
                 Err(err) => StatementExecuteResult {
