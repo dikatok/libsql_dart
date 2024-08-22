@@ -26,6 +26,9 @@ Future<ExecuteResult> execute({required ExecuteArgs args}) =>
 Future<PrepareResult> prepare({required PrepareArgs args}) =>
     RustLib.instance.api.crateApiLibsqlPrepare(args: args);
 
+Future<void> close({required String dbId}) =>
+    RustLib.instance.api.crateApiLibsqlClose(dbId: dbId);
+
 Future<void> statementFinalize({required String statementId}) =>
     RustLib.instance.api
         .crateApiLibsqlStatementFinalize(statementId: statementId);

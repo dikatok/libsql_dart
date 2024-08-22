@@ -283,6 +283,13 @@ pub async fn prepare(args: PrepareArgs) -> PrepareResult {
     };
 }
 
+pub async fn close(db_id: String) {
+    match DATABASE_REGISTRY.lock().await.remove(&db_id) {
+        Some(_) => {}
+        _ => {}
+    };
+}
+
 pub async fn statement_finalize(statement_id: String) {
     match STATEMENT_REGISTRY.lock().await.remove(&statement_id) {
         Some(mut statement) => statement.finalize(),

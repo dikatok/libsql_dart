@@ -209,4 +209,10 @@ class LibsqlClient {
       throw Exception(res.errorMessage);
     }
   }
+
+  /// Close the database
+  Future<void> dispose() {
+    if (_dbId == null) throw Exception('Database is not connected');
+    return libsql.close(dbId: _dbId!);
+  }
 }
