@@ -201,16 +201,12 @@ class LibsqlClient {
   ///
   /// # Args
   /// * `sql` - batch SQL query, each statement is separated by a semicolon
-  ///
-  /// # Returns
-  /// Batch result
-  Future<libsql.BatchResult> batch(String sql) async {
+  Future<void> batch(String sql) async {
     if (_dbId == null) throw Exception('Database is not connected');
     final res =
         await libsql.batch(args: libsql.BatchArgs(dbId: _dbId!, sql: sql));
     if (res.errorMessage?.isNotEmpty ?? false) {
       throw Exception(res.errorMessage);
     }
-    return res;
   }
 }
