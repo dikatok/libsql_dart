@@ -1,6 +1,7 @@
 import 'package:libsql_dart/src/helpers.dart';
 import 'package:libsql_dart/src/rust/api/api.dart' as libsql;
 import 'package:libsql_dart/src/rust/api/api.dart';
+import 'package:libsql_dart/src/rust/api/transaction.dart';
 import 'package:libsql_dart/src/rust/frb_generated.dart';
 import 'package:libsql_dart/src/rust/utils/params.dart';
 import 'package:libsql_dart/src/statement.dart';
@@ -200,9 +201,9 @@ class LibsqlClient {
     }
   }
 
-  Future<Transaction> transaction() async {
+  Future<Transaction> transaction({LibsqlTransactionBehavior? behavior}) async {
     if (_connection == null) throw Exception('Database is not connected');
-    final res = await _connection!.transaction();
+    final res = await _connection!.transaction(behavior: behavior);
     if (res.errorMessage?.isNotEmpty ?? false) {
       throw Exception(res.errorMessage);
     }
