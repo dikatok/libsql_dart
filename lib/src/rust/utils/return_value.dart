@@ -9,20 +9,20 @@ import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'return_value.freezed.dart';
 
 @freezed
-sealed class ReturnValue with _$ReturnValue {
-  const ReturnValue._();
+sealed class LibsqlReturnValue with _$LibsqlReturnValue {
+  const LibsqlReturnValue._();
 
-  const factory ReturnValue.integer(
+  const factory LibsqlReturnValue.integer(
     PlatformInt64 field0,
-  ) = ReturnValue_Integer;
-  const factory ReturnValue.real(
+  ) = LibsqlReturnValue_Integer;
+  const factory LibsqlReturnValue.real(
     double field0,
-  ) = ReturnValue_Real;
-  const factory ReturnValue.text(
+  ) = LibsqlReturnValue_Real;
+  const factory LibsqlReturnValue.text(
     String field0,
-  ) = ReturnValue_Text;
-  const factory ReturnValue.blob(
+  ) = LibsqlReturnValue_Text;
+  const factory LibsqlReturnValue.blob(
     Uint8List field0,
-  ) = ReturnValue_Blob;
-  const factory ReturnValue.null_() = ReturnValue_Null;
+  ) = LibsqlReturnValue_Blob;
+  const factory LibsqlReturnValue.null_() = LibsqlReturnValue_Null;
 }

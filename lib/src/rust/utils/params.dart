@@ -6,32 +6,13 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
-part 'parameters.freezed.dart';
+part 'params.freezed.dart';
 
-@freezed
-sealed class ParamValue with _$ParamValue {
-  const ParamValue._();
+class LibsqlParams {
+  final List<LibsqlValue>? positional;
+  final Map<String, LibsqlValue>? named;
 
-  const factory ParamValue.integer(
-    PlatformInt64 field0,
-  ) = ParamValue_Integer;
-  const factory ParamValue.real(
-    double field0,
-  ) = ParamValue_Real;
-  const factory ParamValue.text(
-    String field0,
-  ) = ParamValue_Text;
-  const factory ParamValue.blob(
-    Uint8List field0,
-  ) = ParamValue_Blob;
-  const factory ParamValue.null_() = ParamValue_Null;
-}
-
-class Parameters {
-  final List<ParamValue>? positional;
-  final Map<String, ParamValue>? named;
-
-  const Parameters({
+  const LibsqlParams({
     this.positional,
     this.named,
   });
@@ -42,8 +23,27 @@ class Parameters {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Parameters &&
+      other is LibsqlParams &&
           runtimeType == other.runtimeType &&
           positional == other.positional &&
           named == other.named;
+}
+
+@freezed
+sealed class LibsqlValue with _$LibsqlValue {
+  const LibsqlValue._();
+
+  const factory LibsqlValue.integer(
+    PlatformInt64 field0,
+  ) = LibsqlValue_Integer;
+  const factory LibsqlValue.real(
+    double field0,
+  ) = LibsqlValue_Real;
+  const factory LibsqlValue.text(
+    String field0,
+  ) = LibsqlValue_Text;
+  const factory LibsqlValue.blob(
+    Uint8List field0,
+  ) = LibsqlValue_Blob;
+  const factory LibsqlValue.null_() = LibsqlValue_Null;
 }

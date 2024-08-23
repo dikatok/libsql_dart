@@ -1,6 +1,6 @@
 import 'package:libsql_dart/src/helpers.dart';
 import 'package:libsql_dart/src/rust/api/api.dart';
-import 'package:libsql_dart/src/rust/utils/parameters.dart';
+import 'package:libsql_dart/src/rust/utils/params.dart';
 
 // This is for internal only
 class Statement {
@@ -31,9 +31,9 @@ class Statement {
     List<dynamic>? positional,
   }) async {
     final res = await statement.query(
-      parameters: Parameters(
-        named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
-        positional: positional?.map(toParamValue).toList(),
+      parameters: LibsqlParams(
+        named: named?.map((k, v) => MapEntry(k, toLibsqlValue(v))),
+        positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
     if (res.errorMessage?.isNotEmpty ?? false) {
@@ -73,9 +73,9 @@ class Statement {
     List<dynamic>? positional,
   }) async {
     final res = await statement.execute(
-      parameters: Parameters(
-        named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
-        positional: positional?.map(toParamValue).toList(),
+      parameters: LibsqlParams(
+        named: named?.map((k, v) => MapEntry(k, toLibsqlValue(v))),
+        positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
     if (res.errorMessage?.isNotEmpty ?? false) {

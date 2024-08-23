@@ -1,7 +1,7 @@
 use super::libsql::TRANSACTION_REGISTRY;
 use crate::utils::{
     helpers::rows_to_query_result,
-    parameters::Parameters,
+    params::LibsqlParams,
     result::{ExecuteResult, QueryResult, TransactionCommitResult, TransactionRollbackResult},
 };
 
@@ -10,7 +10,7 @@ pub struct LibsqlTransaction {
 }
 
 impl LibsqlTransaction {
-    pub async fn query(&self, sql: String, parameters: Option<Parameters>) -> QueryResult {
+    pub async fn query(&self, sql: String, parameters: Option<LibsqlParams>) -> QueryResult {
         match TRANSACTION_REGISTRY.lock().await.get(&self.transaction_id) {
             Some(transaction) => {
                 let params: libsql::params::Params = if let Some(p) = parameters {
@@ -40,7 +40,7 @@ impl LibsqlTransaction {
         }
     }
 
-    pub async fn execute(&self, sql: String, parameters: Option<Parameters>) -> ExecuteResult {
+    pub async fn execute(&self, sql: String, parameters: Option<LibsqlParams>) -> ExecuteResult {
         match TRANSACTION_REGISTRY.lock().await.get(&self.transaction_id) {
             Some(transaction) => {
                 let params: libsql::params::Params = if let Some(p) = parameters {

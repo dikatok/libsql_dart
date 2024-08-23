@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub enum ParamValue {
+pub enum LibsqlValue {
     Integer(i64),
     Real(f64),
     Text(String),
@@ -8,12 +8,12 @@ pub enum ParamValue {
     Null,
 }
 
-pub struct Parameters {
-    pub positional: Option<Vec<ParamValue>>,
-    pub named: Option<HashMap<String, ParamValue>>,
+pub struct LibsqlParams {
+    pub positional: Option<Vec<LibsqlValue>>,
+    pub named: Option<HashMap<String, LibsqlValue>>,
 }
 
-impl Into<libsql::params::Params> for Parameters {
+impl Into<libsql::params::Params> for LibsqlParams {
     fn into(self) -> libsql::params::Params {
         let positional_params = self
             .positional
@@ -22,11 +22,11 @@ impl Into<libsql::params::Params> for Parameters {
                 params
                     .iter()
                     .map(|s| match &s {
-                        ParamValue::Integer(i) => libsql::Value::Integer(*i),
-                        ParamValue::Real(f) => libsql::Value::Real(*f),
-                        ParamValue::Null => libsql::Value::Null,
-                        ParamValue::Blob(b) => libsql::Value::Blob(b.to_vec()),
-                        ParamValue::Text(t) => libsql::Value::Text(t.to_string()),
+                        LibsqlValue::Integer(i) => libsql::Value::Integer(*i),
+                        LibsqlValue::Real(f) => libsql::Value::Real(*f),
+                        LibsqlValue::Null => libsql::Value::Null,
+                        LibsqlValue::Blob(b) => libsql::Value::Blob(b.to_vec()),
+                        LibsqlValue::Text(t) => libsql::Value::Text(t.to_string()),
                     })
                     .collect::<Vec<_>>()
             })
@@ -39,11 +39,11 @@ impl Into<libsql::params::Params> for Parameters {
                 params
                     .iter()
                     .map(|(k, v)| match &v {
-                        ParamValue::Integer(i) => (k.clone(), libsql::Value::Integer(*i)),
-                        ParamValue::Real(f) => (k.clone(), libsql::Value::Real(*f)),
-                        ParamValue::Null => (k.clone(), libsql::Value::Null),
-                        ParamValue::Blob(b) => (k.clone(), libsql::Value::Blob(b.to_vec())),
-                        ParamValue::Text(t) => (k.clone(), libsql::Value::Text(t.to_string())),
+                        LibsqlValue::Integer(i) => (k.clone(), libsql::Value::Integer(*i)),
+                        LibsqlValue::Real(f) => (k.clone(), libsql::Value::Real(*f)),
+                        LibsqlValue::Null => (k.clone(), libsql::Value::Null),
+                        LibsqlValue::Blob(b) => (k.clone(), libsql::Value::Blob(b.to_vec())),
+                        LibsqlValue::Text(t) => (k.clone(), libsql::Value::Text(t.to_string())),
                     })
                     .collect::<Vec<_>>()
             })

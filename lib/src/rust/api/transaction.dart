@@ -4,7 +4,7 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../frb_generated.dart';
-import '../utils/parameters.dart';
+import '../utils/params.dart';
 import '../utils/result.dart';
 import '../utils/return_value.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
@@ -22,11 +22,11 @@ class LibsqlTransaction {
       );
 
   Future<ExecuteResult> execute(
-          {required String sql, Parameters? parameters}) =>
+          {required String sql, LibsqlParams? parameters}) =>
       RustLib.instance.api.crateApiTransactionLibsqlTransactionExecute(
           that: this, sql: sql, parameters: parameters);
 
-  Future<QueryResult> query({required String sql, Parameters? parameters}) =>
+  Future<QueryResult> query({required String sql, LibsqlParams? parameters}) =>
       RustLib.instance.api.crateApiTransactionLibsqlTransactionQuery(
           that: this, sql: sql, parameters: parameters);
 

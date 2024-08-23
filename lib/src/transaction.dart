@@ -1,6 +1,6 @@
 import 'package:libsql_dart/src/helpers.dart';
 import 'package:libsql_dart/src/rust/api/transaction.dart';
-import 'package:libsql_dart/src/rust/utils/parameters.dart';
+import 'package:libsql_dart/src/rust/utils/params.dart';
 
 class Transaction {
   Transaction(this.transaction);
@@ -14,9 +14,9 @@ class Transaction {
   }) async {
     final res = await transaction.query(
       sql: sql,
-      parameters: Parameters(
-        named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
-        positional: positional?.map(toParamValue).toList(),
+      parameters: LibsqlParams(
+        named: named?.map((k, v) => MapEntry(k, toLibsqlValue(v))),
+        positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
     if (res.errorMessage?.isNotEmpty ?? false) {
@@ -49,9 +49,9 @@ class Transaction {
   }) async {
     final res = await transaction.execute(
       sql: sql,
-      parameters: Parameters(
-        named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
-        positional: positional?.map(toParamValue).toList(),
+      parameters: LibsqlParams(
+        named: named?.map((k, v) => MapEntry(k, toLibsqlValue(v))),
+        positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
     if (res.errorMessage?.isNotEmpty ?? false) {

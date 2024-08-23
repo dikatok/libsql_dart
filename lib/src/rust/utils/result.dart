@@ -92,7 +92,7 @@ class PrepareResult {
 }
 
 class QueryResult {
-  final List<Map<String, ReturnValue>> rows;
+  final List<Map<String, LibsqlReturnValue>> rows;
   final List<String> columns;
   final BigInt rowsAffected;
   final PlatformInt64 lastInsertRowid;

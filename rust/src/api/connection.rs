@@ -4,7 +4,7 @@ use super::{
     transaction::{LibsqlTransaction, LibsqlTransactionBehavior},
 };
 use crate::utils::{
-    parameters::Parameters,
+    params::LibsqlParams,
     result::{
         BatchResult, ExecuteResult, PrepareResult, QueryResult, SyncResult, TransactionResult,
     },
@@ -33,7 +33,7 @@ impl LibsqlConnection {
         };
     }
 
-    pub async fn query(&self, sql: String, parameters: Option<Parameters>) -> QueryResult {
+    pub async fn query(&self, sql: String, parameters: Option<LibsqlParams>) -> QueryResult {
         let prepared = self.prepare(sql).await;
         if prepared.error_message.is_some() {
             return QueryResult {
@@ -47,7 +47,7 @@ impl LibsqlConnection {
         prepared.statement.unwrap().query(parameters).await
     }
 
-    pub async fn execute(&self, sql: String, parameters: Option<Parameters>) -> ExecuteResult {
+    pub async fn execute(&self, sql: String, parameters: Option<LibsqlParams>) -> ExecuteResult {
         let prepared = self.prepare(sql).await;
         if prepared.error_message.is_some() {
             return ExecuteResult {

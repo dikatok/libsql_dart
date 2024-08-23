@@ -14,7 +14,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_web.dart';
-import 'utils/parameters.dart';
+import 'utils/params.dart';
 import 'utils/result.dart';
 import 'utils/return_value.dart';
 
@@ -27,10 +27,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   });
 
   @protected
-  Map<String, ParamValue> dco_decode_Map_String_param_value(dynamic raw);
+  Map<String, LibsqlReturnValue> dco_decode_Map_String_libsql_return_value(
+      dynamic raw);
 
   @protected
-  Map<String, ReturnValue> dco_decode_Map_String_return_value(dynamic raw);
+  Map<String, LibsqlValue> dco_decode_Map_String_libsql_value(dynamic raw);
 
   @protected
   String dco_decode_String(dynamic raw);
@@ -54,6 +55,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LibsqlOpenFlags dco_decode_box_autoadd_libsql_open_flags(dynamic raw);
 
   @protected
+  LibsqlParams dco_decode_box_autoadd_libsql_params(dynamic raw);
+
+  @protected
   LibsqlStatement dco_decode_box_autoadd_libsql_statement(dynamic raw);
 
   @protected
@@ -62,9 +66,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   LibsqlTransactionBehavior dco_decode_box_autoadd_libsql_transaction_behavior(
       dynamic raw);
-
-  @protected
-  Parameters dco_decode_box_autoadd_parameters(dynamic raw);
 
   @protected
   BigInt dco_decode_box_autoadd_u_64(dynamic raw);
@@ -94,6 +95,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LibsqlOpenFlags dco_decode_libsql_open_flags(dynamic raw);
 
   @protected
+  LibsqlParams dco_decode_libsql_params(dynamic raw);
+
+  @protected
+  LibsqlReturnValue dco_decode_libsql_return_value(dynamic raw);
+
+  @protected
   LibsqlStatement dco_decode_libsql_statement(dynamic raw);
 
   @protected
@@ -103,28 +110,31 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LibsqlTransactionBehavior dco_decode_libsql_transaction_behavior(dynamic raw);
 
   @protected
-  List<Map<String, ReturnValue>> dco_decode_list_Map_String_return_value(
-      dynamic raw);
+  LibsqlValue dco_decode_libsql_value(dynamic raw);
+
+  @protected
+  List<Map<String, LibsqlReturnValue>>
+      dco_decode_list_Map_String_libsql_return_value(dynamic raw);
 
   @protected
   List<String> dco_decode_list_String(dynamic raw);
 
   @protected
-  List<ParamValue> dco_decode_list_param_value(dynamic raw);
+  List<LibsqlValue> dco_decode_list_libsql_value(dynamic raw);
 
   @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
-  List<(String, ParamValue)> dco_decode_list_record_string_param_value(
+  List<(String, LibsqlReturnValue)>
+      dco_decode_list_record_string_libsql_return_value(dynamic raw);
+
+  @protected
+  List<(String, LibsqlValue)> dco_decode_list_record_string_libsql_value(
       dynamic raw);
 
   @protected
-  List<(String, ReturnValue)> dco_decode_list_record_string_return_value(
-      dynamic raw);
-
-  @protected
-  Map<String, ParamValue>? dco_decode_opt_Map_String_param_value(dynamic raw);
+  Map<String, LibsqlValue>? dco_decode_opt_Map_String_libsql_value(dynamic raw);
 
   @protected
   String? dco_decode_opt_String(dynamic raw);
@@ -139,6 +149,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LibsqlOpenFlags? dco_decode_opt_box_autoadd_libsql_open_flags(dynamic raw);
 
   @protected
+  LibsqlParams? dco_decode_opt_box_autoadd_libsql_params(dynamic raw);
+
+  @protected
   LibsqlStatement? dco_decode_opt_box_autoadd_libsql_statement(dynamic raw);
 
   @protected
@@ -149,19 +162,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dco_decode_opt_box_autoadd_libsql_transaction_behavior(dynamic raw);
 
   @protected
-  Parameters? dco_decode_opt_box_autoadd_parameters(dynamic raw);
-
-  @protected
   BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw);
 
   @protected
-  List<ParamValue>? dco_decode_opt_list_param_value(dynamic raw);
-
-  @protected
-  ParamValue dco_decode_param_value(dynamic raw);
-
-  @protected
-  Parameters dco_decode_parameters(dynamic raw);
+  List<LibsqlValue>? dco_decode_opt_list_libsql_value(dynamic raw);
 
   @protected
   PrepareResult dco_decode_prepare_result(dynamic raw);
@@ -170,13 +174,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   QueryResult dco_decode_query_result(dynamic raw);
 
   @protected
-  (String, ParamValue) dco_decode_record_string_param_value(dynamic raw);
+  (String, LibsqlReturnValue) dco_decode_record_string_libsql_return_value(
+      dynamic raw);
 
   @protected
-  (String, ReturnValue) dco_decode_record_string_return_value(dynamic raw);
-
-  @protected
-  ReturnValue dco_decode_return_value(dynamic raw);
+  (String, LibsqlValue) dco_decode_record_string_libsql_value(dynamic raw);
 
   @protected
   SyncResult dco_decode_sync_result(dynamic raw);
@@ -200,11 +202,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void dco_decode_unit(dynamic raw);
 
   @protected
-  Map<String, ParamValue> sse_decode_Map_String_param_value(
+  Map<String, LibsqlReturnValue> sse_decode_Map_String_libsql_return_value(
       SseDeserializer deserializer);
 
   @protected
-  Map<String, ReturnValue> sse_decode_Map_String_return_value(
+  Map<String, LibsqlValue> sse_decode_Map_String_libsql_value(
       SseDeserializer deserializer);
 
   @protected
@@ -231,6 +233,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  LibsqlParams sse_decode_box_autoadd_libsql_params(
+      SseDeserializer deserializer);
+
+  @protected
   LibsqlStatement sse_decode_box_autoadd_libsql_statement(
       SseDeserializer deserializer);
 
@@ -241,9 +247,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   LibsqlTransactionBehavior sse_decode_box_autoadd_libsql_transaction_behavior(
       SseDeserializer deserializer);
-
-  @protected
-  Parameters sse_decode_box_autoadd_parameters(SseDeserializer deserializer);
 
   @protected
   BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer);
@@ -273,6 +276,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LibsqlOpenFlags sse_decode_libsql_open_flags(SseDeserializer deserializer);
 
   @protected
+  LibsqlParams sse_decode_libsql_params(SseDeserializer deserializer);
+
+  @protected
+  LibsqlReturnValue sse_decode_libsql_return_value(
+      SseDeserializer deserializer);
+
+  @protected
   LibsqlStatement sse_decode_libsql_statement(SseDeserializer deserializer);
 
   @protected
@@ -283,28 +293,33 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  List<Map<String, ReturnValue>> sse_decode_list_Map_String_return_value(
-      SseDeserializer deserializer);
+  LibsqlValue sse_decode_libsql_value(SseDeserializer deserializer);
+
+  @protected
+  List<Map<String, LibsqlReturnValue>>
+      sse_decode_list_Map_String_libsql_return_value(
+          SseDeserializer deserializer);
 
   @protected
   List<String> sse_decode_list_String(SseDeserializer deserializer);
 
   @protected
-  List<ParamValue> sse_decode_list_param_value(SseDeserializer deserializer);
+  List<LibsqlValue> sse_decode_list_libsql_value(SseDeserializer deserializer);
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
-  List<(String, ParamValue)> sse_decode_list_record_string_param_value(
+  List<(String, LibsqlReturnValue)>
+      sse_decode_list_record_string_libsql_return_value(
+          SseDeserializer deserializer);
+
+  @protected
+  List<(String, LibsqlValue)> sse_decode_list_record_string_libsql_value(
       SseDeserializer deserializer);
 
   @protected
-  List<(String, ReturnValue)> sse_decode_list_record_string_return_value(
-      SseDeserializer deserializer);
-
-  @protected
-  Map<String, ParamValue>? sse_decode_opt_Map_String_param_value(
+  Map<String, LibsqlValue>? sse_decode_opt_Map_String_libsql_value(
       SseDeserializer deserializer);
 
   @protected
@@ -322,6 +337,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  LibsqlParams? sse_decode_opt_box_autoadd_libsql_params(
+      SseDeserializer deserializer);
+
+  @protected
   LibsqlStatement? sse_decode_opt_box_autoadd_libsql_statement(
       SseDeserializer deserializer);
 
@@ -335,21 +354,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  Parameters? sse_decode_opt_box_autoadd_parameters(
-      SseDeserializer deserializer);
-
-  @protected
   BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer);
 
   @protected
-  List<ParamValue>? sse_decode_opt_list_param_value(
+  List<LibsqlValue>? sse_decode_opt_list_libsql_value(
       SseDeserializer deserializer);
-
-  @protected
-  ParamValue sse_decode_param_value(SseDeserializer deserializer);
-
-  @protected
-  Parameters sse_decode_parameters(SseDeserializer deserializer);
 
   @protected
   PrepareResult sse_decode_prepare_result(SseDeserializer deserializer);
@@ -358,15 +367,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   QueryResult sse_decode_query_result(SseDeserializer deserializer);
 
   @protected
-  (String, ParamValue) sse_decode_record_string_param_value(
+  (String, LibsqlReturnValue) sse_decode_record_string_libsql_return_value(
       SseDeserializer deserializer);
 
   @protected
-  (String, ReturnValue) sse_decode_record_string_return_value(
+  (String, LibsqlValue) sse_decode_record_string_libsql_value(
       SseDeserializer deserializer);
-
-  @protected
-  ReturnValue sse_decode_return_value(SseDeserializer deserializer);
 
   @protected
   SyncResult sse_decode_sync_result(SseDeserializer deserializer);
@@ -392,12 +398,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_decode_unit(SseDeserializer deserializer);
 
   @protected
-  void sse_encode_Map_String_param_value(
-      Map<String, ParamValue> self, SseSerializer serializer);
+  void sse_encode_Map_String_libsql_return_value(
+      Map<String, LibsqlReturnValue> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_Map_String_return_value(
-      Map<String, ReturnValue> self, SseSerializer serializer);
+  void sse_encode_Map_String_libsql_value(
+      Map<String, LibsqlValue> self, SseSerializer serializer);
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer);
@@ -424,6 +430,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LibsqlOpenFlags self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_libsql_params(
+      LibsqlParams self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_libsql_statement(
       LibsqlStatement self, SseSerializer serializer);
 
@@ -434,10 +444,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_libsql_transaction_behavior(
       LibsqlTransactionBehavior self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_box_autoadd_parameters(
-      Parameters self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer);
@@ -469,6 +475,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LibsqlOpenFlags self, SseSerializer serializer);
 
   @protected
+  void sse_encode_libsql_params(LibsqlParams self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_libsql_return_value(
+      LibsqlReturnValue self, SseSerializer serializer);
+
+  @protected
   void sse_encode_libsql_statement(
       LibsqlStatement self, SseSerializer serializer);
 
@@ -481,31 +494,34 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LibsqlTransactionBehavior self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_Map_String_return_value(
-      List<Map<String, ReturnValue>> self, SseSerializer serializer);
+  void sse_encode_libsql_value(LibsqlValue self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_Map_String_libsql_return_value(
+      List<Map<String, LibsqlReturnValue>> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_param_value(
-      List<ParamValue> self, SseSerializer serializer);
+  void sse_encode_list_libsql_value(
+      List<LibsqlValue> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_prim_u_8_strict(
       Uint8List self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_record_string_param_value(
-      List<(String, ParamValue)> self, SseSerializer serializer);
+  void sse_encode_list_record_string_libsql_return_value(
+      List<(String, LibsqlReturnValue)> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_record_string_return_value(
-      List<(String, ReturnValue)> self, SseSerializer serializer);
+  void sse_encode_list_record_string_libsql_value(
+      List<(String, LibsqlValue)> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_opt_Map_String_param_value(
-      Map<String, ParamValue>? self, SseSerializer serializer);
+  void sse_encode_opt_Map_String_libsql_value(
+      Map<String, LibsqlValue>? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
@@ -522,6 +538,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LibsqlOpenFlags? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_libsql_params(
+      LibsqlParams? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_libsql_statement(
       LibsqlStatement? self, SseSerializer serializer);
 
@@ -534,21 +554,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LibsqlTransactionBehavior? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_opt_box_autoadd_parameters(
-      Parameters? self, SseSerializer serializer);
-
-  @protected
   void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_opt_list_param_value(
-      List<ParamValue>? self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_param_value(ParamValue self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_parameters(Parameters self, SseSerializer serializer);
+  void sse_encode_opt_list_libsql_value(
+      List<LibsqlValue>? self, SseSerializer serializer);
 
   @protected
   void sse_encode_prepare_result(PrepareResult self, SseSerializer serializer);
@@ -557,15 +567,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_query_result(QueryResult self, SseSerializer serializer);
 
   @protected
-  void sse_encode_record_string_param_value(
-      (String, ParamValue) self, SseSerializer serializer);
+  void sse_encode_record_string_libsql_return_value(
+      (String, LibsqlReturnValue) self, SseSerializer serializer);
 
   @protected
-  void sse_encode_record_string_return_value(
-      (String, ReturnValue) self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_return_value(ReturnValue self, SseSerializer serializer);
+  void sse_encode_record_string_libsql_value(
+      (String, LibsqlValue) self, SseSerializer serializer);
 
   @protected
   void sse_encode_sync_result(SyncResult self, SseSerializer serializer);

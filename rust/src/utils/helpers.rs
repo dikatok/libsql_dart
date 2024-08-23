@@ -2,10 +2,10 @@ use std::collections::HashMap;
 
 use libsql::Rows;
 
-use super::{result::QueryResult, return_value::ReturnValue};
+use super::{result::QueryResult, return_value::LibsqlReturnValue};
 
 pub async fn rows_to_query_result(mut result: Rows) -> QueryResult {
-    let mut rows: Vec<HashMap<String, ReturnValue>> = Vec::new();
+    let mut rows: Vec<HashMap<String, LibsqlReturnValue>> = Vec::new();
     while let Ok(Some(result_row)) = result.next().await {
         let mut row = HashMap::new();
         for idx in 0..result_row.column_count() as i32 {

@@ -4,7 +4,7 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../frb_generated.dart';
-import '../utils/parameters.dart';
+import '../utils/params.dart';
 import '../utils/result.dart';
 import '../utils/return_value.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
@@ -16,7 +16,7 @@ class LibsqlStatement {
     required this.statementId,
   });
 
-  Future<ExecuteResult> execute({Parameters? parameters}) =>
+  Future<ExecuteResult> execute({LibsqlParams? parameters}) =>
       RustLib.instance.api.crateApiStatementLibsqlStatementExecute(
           that: this, parameters: parameters);
 
@@ -25,7 +25,7 @@ class LibsqlStatement {
         that: this,
       );
 
-  Future<QueryResult> query({Parameters? parameters}) =>
+  Future<QueryResult> query({LibsqlParams? parameters}) =>
       RustLib.instance.api.crateApiStatementLibsqlStatementQuery(
           that: this, parameters: parameters);
 

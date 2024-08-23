@@ -1,4 +1,4 @@
-pub enum ReturnValue {
+pub enum LibsqlReturnValue {
     Integer(i64),
     Real(f64),
     Text(String),
@@ -6,14 +6,14 @@ pub enum ReturnValue {
     Null,
 }
 
-impl From<libsql::Value> for ReturnValue {
+impl From<libsql::Value> for LibsqlReturnValue {
     fn from(value: libsql::Value) -> Self {
         match value {
-            libsql::Value::Integer(i) => ReturnValue::Integer(i),
-            libsql::Value::Real(f) => ReturnValue::Real(f),
-            libsql::Value::Text(t) => ReturnValue::Text(t),
-            libsql::Value::Blob(b) => ReturnValue::Blob(b),
-            libsql::Value::Null => ReturnValue::Null,
+            libsql::Value::Integer(i) => LibsqlReturnValue::Integer(i),
+            libsql::Value::Real(f) => LibsqlReturnValue::Real(f),
+            libsql::Value::Text(t) => LibsqlReturnValue::Text(t),
+            libsql::Value::Blob(b) => LibsqlReturnValue::Blob(b),
+            libsql::Value::Null => LibsqlReturnValue::Null,
         }
     }
 }

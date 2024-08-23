@@ -1,7 +1,7 @@
 use super::libsql::STATEMENT_REGISTRY;
 use crate::utils::{
     helpers::rows_to_query_result,
-    parameters::Parameters,
+    params::LibsqlParams,
     result::{ExecuteResult, QueryResult},
 };
 
@@ -24,7 +24,7 @@ impl LibsqlStatement {
         };
     }
 
-    pub async fn query(&self, parameters: Option<Parameters>) -> QueryResult {
+    pub async fn query(&self, parameters: Option<LibsqlParams>) -> QueryResult {
         match STATEMENT_REGISTRY.lock().await.remove(&self.statement_id) {
             Some(mut statement) => {
                 let params: libsql::params::Params = if let Some(p) = parameters {
@@ -54,7 +54,7 @@ impl LibsqlStatement {
         }
     }
 
-    pub async fn execute(&self, parameters: Option<Parameters>) -> ExecuteResult {
+    pub async fn execute(&self, parameters: Option<LibsqlParams>) -> ExecuteResult {
         match STATEMENT_REGISTRY.lock().await.remove(&self.statement_id) {
             Some(mut statement) => {
                 let params: libsql::params::Params = if let Some(p) = parameters {

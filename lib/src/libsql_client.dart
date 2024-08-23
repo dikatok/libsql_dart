@@ -1,9 +1,9 @@
 import 'package:libsql_dart/src/helpers.dart';
-import 'package:libsql_dart/src/libsql_statement.dart';
 import 'package:libsql_dart/src/rust/api/api.dart' as libsql;
 import 'package:libsql_dart/src/rust/api/api.dart';
 import 'package:libsql_dart/src/rust/frb_generated.dart';
-import 'package:libsql_dart/src/rust/utils/parameters.dart';
+import 'package:libsql_dart/src/rust/utils/params.dart';
+import 'package:libsql_dart/src/statement.dart';
 import 'package:libsql_dart/src/transaction.dart';
 
 /// A client class to interact with LibSQL/Turso database instance.
@@ -114,9 +114,9 @@ class LibsqlClient {
     if (_connection == null) throw Exception('Database is not connected');
     final res = await _connection!.query(
       sql: sql,
-      parameters: Parameters(
-        named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
-        positional: positional?.map(toParamValue).toList(),
+      parameters: LibsqlParams(
+        named: named?.map((k, v) => MapEntry(k, toLibsqlValue(v))),
+        positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
     if (res.errorMessage?.isNotEmpty ?? false) {
@@ -159,9 +159,9 @@ class LibsqlClient {
     if (_connection == null) throw Exception('Database is not connected');
     final res = await _connection!.execute(
       sql: sql,
-      parameters: Parameters(
-        named: named?.map((k, v) => MapEntry(k, toParamValue(v))),
-        positional: positional?.map(toParamValue).toList(),
+      parameters: LibsqlParams(
+        named: named?.map((k, v) => MapEntry(k, toLibsqlValue(v))),
+        positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
     if (res.errorMessage?.isNotEmpty ?? false) {

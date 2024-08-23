@@ -1,19 +1,19 @@
 import 'dart:typed_data';
 
-import 'package:libsql_dart/src/rust/utils/parameters.dart';
+import 'package:libsql_dart/src/rust/utils/params.dart';
 
-ParamValue toParamValue(dynamic value) {
+LibsqlValue toLibsqlValue(dynamic value) {
   if (value is int) {
-    return ParamValue.integer(value);
+    return LibsqlValue.integer(value);
   }
   if (value is double) {
-    return ParamValue.real(value);
+    return LibsqlValue.real(value);
   }
   if (value is String) {
-    return ParamValue.text(value);
+    return LibsqlValue.text(value);
   }
   if (value is Uint8List) {
-    return ParamValue.blob(value);
+    return LibsqlValue.blob(value);
   }
-  return const ParamValue.null_();
+  return const LibsqlValue.null_();
 }

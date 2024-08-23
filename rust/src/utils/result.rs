@@ -1,4 +1,4 @@
-use super::return_value::ReturnValue;
+use super::return_value::LibsqlReturnValue;
 use crate::api::{
     connection::LibsqlConnection, statement::LibsqlStatement, transaction::LibsqlTransaction,
 };
@@ -14,7 +14,7 @@ pub struct SyncResult {
 }
 
 pub struct QueryResult {
-    pub rows: Vec<HashMap<String, ReturnValue>>,
+    pub rows: Vec<HashMap<String, LibsqlReturnValue>>,
     pub columns: Vec<String>,
     pub rows_affected: u64,
     pub last_insert_rowid: i64,
