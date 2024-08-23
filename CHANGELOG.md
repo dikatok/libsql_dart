@@ -1,3 +1,7 @@
+## 0.4.2
+
+- expose tx behavior
+
 ## 0.4.1
 
 - chores
