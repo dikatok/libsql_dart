@@ -1,5 +1,7 @@
 use super::return_value::ReturnValue;
-use crate::api::{connection::LibsqlConnection, statement::LibsqlStatement};
+use crate::api::{
+    connection::LibsqlConnection, statement::LibsqlStatement, transaction::LibsqlTransaction,
+};
 use std::collections::HashMap;
 
 pub struct ConnectResult {
@@ -30,5 +32,18 @@ pub struct PrepareResult {
 }
 
 pub struct BatchResult {
+    pub error_message: Option<String>,
+}
+
+pub struct TransactionResult {
+    pub transaction: Option<LibsqlTransaction>,
+    pub error_message: Option<String>,
+}
+
+pub struct TransactionCommitResult {
+    pub error_message: Option<String>,
+}
+
+pub struct TransactionRollbackResult {
     pub error_message: Option<String>,
 }

@@ -5,6 +5,7 @@
 
 import '../api/connection.dart';
 import '../api/statement.dart';
+import '../api/transaction.dart';
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'return_value.dart';
@@ -139,6 +140,63 @@ class SyncResult {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SyncResult &&
+          runtimeType == other.runtimeType &&
+          errorMessage == other.errorMessage;
+}
+
+class TransactionCommitResult {
+  final String? errorMessage;
+
+  const TransactionCommitResult({
+    this.errorMessage,
+  });
+
+  @override
+  int get hashCode => errorMessage.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TransactionCommitResult &&
+          runtimeType == other.runtimeType &&
+          errorMessage == other.errorMessage;
+}
+
+class TransactionResult {
+  final LibsqlTransaction? transaction;
+  final String? errorMessage;
+
+  const TransactionResult({
+    this.transaction,
+    this.errorMessage,
+  });
+
+  @override
+  int get hashCode => transaction.hashCode ^ errorMessage.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TransactionResult &&
+          runtimeType == other.runtimeType &&
+          transaction == other.transaction &&
+          errorMessage == other.errorMessage;
+}
+
+class TransactionRollbackResult {
+  final String? errorMessage;
+
+  const TransactionRollbackResult({
+    this.errorMessage,
+  });
+
+  @override
+  int get hashCode => errorMessage.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TransactionRollbackResult &&
           runtimeType == other.runtimeType &&
           errorMessage == other.errorMessage;
 }

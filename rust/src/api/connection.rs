@@ -1,11 +1,15 @@
 use super::{
-    libsql::{DATABASE_REGISTRY, STATEMENT_REGISTRY},
+    libsql::{DATABASE_REGISTRY, STATEMENT_REGISTRY, TRANSACTION_REGISTRY},
     statement::LibsqlStatement,
+    transaction::{LibsqlTransaction, LibsqlTransactionBehavior},
 };
 use crate::utils::{
     parameters::Parameters,
-    result::{BatchResult, ExecuteResult, PrepareResult, QueryResult, SyncResult},
+    result::{
+        BatchResult, ExecuteResult, PrepareResult, QueryResult, SyncResult, TransactionResult,
+    },
 };
+pub use libsql::TransactionBehavior;
 use uuid::Uuid;
 
 pub struct LibsqlConnection {
@@ -94,6 +98,42 @@ impl LibsqlConnection {
                 error_message: Some("DB is not initialized".to_string()),
             },
         };
+    }
+
+    pub async fn transaction(
+        &self,
+        behavior: Option<LibsqlTransactionBehavior>,
+    ) -> TransactionResult {
+        let behavior_ = match behavior {
+            Some(LibsqlTransactionBehavior::Deferred) => TransactionBehavior::Deferred,
+            Some(LibsqlTransactionBehavior::Exclusive) => TransactionBehavior::Exclusive,
+            Some(LibsqlTransactionBehavior::Immediate) => TransactionBehavior::Immediate,
+            Some(LibsqlTransactionBehavior::ReadOnly) => TransactionBehavior::ReadOnly,
+            _ => TransactionBehavior::Deferred,
+        };
+        match DATABASE_REGISTRY.lock().await.get(&self.db_id) {
+            Some((_, conn)) => match conn.transaction_with_behavior(behavior_).await {
+                Ok(transaction) => {
+                    let transaction_id = Uuid::new_v4().to_string();
+                    TRANSACTION_REGISTRY
+                        .lock()
+                        .await
+                        .insert(transaction_id.clone(), transaction);
+                    TransactionResult {
+                        transaction: Some(LibsqlTransaction { transaction_id }),
+                        error_message: None,
+                    }
+                }
+                Err(err) => TransactionResult {
+                    transaction: None,
+                    error_message: Some(err.to_string()),
+                },
+            },
+            _ => TransactionResult {
+                transaction: None,
+                error_message: Some("DB is not initialized".to_string()),
+            },
+        }
     }
 
     pub async fn close(&self) {

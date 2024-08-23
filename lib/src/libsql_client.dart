@@ -4,6 +4,7 @@ import 'package:libsql_dart/src/rust/api/api.dart' as libsql;
 import 'package:libsql_dart/src/rust/api/api.dart';
 import 'package:libsql_dart/src/rust/frb_generated.dart';
 import 'package:libsql_dart/src/rust/utils/parameters.dart';
+import 'package:libsql_dart/src/transaction.dart';
 
 /// A client class to interact with LibSQL/Turso database instance.
 /// All variants of database types can be created using this class.
@@ -197,6 +198,15 @@ class LibsqlClient {
     if (res.errorMessage?.isNotEmpty ?? false) {
       throw Exception(res.errorMessage);
     }
+  }
+
+  Future<Transaction> transaction() async {
+    if (_connection == null) throw Exception('Database is not connected');
+    final res = await _connection!.transaction();
+    if (res.errorMessage?.isNotEmpty ?? false) {
+      throw Exception(res.errorMessage);
+    }
+    return Transaction(res.transaction!);
   }
 
   /// Close the database

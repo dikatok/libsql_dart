@@ -1,15 +1,15 @@
 use async_std::sync::Mutex;
-use libsql::{Builder, Connection, Database, Result, Statement};
+use libsql::{Builder, Connection, Database, Result, Statement, Transaction};
 use std::{collections::HashMap, time::Duration};
 use uuid::Uuid;
 extern crate lazy_static;
-use crate::utils::result::{ConnectResult, SyncResult};
-
 use super::connection::LibsqlConnection;
+use crate::utils::result::ConnectResult;
 
 lazy_static::lazy_static! {
    pub static ref DATABASE_REGISTRY: Mutex<HashMap<String, (Database,  Connection)>> = Mutex::new(HashMap::new());
    pub static ref STATEMENT_REGISTRY: Mutex<HashMap<String, Statement>> = Mutex::new(HashMap::new());
+   pub static ref TRANSACTION_REGISTRY: Mutex<HashMap<String, Transaction>> = Mutex::new(HashMap::new());
 }
 
 #[flutter_rust_bridge::frb(init)]

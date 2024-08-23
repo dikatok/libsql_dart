@@ -9,6 +9,7 @@ import '../utils/result.dart';
 import '../utils/return_value.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'statement.dart';
+import 'transaction.dart';
 
 class LibsqlConnection {
   final String dbId;
@@ -41,6 +42,11 @@ class LibsqlConnection {
       RustLib.instance.api.crateApiConnectionLibsqlConnectionSync(
         that: this,
       );
+
+  Future<TransactionResult> transaction(
+          {LibsqlTransactionBehavior? behavior}) =>
+      RustLib.instance.api.crateApiConnectionLibsqlConnectionTransaction(
+          that: this, behavior: behavior);
 
   @override
   int get hashCode => dbId.hashCode;

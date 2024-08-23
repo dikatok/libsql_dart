@@ -6,6 +6,7 @@
 import 'api/connection.dart';
 import 'api/libsql.dart';
 import 'api/statement.dart';
+import 'api/transaction.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' as ffi;
@@ -54,6 +55,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LibsqlStatement dco_decode_box_autoadd_libsql_statement(dynamic raw);
 
   @protected
+  LibsqlTransaction dco_decode_box_autoadd_libsql_transaction(dynamic raw);
+
+  @protected
+  LibsqlTransactionBehavior dco_decode_box_autoadd_libsql_transaction_behavior(
+      dynamic raw);
+
+  @protected
   Parameters dco_decode_box_autoadd_parameters(dynamic raw);
 
   @protected
@@ -85,6 +93,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   LibsqlStatement dco_decode_libsql_statement(dynamic raw);
+
+  @protected
+  LibsqlTransaction dco_decode_libsql_transaction(dynamic raw);
+
+  @protected
+  LibsqlTransactionBehavior dco_decode_libsql_transaction_behavior(dynamic raw);
 
   @protected
   List<Map<String, ReturnValue>> dco_decode_list_Map_String_return_value(
@@ -126,6 +140,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LibsqlStatement? dco_decode_opt_box_autoadd_libsql_statement(dynamic raw);
 
   @protected
+  LibsqlTransaction? dco_decode_opt_box_autoadd_libsql_transaction(dynamic raw);
+
+  @protected
+  LibsqlTransactionBehavior?
+      dco_decode_opt_box_autoadd_libsql_transaction_behavior(dynamic raw);
+
+  @protected
   Parameters? dco_decode_opt_box_autoadd_parameters(dynamic raw);
 
   @protected
@@ -157,6 +178,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   SyncResult dco_decode_sync_result(dynamic raw);
+
+  @protected
+  TransactionCommitResult dco_decode_transaction_commit_result(dynamic raw);
+
+  @protected
+  TransactionResult dco_decode_transaction_result(dynamic raw);
+
+  @protected
+  TransactionRollbackResult dco_decode_transaction_rollback_result(dynamic raw);
 
   @protected
   BigInt dco_decode_u_64(dynamic raw);
@@ -203,6 +233,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  LibsqlTransaction sse_decode_box_autoadd_libsql_transaction(
+      SseDeserializer deserializer);
+
+  @protected
+  LibsqlTransactionBehavior sse_decode_box_autoadd_libsql_transaction_behavior(
+      SseDeserializer deserializer);
+
+  @protected
   Parameters sse_decode_box_autoadd_parameters(SseDeserializer deserializer);
 
   @protected
@@ -234,6 +272,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   LibsqlStatement sse_decode_libsql_statement(SseDeserializer deserializer);
+
+  @protected
+  LibsqlTransaction sse_decode_libsql_transaction(SseDeserializer deserializer);
+
+  @protected
+  LibsqlTransactionBehavior sse_decode_libsql_transaction_behavior(
+      SseDeserializer deserializer);
 
   @protected
   List<Map<String, ReturnValue>> sse_decode_list_Map_String_return_value(
@@ -279,6 +324,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  LibsqlTransaction? sse_decode_opt_box_autoadd_libsql_transaction(
+      SseDeserializer deserializer);
+
+  @protected
+  LibsqlTransactionBehavior?
+      sse_decode_opt_box_autoadd_libsql_transaction_behavior(
+          SseDeserializer deserializer);
+
+  @protected
   Parameters? sse_decode_opt_box_autoadd_parameters(
       SseDeserializer deserializer);
 
@@ -314,6 +368,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   SyncResult sse_decode_sync_result(SseDeserializer deserializer);
+
+  @protected
+  TransactionCommitResult sse_decode_transaction_commit_result(
+      SseDeserializer deserializer);
+
+  @protected
+  TransactionResult sse_decode_transaction_result(SseDeserializer deserializer);
+
+  @protected
+  TransactionRollbackResult sse_decode_transaction_rollback_result(
+      SseDeserializer deserializer);
 
   @protected
   BigInt sse_decode_u_64(SseDeserializer deserializer);
@@ -361,6 +426,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LibsqlStatement self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_libsql_transaction(
+      LibsqlTransaction self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_libsql_transaction_behavior(
+      LibsqlTransactionBehavior self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_parameters(
       Parameters self, SseSerializer serializer);
 
@@ -396,6 +469,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_libsql_statement(
       LibsqlStatement self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_libsql_transaction(
+      LibsqlTransaction self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_libsql_transaction_behavior(
+      LibsqlTransactionBehavior self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_Map_String_return_value(
@@ -443,6 +524,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LibsqlStatement? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_libsql_transaction(
+      LibsqlTransaction? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_libsql_transaction_behavior(
+      LibsqlTransactionBehavior? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_parameters(
       Parameters? self, SseSerializer serializer);
 
@@ -478,6 +567,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_sync_result(SyncResult self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_transaction_commit_result(
+      TransactionCommitResult self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_transaction_result(
+      TransactionResult self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_transaction_rollback_result(
+      TransactionRollbackResult self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_64(BigInt self, SseSerializer serializer);
