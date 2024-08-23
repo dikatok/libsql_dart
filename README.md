@@ -9,13 +9,35 @@ LibSQL Dart client library to interact with LibSQL/Turso database instance.
 
 ## Getting Started
 
-- Add it to your `pubspec.yaml`.
+### Add it to your `pubspec.yaml`.
 
 ```
-libsql_dart: 0.3.1
+libsql_dart: 0.4.0
 ```
 
-- Instantiate the client (below example is for embedded replica)
+### Create the client
+
+- In memory
+
+```dart
+final client = LibsqlClient(":memory:");
+```
+
+- Local
+
+```dart
+final dir = await getApplicationCacheDirectory();
+final path = '${dir.path}/local.db';
+final client = LibsqlClient(path);
+```
+
+- Remote
+
+```dart
+final client = LibsqlClient('<TURSO_OR_LIBSQL_URL>')..authToken = '<TOKEN>';
+```
+
+- Embedded replica
 
 ```dart
 final dir = await getApplicationCacheDirectory();
@@ -27,40 +49,45 @@ final client = LibsqlClient(path)
 	..readYourWrites = true;
 ```
 
-- Connect
+### Connect
 
 ```dart
 await client.connect();
 ```
 
-- Call `sync` if necessary
+### Call `sync` if necessary when using embedded replica
 
 ```dart
 await client.sync();
 ```
 
-- Read the locally replicated db using `sqflite`
+### Run SQL statements
+
+- Create table
 
 ```dart
-final db = await openDatabase(path, readOnly: true);
-final result = await db.rawQuery('select * from customers');
-print(result);
+await client.execute("create table if not exists customers (id integer primary key, name text);");
 ```
 
-- Run insert query
+- Insert query
 
 ```dart
 await client.query("insert into customers(name) values ('John Doe')");
 ```
 
-- Run batch transaction
+- Select query
 
 ```dart
-await client.batch("""insert into customers (name) values ('Jane Doe');
-	insert into customers (name) values ('Jake Doe');""");
+print(await client.query("select * from customers"));
 ```
 
-- Create prepared statement
+- Batch transaction
+
+```dart
+await client.batch("""insert into customers (name) values ('Jane Doe'); insert into customers (name) values ('Jake Doe');""");
+```
+
+- Prepared statement
 
 ```dart
 final statement = await client
@@ -68,11 +95,25 @@ final statement = await client
 await statement.query(positional: [1])
 ```
 
-- Query the local replica again
+- Transaction
 
 ```dart
-final resultAfterInsertion = await db.rawQuery('select * from customers');
-print(resultAfterInsertion);
+final tx = await client.transaction();
+await tx
+	.execute("update customers set name = 'John Noe' where id = 1");
+await tx
+	.execute("update customers set name = 'Jane Noe' where id = 2");
+print(await tx
+	.query("select * from customers where id = ?", positional: [1]));
+await tx.commit();
+```
+
+- Read the locally replicated db using `sqflite` when using embedded replica
+
+```dart
+final db = await openDatabase(path, readOnly: true);
+final result = await db.rawQuery('select * from customers');
+print(result);
 ```
 
 **Note** Code snippets above also use `path_provider` and `sqflite` packages. When using other sqlite libraries to read the file, you need to make sure that it is done in read only mode, because the replication process assumes exclusive write lock over the file.

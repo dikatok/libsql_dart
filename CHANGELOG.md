@@ -1,3 +1,8 @@
+## 0.4.0
+
+- `transaction`
+- Refactoring
+
 ## 0.3.1
 
 - Fix return object of prepared statement query
