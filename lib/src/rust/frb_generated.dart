@@ -628,11 +628,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   BatchResult dco_decode_batch_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return BatchResult(
-      errorMessage: dco_decode_opt_String(arr[0]),
-    );
+    if (arr.length != 0)
+      throw Exception('unexpected arr length: expect 0 but see ${arr.length}');
+    return BatchResult();
   }
 
   @protected
@@ -717,11 +715,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ConnectResult dco_decode_connect_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
     return ConnectResult(
-      connection: dco_decode_opt_box_autoadd_libsql_connection(arr[0]),
-      errorMessage: dco_decode_opt_String(arr[1]),
+      connection: dco_decode_libsql_connection(arr[0]),
     );
   }
 
@@ -729,11 +726,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ExecuteResult dco_decode_execute_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
     return ExecuteResult(
       rowsAffected: dco_decode_u_64(arr[0]),
-      errorMessage: dco_decode_opt_String(arr[1]),
     );
   }
 
@@ -932,12 +928,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  LibsqlConnection? dco_decode_opt_box_autoadd_libsql_connection(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null ? null : dco_decode_box_autoadd_libsql_connection(raw);
-  }
-
-  @protected
   LibsqlOpenFlags? dco_decode_opt_box_autoadd_libsql_open_flags(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_libsql_open_flags(raw);
@@ -947,19 +937,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   LibsqlParams? dco_decode_opt_box_autoadd_libsql_params(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_libsql_params(raw);
-  }
-
-  @protected
-  LibsqlStatement? dco_decode_opt_box_autoadd_libsql_statement(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null ? null : dco_decode_box_autoadd_libsql_statement(raw);
-  }
-
-  @protected
-  LibsqlTransaction? dco_decode_opt_box_autoadd_libsql_transaction(
-      dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null ? null : dco_decode_box_autoadd_libsql_transaction(raw);
   }
 
   @protected
@@ -987,11 +964,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   PrepareResult dco_decode_prepare_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
     return PrepareResult(
-      statement: dco_decode_opt_box_autoadd_libsql_statement(arr[0]),
-      errorMessage: dco_decode_opt_String(arr[1]),
+      statement: dco_decode_libsql_statement(arr[0]),
     );
   }
 
@@ -999,14 +975,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   QueryResult dco_decode_query_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 5)
-      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
     return QueryResult(
       rows: dco_decode_list_Map_String_libsql_return_value(arr[0]),
       columns: dco_decode_list_String(arr[1]),
       rowsAffected: dco_decode_u_64(arr[2]),
       lastInsertRowid: dco_decode_i_64(arr[3]),
-      errorMessage: dco_decode_opt_String(arr[4]),
     );
   }
 
@@ -1041,33 +1016,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   SyncResult dco_decode_sync_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return SyncResult(
-      errorMessage: dco_decode_opt_String(arr[0]),
-    );
+    if (arr.length != 0)
+      throw Exception('unexpected arr length: expect 0 but see ${arr.length}');
+    return SyncResult();
   }
 
   @protected
   TransactionCommitResult dco_decode_transaction_commit_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return TransactionCommitResult(
-      errorMessage: dco_decode_opt_String(arr[0]),
-    );
+    if (arr.length != 0)
+      throw Exception('unexpected arr length: expect 0 but see ${arr.length}');
+    return TransactionCommitResult();
   }
 
   @protected
   TransactionResult dco_decode_transaction_result(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
     return TransactionResult(
-      transaction: dco_decode_opt_box_autoadd_libsql_transaction(arr[0]),
-      errorMessage: dco_decode_opt_String(arr[1]),
+      transaction: dco_decode_libsql_transaction(arr[0]),
     );
   }
 
@@ -1076,11 +1046,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return TransactionRollbackResult(
-      errorMessage: dco_decode_opt_String(arr[0]),
-    );
+    if (arr.length != 0)
+      throw Exception('unexpected arr length: expect 0 but see ${arr.length}');
+    return TransactionRollbackResult();
   }
 
   @protected
@@ -1127,8 +1095,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   BatchResult sse_decode_batch_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_errorMessage = sse_decode_opt_String(deserializer);
-    return BatchResult(errorMessage: var_errorMessage);
+    return BatchResult();
   }
 
   @protected
@@ -1222,20 +1189,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   ConnectResult sse_decode_connect_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_connection =
-        sse_decode_opt_box_autoadd_libsql_connection(deserializer);
-    var var_errorMessage = sse_decode_opt_String(deserializer);
-    return ConnectResult(
-        connection: var_connection, errorMessage: var_errorMessage);
+    var var_connection = sse_decode_libsql_connection(deserializer);
+    return ConnectResult(connection: var_connection);
   }
 
   @protected
   ExecuteResult sse_decode_execute_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_rowsAffected = sse_decode_u_64(deserializer);
-    var var_errorMessage = sse_decode_opt_String(deserializer);
-    return ExecuteResult(
-        rowsAffected: var_rowsAffected, errorMessage: var_errorMessage);
+    return ExecuteResult(rowsAffected: var_rowsAffected);
   }
 
   @protected
@@ -1459,18 +1421,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  LibsqlConnection? sse_decode_opt_box_autoadd_libsql_connection(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_libsql_connection(deserializer));
-    } else {
-      return null;
-    }
-  }
-
-  @protected
   LibsqlOpenFlags? sse_decode_opt_box_autoadd_libsql_open_flags(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1489,30 +1439,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_box_autoadd_libsql_params(deserializer));
-    } else {
-      return null;
-    }
-  }
-
-  @protected
-  LibsqlStatement? sse_decode_opt_box_autoadd_libsql_statement(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_libsql_statement(deserializer));
-    } else {
-      return null;
-    }
-  }
-
-  @protected
-  LibsqlTransaction? sse_decode_opt_box_autoadd_libsql_transaction(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_libsql_transaction(deserializer));
     } else {
       return null;
     }
@@ -1557,11 +1483,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   PrepareResult sse_decode_prepare_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_statement =
-        sse_decode_opt_box_autoadd_libsql_statement(deserializer);
-    var var_errorMessage = sse_decode_opt_String(deserializer);
-    return PrepareResult(
-        statement: var_statement, errorMessage: var_errorMessage);
+    var var_statement = sse_decode_libsql_statement(deserializer);
+    return PrepareResult(statement: var_statement);
   }
 
   @protected
@@ -1571,13 +1494,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_columns = sse_decode_list_String(deserializer);
     var var_rowsAffected = sse_decode_u_64(deserializer);
     var var_lastInsertRowid = sse_decode_i_64(deserializer);
-    var var_errorMessage = sse_decode_opt_String(deserializer);
     return QueryResult(
         rows: var_rows,
         columns: var_columns,
         rowsAffected: var_rowsAffected,
-        lastInsertRowid: var_lastInsertRowid,
-        errorMessage: var_errorMessage);
+        lastInsertRowid: var_lastInsertRowid);
   }
 
   @protected
@@ -1601,35 +1522,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   SyncResult sse_decode_sync_result(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_errorMessage = sse_decode_opt_String(deserializer);
-    return SyncResult(errorMessage: var_errorMessage);
+    return SyncResult();
   }
 
   @protected
   TransactionCommitResult sse_decode_transaction_commit_result(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_errorMessage = sse_decode_opt_String(deserializer);
-    return TransactionCommitResult(errorMessage: var_errorMessage);
+    return TransactionCommitResult();
   }
 
   @protected
   TransactionResult sse_decode_transaction_result(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_transaction =
-        sse_decode_opt_box_autoadd_libsql_transaction(deserializer);
-    var var_errorMessage = sse_decode_opt_String(deserializer);
-    return TransactionResult(
-        transaction: var_transaction, errorMessage: var_errorMessage);
+    var var_transaction = sse_decode_libsql_transaction(deserializer);
+    return TransactionResult(transaction: var_transaction);
   }
 
   @protected
   TransactionRollbackResult sse_decode_transaction_rollback_result(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_errorMessage = sse_decode_opt_String(deserializer);
-    return TransactionRollbackResult(errorMessage: var_errorMessage);
+    return TransactionRollbackResult();
   }
 
   @protected
@@ -1674,7 +1589,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_encode_batch_result(BatchResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_String(self.errorMessage, serializer);
   }
 
   @protected
@@ -1759,15 +1673,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_encode_connect_result(ConnectResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_box_autoadd_libsql_connection(self.connection, serializer);
-    sse_encode_opt_String(self.errorMessage, serializer);
+    sse_encode_libsql_connection(self.connection, serializer);
   }
 
   @protected
   void sse_encode_execute_result(ExecuteResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_u_64(self.rowsAffected, serializer);
-    sse_encode_opt_String(self.errorMessage, serializer);
   }
 
   @protected
@@ -1966,17 +1878,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_opt_box_autoadd_libsql_connection(
-      LibsqlConnection? self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    sse_encode_bool(self != null, serializer);
-    if (self != null) {
-      sse_encode_box_autoadd_libsql_connection(self, serializer);
-    }
-  }
-
-  @protected
   void sse_encode_opt_box_autoadd_libsql_open_flags(
       LibsqlOpenFlags? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1995,28 +1896,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_libsql_params(self, serializer);
-    }
-  }
-
-  @protected
-  void sse_encode_opt_box_autoadd_libsql_statement(
-      LibsqlStatement? self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    sse_encode_bool(self != null, serializer);
-    if (self != null) {
-      sse_encode_box_autoadd_libsql_statement(self, serializer);
-    }
-  }
-
-  @protected
-  void sse_encode_opt_box_autoadd_libsql_transaction(
-      LibsqlTransaction? self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    sse_encode_bool(self != null, serializer);
-    if (self != null) {
-      sse_encode_box_autoadd_libsql_transaction(self, serializer);
     }
   }
 
@@ -2055,8 +1934,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_encode_prepare_result(PrepareResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_box_autoadd_libsql_statement(self.statement, serializer);
-    sse_encode_opt_String(self.errorMessage, serializer);
+    sse_encode_libsql_statement(self.statement, serializer);
   }
 
   @protected
@@ -2066,7 +1944,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_list_String(self.columns, serializer);
     sse_encode_u_64(self.rowsAffected, serializer);
     sse_encode_i_64(self.lastInsertRowid, serializer);
-    sse_encode_opt_String(self.errorMessage, serializer);
   }
 
   @protected
@@ -2088,29 +1965,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_encode_sync_result(SyncResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_String(self.errorMessage, serializer);
   }
 
   @protected
   void sse_encode_transaction_commit_result(
       TransactionCommitResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_String(self.errorMessage, serializer);
   }
 
   @protected
   void sse_encode_transaction_result(
       TransactionResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_box_autoadd_libsql_transaction(self.transaction, serializer);
-    sse_encode_opt_String(self.errorMessage, serializer);
+    sse_encode_libsql_transaction(self.transaction, serializer);
   }
 
   @protected
   void sse_encode_transaction_rollback_result(
       TransactionRollbackResult self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_String(self.errorMessage, serializer);
   }
 
   @protected

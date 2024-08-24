@@ -83,19 +83,13 @@ class LibsqlClient {
         openFlags: openFlags,
       ),
     );
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
     _connection = res.connection;
   }
 
   // Sync the embedded replica
   Future<void> sync() async {
     if (_connection == null) throw Exception('Database is not connected');
-    final res = await _connection!.sync_();
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
+    await _connection!.sync_();
   }
 
   /// Query the database, you can provide either named or positional parameters
@@ -120,9 +114,6 @@ class LibsqlClient {
         positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
     return res.rows
         .map(
           (row) => Map.fromEntries(
@@ -165,9 +156,6 @@ class LibsqlClient {
         positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
     return res.rowsAffected.toInt();
   }
 
@@ -183,10 +171,7 @@ class LibsqlClient {
     final res = await _connection!.prepare(
       sql: sql,
     );
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
-    return Statement(res.statement!);
+    return Statement(res.statement);
   }
 
   /// Run a batch transaction
@@ -195,19 +180,13 @@ class LibsqlClient {
   /// * `sql` - batch SQL query, each statement is separated by a semicolon
   Future<void> batch(String sql) async {
     if (_connection == null) throw Exception('Database is not connected');
-    final res = await _connection!.batch(sql: sql);
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
+    await _connection!.batch(sql: sql);
   }
 
   Future<Transaction> transaction({LibsqlTransactionBehavior? behavior}) async {
     if (_connection == null) throw Exception('Database is not connected');
     final res = await _connection!.transaction(behavior: behavior);
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
-    return Transaction(res.transaction!);
+    return Transaction(res.transaction);
   }
 
   /// Close the database

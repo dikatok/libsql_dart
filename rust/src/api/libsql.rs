@@ -1,10 +1,11 @@
 use async_std::sync::Mutex;
-use libsql::{Builder, Connection, Database, Result, Statement, Transaction};
+use libsql::{Builder, Connection, Database, Statement, Transaction};
 use std::{collections::HashMap, time::Duration};
 use uuid::Uuid;
 extern crate lazy_static;
-use super::connection::LibsqlConnection;
 use crate::utils::result::ConnectResult;
+
+use super::connection::LibsqlConnection;
 
 lazy_static::lazy_static! {
    pub static ref DATABASE_REGISTRY: Mutex<HashMap<String, (Database,  Connection)>> = Mutex::new(HashMap::new());
@@ -34,7 +35,7 @@ pub struct ConnectArgs {
 }
 
 pub async fn connect(args: ConnectArgs) -> ConnectResult {
-    let database: Result<Database> = if let Some(sync_url) = args.sync_url {
+    let database = if let Some(sync_url) = args.sync_url {
         let connector = hyper_rustls::HttpsConnectorBuilder::new()
             .with_webpki_roots()
             .https_or_http()
@@ -59,7 +60,7 @@ pub async fn connect(args: ConnectArgs) -> ConnectResult {
             ));
         }
 
-        builder = builder.read_your_writes(args.read_your_writes.or(Some(true)).unwrap());
+        builder = builder.read_your_writes(args.read_your_writes.unwrap_or(true));
 
         builder.build().await
     } else if args.url.starts_with("libsql://")
@@ -92,32 +93,15 @@ pub async fn connect(args: ConnectArgs) -> ConnectResult {
         }
 
         builder.build().await
-    };
-
-    match database {
-        Ok(db) => {
-            let conn = match db.connect() {
-                Ok(conn) => conn,
-                Err(err) => {
-                    return ConnectResult {
-                        connection: None,
-                        error_message: Some(err.to_string()),
-                    }
-                }
-            };
-            let db_id = Uuid::new_v4().to_string();
-            DATABASE_REGISTRY
-                .lock()
-                .await
-                .insert(db_id.clone(), (db, conn));
-            ConnectResult {
-                connection: Some(LibsqlConnection { db_id }),
-                error_message: None,
-            }
-        }
-        Err(e) => ConnectResult {
-            connection: None,
-            error_message: Some(e.to_string()),
-        },
+    }
+    .unwrap();
+    let conn = database.connect().unwrap();
+    let db_id = Uuid::new_v4().to_string();
+    DATABASE_REGISTRY
+        .lock()
+        .await
+        .insert(db_id.clone(), (database, conn));
+    ConnectResult {
+        connection: LibsqlConnection { db_id },
     }
 }

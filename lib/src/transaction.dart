@@ -19,9 +19,6 @@ class Transaction {
         positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
     return res.rows
         .map(
           (row) => Map.fromEntries(
@@ -54,23 +51,14 @@ class Transaction {
         positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
     return res.rowsAffected.toInt();
   }
 
   Future<void> commit() async {
-    final res = await transaction.commit();
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
+    await transaction.commit();
   }
 
   Future<void> rollback() async {
-    final res = await transaction.rollback();
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
+    await transaction.rollback();
   }
 }

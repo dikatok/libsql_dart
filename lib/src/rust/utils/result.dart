@@ -11,84 +11,69 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'return_value.dart';
 
 class BatchResult {
-  final String? errorMessage;
-
-  const BatchResult({
-    this.errorMessage,
-  });
+  const BatchResult();
 
   @override
-  int get hashCode => errorMessage.hashCode;
+  int get hashCode => 0;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BatchResult &&
-          runtimeType == other.runtimeType &&
-          errorMessage == other.errorMessage;
+      other is BatchResult && runtimeType == other.runtimeType;
 }
 
 class ConnectResult {
-  final LibsqlConnection? connection;
-  final String? errorMessage;
+  final LibsqlConnection connection;
 
   const ConnectResult({
-    this.connection,
-    this.errorMessage,
+    required this.connection,
   });
 
   @override
-  int get hashCode => connection.hashCode ^ errorMessage.hashCode;
+  int get hashCode => connection.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ConnectResult &&
           runtimeType == other.runtimeType &&
-          connection == other.connection &&
-          errorMessage == other.errorMessage;
+          connection == other.connection;
 }
 
 class ExecuteResult {
   final BigInt rowsAffected;
-  final String? errorMessage;
 
   const ExecuteResult({
     required this.rowsAffected,
-    this.errorMessage,
   });
 
   @override
-  int get hashCode => rowsAffected.hashCode ^ errorMessage.hashCode;
+  int get hashCode => rowsAffected.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ExecuteResult &&
           runtimeType == other.runtimeType &&
-          rowsAffected == other.rowsAffected &&
-          errorMessage == other.errorMessage;
+          rowsAffected == other.rowsAffected;
 }
 
 class PrepareResult {
-  final LibsqlStatement? statement;
-  final String? errorMessage;
+  final LibsqlStatement statement;
 
   const PrepareResult({
-    this.statement,
-    this.errorMessage,
+    required this.statement,
   });
 
   @override
-  int get hashCode => statement.hashCode ^ errorMessage.hashCode;
+  int get hashCode => statement.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PrepareResult &&
           runtimeType == other.runtimeType &&
-          statement == other.statement &&
-          errorMessage == other.errorMessage;
+          statement == other.statement;
 }
 
 class QueryResult {
@@ -96,14 +81,12 @@ class QueryResult {
   final List<String> columns;
   final BigInt rowsAffected;
   final PlatformInt64 lastInsertRowid;
-  final String? errorMessage;
 
   const QueryResult({
     required this.rows,
     required this.columns,
     required this.rowsAffected,
     required this.lastInsertRowid,
-    this.errorMessage,
   });
 
   @override
@@ -111,8 +94,7 @@ class QueryResult {
       rows.hashCode ^
       columns.hashCode ^
       rowsAffected.hashCode ^
-      lastInsertRowid.hashCode ^
-      errorMessage.hashCode;
+      lastInsertRowid.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -122,81 +104,59 @@ class QueryResult {
           rows == other.rows &&
           columns == other.columns &&
           rowsAffected == other.rowsAffected &&
-          lastInsertRowid == other.lastInsertRowid &&
-          errorMessage == other.errorMessage;
+          lastInsertRowid == other.lastInsertRowid;
 }
 
 class SyncResult {
-  final String? errorMessage;
-
-  const SyncResult({
-    this.errorMessage,
-  });
+  const SyncResult();
 
   @override
-  int get hashCode => errorMessage.hashCode;
+  int get hashCode => 0;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SyncResult &&
-          runtimeType == other.runtimeType &&
-          errorMessage == other.errorMessage;
+      other is SyncResult && runtimeType == other.runtimeType;
 }
 
 class TransactionCommitResult {
-  final String? errorMessage;
-
-  const TransactionCommitResult({
-    this.errorMessage,
-  });
+  const TransactionCommitResult();
 
   @override
-  int get hashCode => errorMessage.hashCode;
+  int get hashCode => 0;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TransactionCommitResult &&
-          runtimeType == other.runtimeType &&
-          errorMessage == other.errorMessage;
+      other is TransactionCommitResult && runtimeType == other.runtimeType;
 }
 
 class TransactionResult {
-  final LibsqlTransaction? transaction;
-  final String? errorMessage;
+  final LibsqlTransaction transaction;
 
   const TransactionResult({
-    this.transaction,
-    this.errorMessage,
+    required this.transaction,
   });
 
   @override
-  int get hashCode => transaction.hashCode ^ errorMessage.hashCode;
+  int get hashCode => transaction.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is TransactionResult &&
           runtimeType == other.runtimeType &&
-          transaction == other.transaction &&
-          errorMessage == other.errorMessage;
+          transaction == other.transaction;
 }
 
 class TransactionRollbackResult {
-  final String? errorMessage;
-
-  const TransactionRollbackResult({
-    this.errorMessage,
-  });
+  const TransactionRollbackResult();
 
   @override
-  int get hashCode => errorMessage.hashCode;
+  int get hashCode => 0;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TransactionRollbackResult &&
-          runtimeType == other.runtimeType &&
-          errorMessage == other.errorMessage;
+      other is TransactionRollbackResult && runtimeType == other.runtimeType;
 }

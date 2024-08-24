@@ -788,10 +788,7 @@ impl SseDecode for String {
 impl SseDecode for crate::utils::result::BatchResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::utils::result::BatchResult {
-            error_message: var_errorMessage,
-        };
+        return crate::utils::result::BatchResult {};
     }
 }
 
@@ -829,11 +826,9 @@ impl SseDecode for crate::utils::result::ConnectResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_connection =
-            <Option<crate::api::connection::LibsqlConnection>>::sse_decode(deserializer);
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
+            <crate::api::connection::LibsqlConnection>::sse_decode(deserializer);
         return crate::utils::result::ConnectResult {
             connection: var_connection,
-            error_message: var_errorMessage,
         };
     }
 }
@@ -842,10 +837,8 @@ impl SseDecode for crate::utils::result::ExecuteResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_rowsAffected = <u64>::sse_decode(deserializer);
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
         return crate::utils::result::ExecuteResult {
             rows_affected: var_rowsAffected,
-            error_message: var_errorMessage,
         };
     }
 }
@@ -1122,19 +1115,6 @@ impl SseDecode for Option<bool> {
     }
 }
 
-impl SseDecode for Option<crate::api::connection::LibsqlConnection> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        if (<bool>::sse_decode(deserializer)) {
-            return Some(<crate::api::connection::LibsqlConnection>::sse_decode(
-                deserializer,
-            ));
-        } else {
-            return None;
-        }
-    }
-}
-
 impl SseDecode for Option<crate::api::libsql::LibsqlOpenFlags> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1153,32 +1133,6 @@ impl SseDecode for Option<crate::utils::params::LibsqlParams> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<crate::utils::params::LibsqlParams>::sse_decode(
-                deserializer,
-            ));
-        } else {
-            return None;
-        }
-    }
-}
-
-impl SseDecode for Option<crate::api::statement::LibsqlStatement> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        if (<bool>::sse_decode(deserializer)) {
-            return Some(<crate::api::statement::LibsqlStatement>::sse_decode(
-                deserializer,
-            ));
-        } else {
-            return None;
-        }
-    }
-}
-
-impl SseDecode for Option<crate::api::transaction::LibsqlTransaction> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        if (<bool>::sse_decode(deserializer)) {
-            return Some(<crate::api::transaction::LibsqlTransaction>::sse_decode(
                 deserializer,
             ));
         } else {
@@ -1227,12 +1181,9 @@ impl SseDecode for Option<Vec<crate::utils::params::LibsqlValue>> {
 impl SseDecode for crate::utils::result::PrepareResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_statement =
-            <Option<crate::api::statement::LibsqlStatement>>::sse_decode(deserializer);
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
+        let mut var_statement = <crate::api::statement::LibsqlStatement>::sse_decode(deserializer);
         return crate::utils::result::PrepareResult {
             statement: var_statement,
-            error_message: var_errorMessage,
         };
     }
 }
@@ -1246,13 +1197,11 @@ impl SseDecode for crate::utils::result::QueryResult {
         let mut var_columns = <Vec<String>>::sse_decode(deserializer);
         let mut var_rowsAffected = <u64>::sse_decode(deserializer);
         let mut var_lastInsertRowid = <i64>::sse_decode(deserializer);
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
         return crate::utils::result::QueryResult {
             rows: var_rows,
             columns: var_columns,
             rows_affected: var_rowsAffected,
             last_insert_rowid: var_lastInsertRowid,
-            error_message: var_errorMessage,
         };
     }
 }
@@ -1279,20 +1228,14 @@ impl SseDecode for (String, crate::utils::params::LibsqlValue) {
 impl SseDecode for crate::utils::result::SyncResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::utils::result::SyncResult {
-            error_message: var_errorMessage,
-        };
+        return crate::utils::result::SyncResult {};
     }
 }
 
 impl SseDecode for crate::utils::result::TransactionCommitResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::utils::result::TransactionCommitResult {
-            error_message: var_errorMessage,
-        };
+        return crate::utils::result::TransactionCommitResult {};
     }
 }
 
@@ -1300,11 +1243,9 @@ impl SseDecode for crate::utils::result::TransactionResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_transaction =
-            <Option<crate::api::transaction::LibsqlTransaction>>::sse_decode(deserializer);
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
+            <crate::api::transaction::LibsqlTransaction>::sse_decode(deserializer);
         return crate::utils::result::TransactionResult {
             transaction: var_transaction,
-            error_message: var_errorMessage,
         };
     }
 }
@@ -1312,10 +1253,7 @@ impl SseDecode for crate::utils::result::TransactionResult {
 impl SseDecode for crate::utils::result::TransactionRollbackResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_errorMessage = <Option<String>>::sse_decode(deserializer);
-        return crate::utils::result::TransactionRollbackResult {
-            error_message: var_errorMessage,
-        };
+        return crate::utils::result::TransactionRollbackResult {};
     }
 }
 
@@ -1460,7 +1398,7 @@ fn pde_ffi_dispatcher_sync_impl(
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::utils::result::BatchResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.error_message.into_into_dart().into_dart()].into_dart()
+        Vec::<u8>::new().into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -1503,11 +1441,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::libsql::ConnectArgs>
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::utils::result::ConnectResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.connection.into_into_dart().into_dart(),
-            self.error_message.into_into_dart().into_dart(),
-        ]
-        .into_dart()
+        [self.connection.into_into_dart().into_dart()].into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -1524,11 +1458,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::ConnectResult>
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::utils::result::ExecuteResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.rows_affected.into_into_dart().into_dart(),
-            self.error_message.into_into_dart().into_dart(),
-        ]
-        .into_dart()
+        [self.rows_affected.into_into_dart().into_dart()].into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -1730,11 +1660,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::utils::params::LibsqlValue>
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::utils::result::PrepareResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.statement.into_into_dart().into_dart(),
-            self.error_message.into_into_dart().into_dart(),
-        ]
-        .into_dart()
+        [self.statement.into_into_dart().into_dart()].into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -1756,7 +1682,6 @@ impl flutter_rust_bridge::IntoDart for crate::utils::result::QueryResult {
             self.columns.into_into_dart().into_dart(),
             self.rows_affected.into_into_dart().into_dart(),
             self.last_insert_rowid.into_into_dart().into_dart(),
-            self.error_message.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -1775,7 +1700,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::QueryResult>
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::utils::result::SyncResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.error_message.into_into_dart().into_dart()].into_dart()
+        Vec::<u8>::new().into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -1792,7 +1717,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::SyncResult>
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::utils::result::TransactionCommitResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.error_message.into_into_dart().into_dart()].into_dart()
+        Vec::<u8>::new().into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -1809,11 +1734,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::TransactionCommitRe
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::utils::result::TransactionResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.transaction.into_into_dart().into_dart(),
-            self.error_message.into_into_dart().into_dart(),
-        ]
-        .into_dart()
+        [self.transaction.into_into_dart().into_dart()].into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -1830,7 +1751,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::utils::result::TransactionResult>
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::utils::result::TransactionRollbackResult {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.error_message.into_into_dart().into_dart()].into_dart()
+        Vec::<u8>::new().into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -1876,9 +1797,7 @@ impl SseEncode for String {
 
 impl SseEncode for crate::utils::result::BatchResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<String>>::sse_encode(self.error_message, serializer);
-    }
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
 }
 
 impl SseEncode for bool {
@@ -1904,8 +1823,7 @@ impl SseEncode for crate::api::libsql::ConnectArgs {
 impl SseEncode for crate::utils::result::ConnectResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<crate::api::connection::LibsqlConnection>>::sse_encode(self.connection, serializer);
-        <Option<String>>::sse_encode(self.error_message, serializer);
+        <crate::api::connection::LibsqlConnection>::sse_encode(self.connection, serializer);
     }
 }
 
@@ -1913,7 +1831,6 @@ impl SseEncode for crate::utils::result::ExecuteResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.rows_affected, serializer);
-        <Option<String>>::sse_encode(self.error_message, serializer);
     }
 }
 
@@ -2158,16 +2075,6 @@ impl SseEncode for Option<bool> {
     }
 }
 
-impl SseEncode for Option<crate::api::connection::LibsqlConnection> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <bool>::sse_encode(self.is_some(), serializer);
-        if let Some(value) = self {
-            <crate::api::connection::LibsqlConnection>::sse_encode(value, serializer);
-        }
-    }
-}
-
 impl SseEncode for Option<crate::api::libsql::LibsqlOpenFlags> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -2184,26 +2091,6 @@ impl SseEncode for Option<crate::utils::params::LibsqlParams> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <crate::utils::params::LibsqlParams>::sse_encode(value, serializer);
-        }
-    }
-}
-
-impl SseEncode for Option<crate::api::statement::LibsqlStatement> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <bool>::sse_encode(self.is_some(), serializer);
-        if let Some(value) = self {
-            <crate::api::statement::LibsqlStatement>::sse_encode(value, serializer);
-        }
-    }
-}
-
-impl SseEncode for Option<crate::api::transaction::LibsqlTransaction> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <bool>::sse_encode(self.is_some(), serializer);
-        if let Some(value) = self {
-            <crate::api::transaction::LibsqlTransaction>::sse_encode(value, serializer);
         }
     }
 }
@@ -2241,8 +2128,7 @@ impl SseEncode for Option<Vec<crate::utils::params::LibsqlValue>> {
 impl SseEncode for crate::utils::result::PrepareResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<crate::api::statement::LibsqlStatement>>::sse_encode(self.statement, serializer);
-        <Option<String>>::sse_encode(self.error_message, serializer);
+        <crate::api::statement::LibsqlStatement>::sse_encode(self.statement, serializer);
     }
 }
 
@@ -2253,7 +2139,6 @@ impl SseEncode for crate::utils::result::QueryResult {
         <Vec<String>>::sse_encode(self.columns, serializer);
         <u64>::sse_encode(self.rows_affected, serializer);
         <i64>::sse_encode(self.last_insert_rowid, serializer);
-        <Option<String>>::sse_encode(self.error_message, serializer);
     }
 }
 
@@ -2275,34 +2160,24 @@ impl SseEncode for (String, crate::utils::params::LibsqlValue) {
 
 impl SseEncode for crate::utils::result::SyncResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<String>>::sse_encode(self.error_message, serializer);
-    }
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
 }
 
 impl SseEncode for crate::utils::result::TransactionCommitResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<String>>::sse_encode(self.error_message, serializer);
-    }
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
 }
 
 impl SseEncode for crate::utils::result::TransactionResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<crate::api::transaction::LibsqlTransaction>>::sse_encode(
-            self.transaction,
-            serializer,
-        );
-        <Option<String>>::sse_encode(self.error_message, serializer);
+        <crate::api::transaction::LibsqlTransaction>::sse_encode(self.transaction, serializer);
     }
 }
 
 impl SseEncode for crate::utils::result::TransactionRollbackResult {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<String>>::sse_encode(self.error_message, serializer);
-    }
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
 }
 
 impl SseEncode for u64 {

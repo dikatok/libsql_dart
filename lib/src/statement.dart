@@ -36,9 +36,6 @@ class Statement {
         positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
     return res.rows
         .map(
           (row) => Map.fromEntries(
@@ -78,9 +75,6 @@ class Statement {
         positional: positional?.map(toLibsqlValue).toList(),
       ),
     );
-    if (res.errorMessage?.isNotEmpty ?? false) {
-      throw Exception(res.errorMessage);
-    }
     return res.rowsAffected.toInt();
   }
 }

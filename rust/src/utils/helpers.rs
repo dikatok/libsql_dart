@@ -24,6 +24,5 @@ pub async fn rows_to_query_result(mut result: Rows) -> QueryResult {
         columns,
         rows_affected: 0,
         last_insert_rowid: 0,
-        error_message: None,
     }
 }

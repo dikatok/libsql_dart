@@ -141,19 +141,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool? dco_decode_opt_box_autoadd_bool(dynamic raw);
 
   @protected
-  LibsqlConnection? dco_decode_opt_box_autoadd_libsql_connection(dynamic raw);
-
-  @protected
   LibsqlOpenFlags? dco_decode_opt_box_autoadd_libsql_open_flags(dynamic raw);
 
   @protected
   LibsqlParams? dco_decode_opt_box_autoadd_libsql_params(dynamic raw);
-
-  @protected
-  LibsqlStatement? dco_decode_opt_box_autoadd_libsql_statement(dynamic raw);
-
-  @protected
-  LibsqlTransaction? dco_decode_opt_box_autoadd_libsql_transaction(dynamic raw);
 
   @protected
   LibsqlTransactionBehavior?
@@ -327,23 +318,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool? sse_decode_opt_box_autoadd_bool(SseDeserializer deserializer);
 
   @protected
-  LibsqlConnection? sse_decode_opt_box_autoadd_libsql_connection(
-      SseDeserializer deserializer);
-
-  @protected
   LibsqlOpenFlags? sse_decode_opt_box_autoadd_libsql_open_flags(
       SseDeserializer deserializer);
 
   @protected
   LibsqlParams? sse_decode_opt_box_autoadd_libsql_params(
-      SseDeserializer deserializer);
-
-  @protected
-  LibsqlStatement? sse_decode_opt_box_autoadd_libsql_statement(
-      SseDeserializer deserializer);
-
-  @protected
-  LibsqlTransaction? sse_decode_opt_box_autoadd_libsql_transaction(
       SseDeserializer deserializer);
 
   @protected
@@ -528,24 +507,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_opt_box_autoadd_bool(bool? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_opt_box_autoadd_libsql_connection(
-      LibsqlConnection? self, SseSerializer serializer);
-
-  @protected
   void sse_encode_opt_box_autoadd_libsql_open_flags(
       LibsqlOpenFlags? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_box_autoadd_libsql_params(
       LibsqlParams? self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_opt_box_autoadd_libsql_statement(
-      LibsqlStatement? self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_opt_box_autoadd_libsql_transaction(
-      LibsqlTransaction? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_box_autoadd_libsql_transaction_behavior(

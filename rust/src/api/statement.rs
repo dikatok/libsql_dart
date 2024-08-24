@@ -11,73 +11,56 @@ pub struct LibsqlStatement {
 
 impl LibsqlStatement {
     pub async fn finalize(&self) {
-        match STATEMENT_REGISTRY.lock().await.remove(&self.statement_id) {
-            Some(mut statement) => statement.finalize(),
-            _ => {}
-        };
+        STATEMENT_REGISTRY
+            .lock()
+            .await
+            .remove(&self.statement_id)
+            .unwrap()
+            .finalize();
     }
 
     pub async fn reset(&self) {
-        match STATEMENT_REGISTRY.lock().await.remove(&self.statement_id) {
-            Some(mut statement) => statement.reset(),
-            _ => {}
-        };
+        STATEMENT_REGISTRY
+            .lock()
+            .await
+            .remove(&self.statement_id)
+            .unwrap()
+            .reset();
     }
 
     pub async fn query(&self, parameters: Option<LibsqlParams>) -> QueryResult {
-        match STATEMENT_REGISTRY.lock().await.remove(&self.statement_id) {
-            Some(mut statement) => {
-                let params: libsql::params::Params = if let Some(p) = parameters {
-                    p.into()
-                } else {
-                    libsql::params::Params::None
-                };
-
-                match statement.query(params).await {
-                    Ok(result) => rows_to_query_result(result).await,
-                    Err(err) => QueryResult {
-                        rows: vec![],
-                        columns: vec![],
-                        rows_affected: 0,
-                        last_insert_rowid: 0,
-                        error_message: Some(err.to_string()),
-                    },
-                }
-            }
-            _ => QueryResult {
-                rows: vec![],
-                columns: vec![],
-                rows_affected: 0,
-                last_insert_rowid: 0,
-                error_message: Some("Statement not found".to_string()),
-            },
-        }
+        let params: libsql::params::Params = parameters
+            .unwrap_or(LibsqlParams {
+                positional: None,
+                named: None,
+            })
+            .into();
+        let result = STATEMENT_REGISTRY
+            .lock()
+            .await
+            .remove(&self.statement_id)
+            .unwrap()
+            .query(params)
+            .await
+            .unwrap();
+        rows_to_query_result(result).await
     }
 
     pub async fn execute(&self, parameters: Option<LibsqlParams>) -> ExecuteResult {
-        match STATEMENT_REGISTRY.lock().await.remove(&self.statement_id) {
-            Some(mut statement) => {
-                let params: libsql::params::Params = if let Some(p) = parameters {
-                    p.into()
-                } else {
-                    libsql::params::Params::None
-                };
-
-                match statement.execute(params).await {
-                    Ok(result) => ExecuteResult {
-                        rows_affected: result as u64,
-                        error_message: None,
-                    },
-                    Err(err) => ExecuteResult {
-                        rows_affected: 0,
-                        error_message: Some(err.to_string()),
-                    },
-                }
-            }
-            _ => ExecuteResult {
-                rows_affected: 0,
-                error_message: Some("Statement not found".to_string()),
-            },
-        }
+        let params: libsql::params::Params = parameters
+            .unwrap_or(LibsqlParams {
+                positional: None,
+                named: None,
+            })
+            .into();
+        let rows_affected = STATEMENT_REGISTRY
+            .lock()
+            .await
+            .remove(&self.statement_id)
+            .unwrap()
+            .execute(params)
+            .await
+            .unwrap() as u64;
+        ExecuteResult { rows_affected }
     }
 }
