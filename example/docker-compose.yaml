@@ -1,0 +1,7 @@
+services:
+  libsql:
+    container_name: libsql_dart_sqld
+    image: ghcr.io/tursodatabase/libsql-server:v0.24.23
+    restart: always
+    ports:
+      - 8081:8080

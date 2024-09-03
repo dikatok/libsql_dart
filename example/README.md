@@ -1,16 +1,13 @@
 # libsql_dart_example
 
-Demonstrates how to use the libsql_dart plugin.
-
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Do either of the following:
 
-A few resources to get you started if this is your first Flutter project:
+- Create a remote Turso database
+- Run a local Turso database `https://docs.turso.tech/local-development#turso-cli`
+- Run a local libsql instance using the provided `docker-compose.yaml`
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Fill the credentials in `.env`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Run the example `flutter run --debug --dart-define-from-file=.env`
