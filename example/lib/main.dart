@@ -31,10 +31,6 @@ Future<void> main() async {
     syncIntervalSeconds: 5,
   );
 
-  await memoryClient.connect();
-  await memoryClient.execute(
-      "create table if not exists tasks (id integer primary key, title text, description text, completed integer)");
-
   await bootstrapDatabase(memoryClient);
   await bootstrapDatabase(localClient);
   await bootstrapDatabase(remoteClient);
