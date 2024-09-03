@@ -1,3 +1,7 @@
+## 0.4.5
+
+- bump flutter_rust_bridge to 2.3.0
+
 ## 0.4.4
 
 - fix demo
