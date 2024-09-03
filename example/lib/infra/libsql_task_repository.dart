@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:libsql_dart/libsql_dart.dart';
 import 'package:libsql_dart_example/features/task/models/task.dart';
 import 'package:libsql_dart_example/features/task/repositories/repositories.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:watcher/watcher.dart';
 
 class LibsqlTaskRepository extends TaskRepository {
   final LibsqlClient _client;
@@ -36,5 +40,12 @@ class LibsqlTaskRepository extends TaskRepository {
     await _client.execute(
       "update tasks set completed = 1 where id in (${ids.join(",")})",
     );
+  }
+
+  @override
+  Future<Stream?> replicaChanges() async {
+    if (_client.syncUrl?.isEmpty ?? true) return null;
+    final dir = await getApplicationCacheDirectory();
+    return DirectoryWatcher(dir.path).events;
   }
 }

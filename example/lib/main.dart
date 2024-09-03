@@ -28,7 +28,7 @@ Future<void> main() async {
     syncUrl: url,
     authToken: token,
     readYourWrites: true,
-    syncIntervalSeconds: 5,
+    syncIntervalSeconds: 3,
   );
 
   await bootstrapDatabase(memoryClient);

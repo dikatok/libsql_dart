@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:libsql_dart_example/features/task/blocs/task_list_state.dart';
 import 'package:libsql_dart_example/features/task/models/models.dart';
@@ -6,8 +8,15 @@ import 'package:libsql_dart_example/features/task/repositories/repositories.dart
 class TaskListCubit extends Cubit<TaskListState> {
   final TaskRepository _taskRepository;
 
+  StreamSubscription? _subscription;
+
   TaskListCubit(this._taskRepository) : super(TaskListInitial()) {
     getTasks();
+    _taskRepository.replicaChanges().then((stream) {
+      _subscription = stream?.listen((event) {
+        getTasks();
+      });
+    });
   }
 
   Future<void> getTasks() async {
@@ -45,5 +54,11 @@ class TaskListCubit extends Cubit<TaskListState> {
     } catch (e) {
       emit(TaskListError(e.toString()));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
   }
 }

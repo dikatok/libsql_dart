@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:libsql_dart_example/features/task/models/models.dart';
 
 abstract class TaskRepository {
+  Future<Stream?> replicaChanges();
+
   Future<List<Task>> getTasks();
 
   Future<void> addTask(Task task);
