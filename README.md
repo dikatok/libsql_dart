@@ -12,7 +12,7 @@ LibSQL Dart client library to interact with LibSQL/Turso database instance.
 ### Add it to your `pubspec.yaml`.
 
 ```
-libsql_dart: 0.4.2
+libsql_dart: 0.4.3
 ```
 
 ### Create the client
