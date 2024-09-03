@@ -20,7 +20,7 @@ dev_dependencies:
   ffi: ^2.1.0
   ffigen: ^11.0.0
   flutter_test:
-    sdk: fluttergit
+    sdk: flutter
   flutter_lints: ^3.0.0
   integration_test:
     sdk: flutter
