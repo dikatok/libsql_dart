@@ -1,3 +1,7 @@
+## 0.4.4
+
+- fix demo
+
 ## 0.4.3
 
 - let frb handles panic
