@@ -8,7 +8,7 @@ crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
 async-std = "1.12.0"
-flutter_rust_bridge = "=2.2.0"
+flutter_rust_bridge = "=2.3.0"
 futures = "0.3.30"
 hyper-rustls = { version = "0.25", features = ["webpki-roots"] }
 lazy_static = "1.5.0"
