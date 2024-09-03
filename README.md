@@ -117,3 +117,7 @@ print(result);
 ```
 
 **Note** Code snippets above also use `path_provider` and `sqflite` packages. When using other sqlite libraries to read the file, you need to make sure that it is done in read only mode, because the replication process assumes exclusive write lock over the file.
+
+## Demo
+
+![Demo](assets/demo.gif)
