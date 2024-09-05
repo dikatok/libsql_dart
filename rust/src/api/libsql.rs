@@ -8,13 +8,16 @@ use crate::utils::result::ConnectResult;
 use super::connection::LibsqlConnection;
 
 lazy_static::lazy_static! {
-   pub static ref DATABASE_REGISTRY: Mutex<HashMap<String, (Database,  Connection)>> = Mutex::new(HashMap::new());
+   pub static ref DATABASE_REGISTRY: Mutex<HashMap<String, (Database, Connection)>> = Mutex::new(HashMap::new());
    pub static ref STATEMENT_REGISTRY: Mutex<HashMap<String, Statement>> = Mutex::new(HashMap::new());
    pub static ref TRANSACTION_REGISTRY: Mutex<HashMap<String, Transaction>> = Mutex::new(HashMap::new());
 }
 
 #[flutter_rust_bridge::frb(init)]
-pub fn init_app() {
+pub async fn init_app() {
+    TRANSACTION_REGISTRY.lock().await.clear();
+    STATEMENT_REGISTRY.lock().await.clear();
+    DATABASE_REGISTRY.lock().await.clear();
     flutter_rust_bridge::setup_default_user_utils();
 }
 
