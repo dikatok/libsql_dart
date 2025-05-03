@@ -118,6 +118,16 @@ print(result);
 
 **Note** Code snippets above also use `path_provider` and `sqflite` packages. When using other sqlite libraries to read the file, you need to make sure that it is done in read only mode, because the replication process assumes exclusive write lock over the file.
 
+# ⚠️ Warning
+Before using any libsql_dart function (in release mode only) that requires access to the remote server, you must declare internet access for your application in `AndroidManifest.xml`. 
+Otherwise, the library will not be able to resolve the DNS for the url. (It won't crash your app, it will just fail quietly)
+
+Add the permission to `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+```
+
 ## Demo
 
 ![Demo](https://raw.githubusercontent.com/dikatok/libsql_dart/main/assets/demo.gif)
