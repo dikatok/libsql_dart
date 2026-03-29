@@ -7,12 +7,9 @@ issue_tracker: https://github.com/dikatok/libsql_dart/issues
 
 environment:
   sdk: ">=3.4.4 <4.0.0"
-  flutter: ">=3.3.0"
 
 dependencies:
   code_assets: ^1.0.0
-  flutter:
-    sdk: flutter
   flutter_rust_bridge: 2.10.0
   freezed_annotation: ^3.1.0
   hooks: ^1.0.2
@@ -24,9 +21,5 @@ dev_dependencies:
   ffi: ^2.2.0
   ffigen: ^20.1.1
   flutter_lints: ^6.0.0
-  flutter_test:
-    sdk: flutter
   freezed: ^3.2.5
-  integration_test:
-    sdk: flutter
 
