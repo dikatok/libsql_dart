@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,59 +9,46 @@ part of 'return_value.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$LibsqlReturnValue {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int field0) integer,
-    required TResult Function(double field0) real,
-    required TResult Function(String field0) text,
-    required TResult Function(Uint8List field0) blob,
-    required TResult Function() null_,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int field0)? integer,
-    TResult? Function(double field0)? real,
-    TResult? Function(String field0)? text,
-    TResult? Function(Uint8List field0)? blob,
-    TResult? Function()? null_,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int field0)? integer,
-    TResult Function(double field0)? real,
-    TResult Function(String field0)? text,
-    TResult Function(Uint8List field0)? blob,
-    TResult Function()? null_,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LibsqlReturnValue_Integer value) integer,
-    required TResult Function(LibsqlReturnValue_Real value) real,
-    required TResult Function(LibsqlReturnValue_Text value) text,
-    required TResult Function(LibsqlReturnValue_Blob value) blob,
-    required TResult Function(LibsqlReturnValue_Null value) null_,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LibsqlReturnValue_Integer value)? integer,
-    TResult? Function(LibsqlReturnValue_Real value)? real,
-    TResult? Function(LibsqlReturnValue_Text value)? text,
-    TResult? Function(LibsqlReturnValue_Blob value)? blob,
-    TResult? Function(LibsqlReturnValue_Null value)? null_,
-  }) =>
-      throw _privateConstructorUsedError;
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is LibsqlReturnValue);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'LibsqlReturnValue()';
+  }
+}
+
+/// @nodoc
+class $LibsqlReturnValueCopyWith<$Res> {
+  $LibsqlReturnValueCopyWith(
+      LibsqlReturnValue _, $Res Function(LibsqlReturnValue) __);
+}
+
+/// Adds pattern-matching-related methods to [LibsqlReturnValue].
+extension LibsqlReturnValuePatterns on LibsqlReturnValue {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LibsqlReturnValue_Integer value)? integer,
@@ -70,224 +57,333 @@ mixin _$LibsqlReturnValue {
     TResult Function(LibsqlReturnValue_Blob value)? blob,
     TResult Function(LibsqlReturnValue_Null value)? null_,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $LibsqlReturnValueCopyWith<$Res> {
-  factory $LibsqlReturnValueCopyWith(
-          LibsqlReturnValue value, $Res Function(LibsqlReturnValue) then) =
-      _$LibsqlReturnValueCopyWithImpl<$Res, LibsqlReturnValue>;
-}
-
-/// @nodoc
-class _$LibsqlReturnValueCopyWithImpl<$Res, $Val extends LibsqlReturnValue>
-    implements $LibsqlReturnValueCopyWith<$Res> {
-  _$LibsqlReturnValueCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-abstract class _$$LibsqlReturnValue_IntegerImplCopyWith<$Res> {
-  factory _$$LibsqlReturnValue_IntegerImplCopyWith(
-          _$LibsqlReturnValue_IntegerImpl value,
-          $Res Function(_$LibsqlReturnValue_IntegerImpl) then) =
-      __$$LibsqlReturnValue_IntegerImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({int field0});
-}
-
-/// @nodoc
-class __$$LibsqlReturnValue_IntegerImplCopyWithImpl<$Res>
-    extends _$LibsqlReturnValueCopyWithImpl<$Res,
-        _$LibsqlReturnValue_IntegerImpl>
-    implements _$$LibsqlReturnValue_IntegerImplCopyWith<$Res> {
-  __$$LibsqlReturnValue_IntegerImplCopyWithImpl(
-      _$LibsqlReturnValue_IntegerImpl _value,
-      $Res Function(_$LibsqlReturnValue_IntegerImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? field0 = null,
   }) {
-    return _then(_$LibsqlReturnValue_IntegerImpl(
-      null == field0
-          ? _value.field0
-          : field0 // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    final _that = this;
+    switch (_that) {
+      case LibsqlReturnValue_Integer() when integer != null:
+        return integer(_that);
+      case LibsqlReturnValue_Real() when real != null:
+        return real(_that);
+      case LibsqlReturnValue_Text() when text != null:
+        return text(_that);
+      case LibsqlReturnValue_Blob() when blob != null:
+        return blob(_that);
+      case LibsqlReturnValue_Null() when null_ != null:
+        return null_(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LibsqlReturnValue_Integer value) integer,
+    required TResult Function(LibsqlReturnValue_Real value) real,
+    required TResult Function(LibsqlReturnValue_Text value) text,
+    required TResult Function(LibsqlReturnValue_Blob value) blob,
+    required TResult Function(LibsqlReturnValue_Null value) null_,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case LibsqlReturnValue_Integer():
+        return integer(_that);
+      case LibsqlReturnValue_Real():
+        return real(_that);
+      case LibsqlReturnValue_Text():
+        return text(_that);
+      case LibsqlReturnValue_Blob():
+        return blob(_that);
+      case LibsqlReturnValue_Null():
+        return null_(_that);
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LibsqlReturnValue_Integer value)? integer,
+    TResult? Function(LibsqlReturnValue_Real value)? real,
+    TResult? Function(LibsqlReturnValue_Text value)? text,
+    TResult? Function(LibsqlReturnValue_Blob value)? blob,
+    TResult? Function(LibsqlReturnValue_Null value)? null_,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case LibsqlReturnValue_Integer() when integer != null:
+        return integer(_that);
+      case LibsqlReturnValue_Real() when real != null:
+        return real(_that);
+      case LibsqlReturnValue_Text() when text != null:
+        return text(_that);
+      case LibsqlReturnValue_Blob() when blob != null:
+        return blob(_that);
+      case LibsqlReturnValue_Null() when null_ != null:
+        return null_(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PlatformInt64 field0)? integer,
+    TResult Function(double field0)? real,
+    TResult Function(String field0)? text,
+    TResult Function(Uint8List field0)? blob,
+    TResult Function()? null_,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case LibsqlReturnValue_Integer() when integer != null:
+        return integer(_that.field0);
+      case LibsqlReturnValue_Real() when real != null:
+        return real(_that.field0);
+      case LibsqlReturnValue_Text() when text != null:
+        return text(_that.field0);
+      case LibsqlReturnValue_Blob() when blob != null:
+        return blob(_that.field0);
+      case LibsqlReturnValue_Null() when null_ != null:
+        return null_();
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PlatformInt64 field0) integer,
+    required TResult Function(double field0) real,
+    required TResult Function(String field0) text,
+    required TResult Function(Uint8List field0) blob,
+    required TResult Function() null_,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case LibsqlReturnValue_Integer():
+        return integer(_that.field0);
+      case LibsqlReturnValue_Real():
+        return real(_that.field0);
+      case LibsqlReturnValue_Text():
+        return text(_that.field0);
+      case LibsqlReturnValue_Blob():
+        return blob(_that.field0);
+      case LibsqlReturnValue_Null():
+        return null_();
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PlatformInt64 field0)? integer,
+    TResult? Function(double field0)? real,
+    TResult? Function(String field0)? text,
+    TResult? Function(Uint8List field0)? blob,
+    TResult? Function()? null_,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case LibsqlReturnValue_Integer() when integer != null:
+        return integer(_that.field0);
+      case LibsqlReturnValue_Real() when real != null:
+        return real(_that.field0);
+      case LibsqlReturnValue_Text() when text != null:
+        return text(_that.field0);
+      case LibsqlReturnValue_Blob() when blob != null:
+        return blob(_that.field0);
+      case LibsqlReturnValue_Null() when null_ != null:
+        return null_();
+      case _:
+        return null;
+    }
   }
 }
 
 /// @nodoc
 
-class _$LibsqlReturnValue_IntegerImpl extends LibsqlReturnValue_Integer {
-  const _$LibsqlReturnValue_IntegerImpl(this.field0) : super._();
+class LibsqlReturnValue_Integer extends LibsqlReturnValue {
+  const LibsqlReturnValue_Integer(this.field0) : super._();
 
-  @override
-  final int field0;
+  final PlatformInt64 field0;
 
-  @override
-  String toString() {
-    return 'LibsqlReturnValue.integer(field0: $field0)';
-  }
+  /// Create a copy of LibsqlReturnValue
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $LibsqlReturnValue_IntegerCopyWith<LibsqlReturnValue_Integer> get copyWith =>
+      _$LibsqlReturnValue_IntegerCopyWithImpl<LibsqlReturnValue_Integer>(
+          this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LibsqlReturnValue_IntegerImpl &&
+            other is LibsqlReturnValue_Integer &&
             (identical(other.field0, field0) || other.field0 == field0));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, field0);
 
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$LibsqlReturnValue_IntegerImplCopyWith<_$LibsqlReturnValue_IntegerImpl>
-      get copyWith => __$$LibsqlReturnValue_IntegerImplCopyWithImpl<
-          _$LibsqlReturnValue_IntegerImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int field0) integer,
-    required TResult Function(double field0) real,
-    required TResult Function(String field0) text,
-    required TResult Function(Uint8List field0) blob,
-    required TResult Function() null_,
-  }) {
-    return integer(field0);
+  String toString() {
+    return 'LibsqlReturnValue.integer(field0: $field0)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int field0)? integer,
-    TResult? Function(double field0)? real,
-    TResult? Function(String field0)? text,
-    TResult? Function(Uint8List field0)? blob,
-    TResult? Function()? null_,
-  }) {
-    return integer?.call(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int field0)? integer,
-    TResult Function(double field0)? real,
-    TResult Function(String field0)? text,
-    TResult Function(Uint8List field0)? blob,
-    TResult Function()? null_,
-    required TResult orElse(),
-  }) {
-    if (integer != null) {
-      return integer(field0);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LibsqlReturnValue_Integer value) integer,
-    required TResult Function(LibsqlReturnValue_Real value) real,
-    required TResult Function(LibsqlReturnValue_Text value) text,
-    required TResult Function(LibsqlReturnValue_Blob value) blob,
-    required TResult Function(LibsqlReturnValue_Null value) null_,
-  }) {
-    return integer(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LibsqlReturnValue_Integer value)? integer,
-    TResult? Function(LibsqlReturnValue_Real value)? real,
-    TResult? Function(LibsqlReturnValue_Text value)? text,
-    TResult? Function(LibsqlReturnValue_Blob value)? blob,
-    TResult? Function(LibsqlReturnValue_Null value)? null_,
-  }) {
-    return integer?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LibsqlReturnValue_Integer value)? integer,
-    TResult Function(LibsqlReturnValue_Real value)? real,
-    TResult Function(LibsqlReturnValue_Text value)? text,
-    TResult Function(LibsqlReturnValue_Blob value)? blob,
-    TResult Function(LibsqlReturnValue_Null value)? null_,
-    required TResult orElse(),
-  }) {
-    if (integer != null) {
-      return integer(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LibsqlReturnValue_Integer extends LibsqlReturnValue {
-  const factory LibsqlReturnValue_Integer(final int field0) =
-      _$LibsqlReturnValue_IntegerImpl;
-  const LibsqlReturnValue_Integer._() : super._();
-
-  int get field0;
-
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LibsqlReturnValue_IntegerImplCopyWith<_$LibsqlReturnValue_IntegerImpl>
-      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LibsqlReturnValue_RealImplCopyWith<$Res> {
-  factory _$$LibsqlReturnValue_RealImplCopyWith(
-          _$LibsqlReturnValue_RealImpl value,
-          $Res Function(_$LibsqlReturnValue_RealImpl) then) =
-      __$$LibsqlReturnValue_RealImplCopyWithImpl<$Res>;
+abstract mixin class $LibsqlReturnValue_IntegerCopyWith<$Res>
+    implements $LibsqlReturnValueCopyWith<$Res> {
+  factory $LibsqlReturnValue_IntegerCopyWith(LibsqlReturnValue_Integer value,
+          $Res Function(LibsqlReturnValue_Integer) _then) =
+      _$LibsqlReturnValue_IntegerCopyWithImpl;
+  @useResult
+  $Res call({PlatformInt64 field0});
+}
+
+/// @nodoc
+class _$LibsqlReturnValue_IntegerCopyWithImpl<$Res>
+    implements $LibsqlReturnValue_IntegerCopyWith<$Res> {
+  _$LibsqlReturnValue_IntegerCopyWithImpl(this._self, this._then);
+
+  final LibsqlReturnValue_Integer _self;
+  final $Res Function(LibsqlReturnValue_Integer) _then;
+
+  /// Create a copy of LibsqlReturnValue
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(LibsqlReturnValue_Integer(
+      null == field0
+          ? _self.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as PlatformInt64,
+    ));
+  }
+}
+
+/// @nodoc
+
+class LibsqlReturnValue_Real extends LibsqlReturnValue {
+  const LibsqlReturnValue_Real(this.field0) : super._();
+
+  final double field0;
+
+  /// Create a copy of LibsqlReturnValue
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $LibsqlReturnValue_RealCopyWith<LibsqlReturnValue_Real> get copyWith =>
+      _$LibsqlReturnValue_RealCopyWithImpl<LibsqlReturnValue_Real>(
+          this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is LibsqlReturnValue_Real &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  @override
+  String toString() {
+    return 'LibsqlReturnValue.real(field0: $field0)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $LibsqlReturnValue_RealCopyWith<$Res>
+    implements $LibsqlReturnValueCopyWith<$Res> {
+  factory $LibsqlReturnValue_RealCopyWith(LibsqlReturnValue_Real value,
+          $Res Function(LibsqlReturnValue_Real) _then) =
+      _$LibsqlReturnValue_RealCopyWithImpl;
   @useResult
   $Res call({double field0});
 }
 
 /// @nodoc
-class __$$LibsqlReturnValue_RealImplCopyWithImpl<$Res>
-    extends _$LibsqlReturnValueCopyWithImpl<$Res, _$LibsqlReturnValue_RealImpl>
-    implements _$$LibsqlReturnValue_RealImplCopyWith<$Res> {
-  __$$LibsqlReturnValue_RealImplCopyWithImpl(
-      _$LibsqlReturnValue_RealImpl _value,
-      $Res Function(_$LibsqlReturnValue_RealImpl) _then)
-      : super(_value, _then);
+class _$LibsqlReturnValue_RealCopyWithImpl<$Res>
+    implements $LibsqlReturnValue_RealCopyWith<$Res> {
+  _$LibsqlReturnValue_RealCopyWithImpl(this._self, this._then);
+
+  final LibsqlReturnValue_Real _self;
+  final $Res Function(LibsqlReturnValue_Real) _then;
 
   /// Create a copy of LibsqlReturnValue
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
-  @override
   $Res call({
     Object? field0 = null,
   }) {
-    return _then(_$LibsqlReturnValue_RealImpl(
+    return _then(LibsqlReturnValue_Real(
       null == field0
-          ? _value.field0
+          ? _self.field0
           : field0 // ignore: cast_nullable_to_non_nullable
               as double,
     ));
@@ -296,161 +392,63 @@ class __$$LibsqlReturnValue_RealImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LibsqlReturnValue_RealImpl extends LibsqlReturnValue_Real {
-  const _$LibsqlReturnValue_RealImpl(this.field0) : super._();
+class LibsqlReturnValue_Text extends LibsqlReturnValue {
+  const LibsqlReturnValue_Text(this.field0) : super._();
 
-  @override
-  final double field0;
+  final String field0;
 
-  @override
-  String toString() {
-    return 'LibsqlReturnValue.real(field0: $field0)';
-  }
+  /// Create a copy of LibsqlReturnValue
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $LibsqlReturnValue_TextCopyWith<LibsqlReturnValue_Text> get copyWith =>
+      _$LibsqlReturnValue_TextCopyWithImpl<LibsqlReturnValue_Text>(
+          this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LibsqlReturnValue_RealImpl &&
+            other is LibsqlReturnValue_Text &&
             (identical(other.field0, field0) || other.field0 == field0));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, field0);
 
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$LibsqlReturnValue_RealImplCopyWith<_$LibsqlReturnValue_RealImpl>
-      get copyWith => __$$LibsqlReturnValue_RealImplCopyWithImpl<
-          _$LibsqlReturnValue_RealImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int field0) integer,
-    required TResult Function(double field0) real,
-    required TResult Function(String field0) text,
-    required TResult Function(Uint8List field0) blob,
-    required TResult Function() null_,
-  }) {
-    return real(field0);
+  String toString() {
+    return 'LibsqlReturnValue.text(field0: $field0)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int field0)? integer,
-    TResult? Function(double field0)? real,
-    TResult? Function(String field0)? text,
-    TResult? Function(Uint8List field0)? blob,
-    TResult? Function()? null_,
-  }) {
-    return real?.call(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int field0)? integer,
-    TResult Function(double field0)? real,
-    TResult Function(String field0)? text,
-    TResult Function(Uint8List field0)? blob,
-    TResult Function()? null_,
-    required TResult orElse(),
-  }) {
-    if (real != null) {
-      return real(field0);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LibsqlReturnValue_Integer value) integer,
-    required TResult Function(LibsqlReturnValue_Real value) real,
-    required TResult Function(LibsqlReturnValue_Text value) text,
-    required TResult Function(LibsqlReturnValue_Blob value) blob,
-    required TResult Function(LibsqlReturnValue_Null value) null_,
-  }) {
-    return real(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LibsqlReturnValue_Integer value)? integer,
-    TResult? Function(LibsqlReturnValue_Real value)? real,
-    TResult? Function(LibsqlReturnValue_Text value)? text,
-    TResult? Function(LibsqlReturnValue_Blob value)? blob,
-    TResult? Function(LibsqlReturnValue_Null value)? null_,
-  }) {
-    return real?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LibsqlReturnValue_Integer value)? integer,
-    TResult Function(LibsqlReturnValue_Real value)? real,
-    TResult Function(LibsqlReturnValue_Text value)? text,
-    TResult Function(LibsqlReturnValue_Blob value)? blob,
-    TResult Function(LibsqlReturnValue_Null value)? null_,
-    required TResult orElse(),
-  }) {
-    if (real != null) {
-      return real(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LibsqlReturnValue_Real extends LibsqlReturnValue {
-  const factory LibsqlReturnValue_Real(final double field0) =
-      _$LibsqlReturnValue_RealImpl;
-  const LibsqlReturnValue_Real._() : super._();
-
-  double get field0;
-
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LibsqlReturnValue_RealImplCopyWith<_$LibsqlReturnValue_RealImpl>
-      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LibsqlReturnValue_TextImplCopyWith<$Res> {
-  factory _$$LibsqlReturnValue_TextImplCopyWith(
-          _$LibsqlReturnValue_TextImpl value,
-          $Res Function(_$LibsqlReturnValue_TextImpl) then) =
-      __$$LibsqlReturnValue_TextImplCopyWithImpl<$Res>;
+abstract mixin class $LibsqlReturnValue_TextCopyWith<$Res>
+    implements $LibsqlReturnValueCopyWith<$Res> {
+  factory $LibsqlReturnValue_TextCopyWith(LibsqlReturnValue_Text value,
+          $Res Function(LibsqlReturnValue_Text) _then) =
+      _$LibsqlReturnValue_TextCopyWithImpl;
   @useResult
   $Res call({String field0});
 }
 
 /// @nodoc
-class __$$LibsqlReturnValue_TextImplCopyWithImpl<$Res>
-    extends _$LibsqlReturnValueCopyWithImpl<$Res, _$LibsqlReturnValue_TextImpl>
-    implements _$$LibsqlReturnValue_TextImplCopyWith<$Res> {
-  __$$LibsqlReturnValue_TextImplCopyWithImpl(
-      _$LibsqlReturnValue_TextImpl _value,
-      $Res Function(_$LibsqlReturnValue_TextImpl) _then)
-      : super(_value, _then);
+class _$LibsqlReturnValue_TextCopyWithImpl<$Res>
+    implements $LibsqlReturnValue_TextCopyWith<$Res> {
+  _$LibsqlReturnValue_TextCopyWithImpl(this._self, this._then);
+
+  final LibsqlReturnValue_Text _self;
+  final $Res Function(LibsqlReturnValue_Text) _then;
 
   /// Create a copy of LibsqlReturnValue
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
-  @override
   $Res call({
     Object? field0 = null,
   }) {
-    return _then(_$LibsqlReturnValue_TextImpl(
+    return _then(LibsqlReturnValue_Text(
       null == field0
-          ? _value.field0
+          ? _self.field0
           : field0 // ignore: cast_nullable_to_non_nullable
               as String,
     ));
@@ -459,161 +457,64 @@ class __$$LibsqlReturnValue_TextImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LibsqlReturnValue_TextImpl extends LibsqlReturnValue_Text {
-  const _$LibsqlReturnValue_TextImpl(this.field0) : super._();
+class LibsqlReturnValue_Blob extends LibsqlReturnValue {
+  const LibsqlReturnValue_Blob(this.field0) : super._();
 
-  @override
-  final String field0;
+  final Uint8List field0;
 
-  @override
-  String toString() {
-    return 'LibsqlReturnValue.text(field0: $field0)';
-  }
+  /// Create a copy of LibsqlReturnValue
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $LibsqlReturnValue_BlobCopyWith<LibsqlReturnValue_Blob> get copyWith =>
+      _$LibsqlReturnValue_BlobCopyWithImpl<LibsqlReturnValue_Blob>(
+          this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LibsqlReturnValue_TextImpl &&
-            (identical(other.field0, field0) || other.field0 == field0));
+            other is LibsqlReturnValue_Blob &&
+            const DeepCollectionEquality().equals(other.field0, field0));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, field0);
-
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LibsqlReturnValue_TextImplCopyWith<_$LibsqlReturnValue_TextImpl>
-      get copyWith => __$$LibsqlReturnValue_TextImplCopyWithImpl<
-          _$LibsqlReturnValue_TextImpl>(this, _$identity);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(field0));
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int field0) integer,
-    required TResult Function(double field0) real,
-    required TResult Function(String field0) text,
-    required TResult Function(Uint8List field0) blob,
-    required TResult Function() null_,
-  }) {
-    return text(field0);
+  String toString() {
+    return 'LibsqlReturnValue.blob(field0: $field0)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int field0)? integer,
-    TResult? Function(double field0)? real,
-    TResult? Function(String field0)? text,
-    TResult? Function(Uint8List field0)? blob,
-    TResult? Function()? null_,
-  }) {
-    return text?.call(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int field0)? integer,
-    TResult Function(double field0)? real,
-    TResult Function(String field0)? text,
-    TResult Function(Uint8List field0)? blob,
-    TResult Function()? null_,
-    required TResult orElse(),
-  }) {
-    if (text != null) {
-      return text(field0);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LibsqlReturnValue_Integer value) integer,
-    required TResult Function(LibsqlReturnValue_Real value) real,
-    required TResult Function(LibsqlReturnValue_Text value) text,
-    required TResult Function(LibsqlReturnValue_Blob value) blob,
-    required TResult Function(LibsqlReturnValue_Null value) null_,
-  }) {
-    return text(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LibsqlReturnValue_Integer value)? integer,
-    TResult? Function(LibsqlReturnValue_Real value)? real,
-    TResult? Function(LibsqlReturnValue_Text value)? text,
-    TResult? Function(LibsqlReturnValue_Blob value)? blob,
-    TResult? Function(LibsqlReturnValue_Null value)? null_,
-  }) {
-    return text?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LibsqlReturnValue_Integer value)? integer,
-    TResult Function(LibsqlReturnValue_Real value)? real,
-    TResult Function(LibsqlReturnValue_Text value)? text,
-    TResult Function(LibsqlReturnValue_Blob value)? blob,
-    TResult Function(LibsqlReturnValue_Null value)? null_,
-    required TResult orElse(),
-  }) {
-    if (text != null) {
-      return text(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LibsqlReturnValue_Text extends LibsqlReturnValue {
-  const factory LibsqlReturnValue_Text(final String field0) =
-      _$LibsqlReturnValue_TextImpl;
-  const LibsqlReturnValue_Text._() : super._();
-
-  String get field0;
-
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LibsqlReturnValue_TextImplCopyWith<_$LibsqlReturnValue_TextImpl>
-      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LibsqlReturnValue_BlobImplCopyWith<$Res> {
-  factory _$$LibsqlReturnValue_BlobImplCopyWith(
-          _$LibsqlReturnValue_BlobImpl value,
-          $Res Function(_$LibsqlReturnValue_BlobImpl) then) =
-      __$$LibsqlReturnValue_BlobImplCopyWithImpl<$Res>;
+abstract mixin class $LibsqlReturnValue_BlobCopyWith<$Res>
+    implements $LibsqlReturnValueCopyWith<$Res> {
+  factory $LibsqlReturnValue_BlobCopyWith(LibsqlReturnValue_Blob value,
+          $Res Function(LibsqlReturnValue_Blob) _then) =
+      _$LibsqlReturnValue_BlobCopyWithImpl;
   @useResult
   $Res call({Uint8List field0});
 }
 
 /// @nodoc
-class __$$LibsqlReturnValue_BlobImplCopyWithImpl<$Res>
-    extends _$LibsqlReturnValueCopyWithImpl<$Res, _$LibsqlReturnValue_BlobImpl>
-    implements _$$LibsqlReturnValue_BlobImplCopyWith<$Res> {
-  __$$LibsqlReturnValue_BlobImplCopyWithImpl(
-      _$LibsqlReturnValue_BlobImpl _value,
-      $Res Function(_$LibsqlReturnValue_BlobImpl) _then)
-      : super(_value, _then);
+class _$LibsqlReturnValue_BlobCopyWithImpl<$Res>
+    implements $LibsqlReturnValue_BlobCopyWith<$Res> {
+  _$LibsqlReturnValue_BlobCopyWithImpl(this._self, this._then);
+
+  final LibsqlReturnValue_Blob _self;
+  final $Res Function(LibsqlReturnValue_Blob) _then;
 
   /// Create a copy of LibsqlReturnValue
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
-  @override
   $Res call({
     Object? field0 = null,
   }) {
-    return _then(_$LibsqlReturnValue_BlobImpl(
+    return _then(LibsqlReturnValue_Blob(
       null == field0
-          ? _value.field0
+          ? _self.field0
           : field0 // ignore: cast_nullable_to_non_nullable
               as Uint8List,
     ));
@@ -622,256 +523,22 @@ class __$$LibsqlReturnValue_BlobImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LibsqlReturnValue_BlobImpl extends LibsqlReturnValue_Blob {
-  const _$LibsqlReturnValue_BlobImpl(this.field0) : super._();
-
-  @override
-  final Uint8List field0;
-
-  @override
-  String toString() {
-    return 'LibsqlReturnValue.blob(field0: $field0)';
-  }
+class LibsqlReturnValue_Null extends LibsqlReturnValue {
+  const LibsqlReturnValue_Null() : super._();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LibsqlReturnValue_BlobImpl &&
-            const DeepCollectionEquality().equals(other.field0, field0));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(field0));
-
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LibsqlReturnValue_BlobImplCopyWith<_$LibsqlReturnValue_BlobImpl>
-      get copyWith => __$$LibsqlReturnValue_BlobImplCopyWithImpl<
-          _$LibsqlReturnValue_BlobImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int field0) integer,
-    required TResult Function(double field0) real,
-    required TResult Function(String field0) text,
-    required TResult Function(Uint8List field0) blob,
-    required TResult Function() null_,
-  }) {
-    return blob(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int field0)? integer,
-    TResult? Function(double field0)? real,
-    TResult? Function(String field0)? text,
-    TResult? Function(Uint8List field0)? blob,
-    TResult? Function()? null_,
-  }) {
-    return blob?.call(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int field0)? integer,
-    TResult Function(double field0)? real,
-    TResult Function(String field0)? text,
-    TResult Function(Uint8List field0)? blob,
-    TResult Function()? null_,
-    required TResult orElse(),
-  }) {
-    if (blob != null) {
-      return blob(field0);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LibsqlReturnValue_Integer value) integer,
-    required TResult Function(LibsqlReturnValue_Real value) real,
-    required TResult Function(LibsqlReturnValue_Text value) text,
-    required TResult Function(LibsqlReturnValue_Blob value) blob,
-    required TResult Function(LibsqlReturnValue_Null value) null_,
-  }) {
-    return blob(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LibsqlReturnValue_Integer value)? integer,
-    TResult? Function(LibsqlReturnValue_Real value)? real,
-    TResult? Function(LibsqlReturnValue_Text value)? text,
-    TResult? Function(LibsqlReturnValue_Blob value)? blob,
-    TResult? Function(LibsqlReturnValue_Null value)? null_,
-  }) {
-    return blob?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LibsqlReturnValue_Integer value)? integer,
-    TResult Function(LibsqlReturnValue_Real value)? real,
-    TResult Function(LibsqlReturnValue_Text value)? text,
-    TResult Function(LibsqlReturnValue_Blob value)? blob,
-    TResult Function(LibsqlReturnValue_Null value)? null_,
-    required TResult orElse(),
-  }) {
-    if (blob != null) {
-      return blob(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LibsqlReturnValue_Blob extends LibsqlReturnValue {
-  const factory LibsqlReturnValue_Blob(final Uint8List field0) =
-      _$LibsqlReturnValue_BlobImpl;
-  const LibsqlReturnValue_Blob._() : super._();
-
-  Uint8List get field0;
-
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LibsqlReturnValue_BlobImplCopyWith<_$LibsqlReturnValue_BlobImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$LibsqlReturnValue_NullImplCopyWith<$Res> {
-  factory _$$LibsqlReturnValue_NullImplCopyWith(
-          _$LibsqlReturnValue_NullImpl value,
-          $Res Function(_$LibsqlReturnValue_NullImpl) then) =
-      __$$LibsqlReturnValue_NullImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LibsqlReturnValue_NullImplCopyWithImpl<$Res>
-    extends _$LibsqlReturnValueCopyWithImpl<$Res, _$LibsqlReturnValue_NullImpl>
-    implements _$$LibsqlReturnValue_NullImplCopyWith<$Res> {
-  __$$LibsqlReturnValue_NullImplCopyWithImpl(
-      _$LibsqlReturnValue_NullImpl _value,
-      $Res Function(_$LibsqlReturnValue_NullImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of LibsqlReturnValue
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$LibsqlReturnValue_NullImpl extends LibsqlReturnValue_Null {
-  const _$LibsqlReturnValue_NullImpl() : super._();
-
-  @override
-  String toString() {
-    return 'LibsqlReturnValue.null_()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LibsqlReturnValue_NullImpl);
+        (other.runtimeType == runtimeType && other is LibsqlReturnValue_Null);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int field0) integer,
-    required TResult Function(double field0) real,
-    required TResult Function(String field0) text,
-    required TResult Function(Uint8List field0) blob,
-    required TResult Function() null_,
-  }) {
-    return null_();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int field0)? integer,
-    TResult? Function(double field0)? real,
-    TResult? Function(String field0)? text,
-    TResult? Function(Uint8List field0)? blob,
-    TResult? Function()? null_,
-  }) {
-    return null_?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int field0)? integer,
-    TResult Function(double field0)? real,
-    TResult Function(String field0)? text,
-    TResult Function(Uint8List field0)? blob,
-    TResult Function()? null_,
-    required TResult orElse(),
-  }) {
-    if (null_ != null) {
-      return null_();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LibsqlReturnValue_Integer value) integer,
-    required TResult Function(LibsqlReturnValue_Real value) real,
-    required TResult Function(LibsqlReturnValue_Text value) text,
-    required TResult Function(LibsqlReturnValue_Blob value) blob,
-    required TResult Function(LibsqlReturnValue_Null value) null_,
-  }) {
-    return null_(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LibsqlReturnValue_Integer value)? integer,
-    TResult? Function(LibsqlReturnValue_Real value)? real,
-    TResult? Function(LibsqlReturnValue_Text value)? text,
-    TResult? Function(LibsqlReturnValue_Blob value)? blob,
-    TResult? Function(LibsqlReturnValue_Null value)? null_,
-  }) {
-    return null_?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LibsqlReturnValue_Integer value)? integer,
-    TResult Function(LibsqlReturnValue_Real value)? real,
-    TResult Function(LibsqlReturnValue_Text value)? text,
-    TResult Function(LibsqlReturnValue_Blob value)? blob,
-    TResult Function(LibsqlReturnValue_Null value)? null_,
-    required TResult orElse(),
-  }) {
-    if (null_ != null) {
-      return null_(this);
-    }
-    return orElse();
+  String toString() {
+    return 'LibsqlReturnValue.null_()';
   }
 }
 
-abstract class LibsqlReturnValue_Null extends LibsqlReturnValue {
-  const factory LibsqlReturnValue_Null() = _$LibsqlReturnValue_NullImpl;
-  const LibsqlReturnValue_Null._() : super._();
-}
+// dart format on

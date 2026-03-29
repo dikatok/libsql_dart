@@ -4,6 +4,7 @@ import 'package:libsql_dart/src/rust/api/api.dart';
 import 'package:libsql_dart/src/rust/api/transaction.dart';
 import 'package:libsql_dart/src/rust/frb_generated.dart';
 import 'package:libsql_dart/src/rust/utils/params.dart';
+import 'package:libsql_dart/src/rust/utils/return_value.dart';
 import 'package:libsql_dart/src/statement.dart';
 import 'package:libsql_dart/src/transaction.dart';
 

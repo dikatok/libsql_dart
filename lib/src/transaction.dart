@@ -1,6 +1,7 @@
 import 'package:libsql_dart/src/helpers.dart';
 import 'package:libsql_dart/src/rust/api/transaction.dart';
 import 'package:libsql_dart/src/rust/utils/params.dart';
+import 'package:libsql_dart/src/rust/utils/return_value.dart';
 
 class Transaction {
   Transaction(this.inner);

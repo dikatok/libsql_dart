@@ -5,5 +5,8 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - cargokit/**
     - lib/src/rust/**
+
+linter:
+  rules:
+    - sort_pub_dependencies

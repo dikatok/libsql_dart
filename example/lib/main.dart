@@ -64,9 +64,9 @@ Future<void> main() async {
 
   await bootstrapDatabase(memoryClient);
   await bootstrapDatabase(localClient);
-  await bootstrapDatabase(remoteClient);
-  await bootstrapDatabase(replicaClient, sync: true);
-  await bootstrapDatabase(offlineClient, sync: true);
+  // await bootstrapDatabase(remoteClient);
+  // await bootstrapDatabase(replicaClient, sync: true);
+  // await bootstrapDatabase(offlineClient, sync: true);
 
   if (doTestExtension) {
     final extensionTestClient = LibsqlClient("${dir.path}/extension.db");
