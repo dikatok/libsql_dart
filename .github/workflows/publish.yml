@@ -1,22 +1,27 @@
 name: Publish
 on:
-  # push:
-  #   branches: [main]
-  #   paths: [CHANGELOG.md]
-  workflow_dispatch:
+  on:
+    push:
+      tags:
+        - 'v*'
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@main
-      - name: "Publish libsql_dart"
-        uses: k-paxian/dart-package-publisher@master
-        with:
-          accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
-          refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
-          skipTests: true
-          force: true
+      - uses: actions/checkout@v6
+      - uses: dart-lang/setup-dart@v1
+      - uses: flutter-actions/setup-flutter@v4
+      - name: Install dependencies
+        run: dart pub get
+      - name: Install flutter_rust_bridge_codegen
+        run: cargo install flutter_rust_bridge_codegen
+      - name: Run flutter_rust_bridge_codegen
+        run: flutter_rust_bridge_codegen generate
+      - name: Publish
+        run: dart pub publish --force
