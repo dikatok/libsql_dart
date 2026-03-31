@@ -26,22 +26,12 @@ Future<void> main() async {
   await dir.delete(recursive: true);
   await dir.create(recursive: true);
 
-  // memoryClient = LibsqlClient(":memory:");
   memoryClient = LibsqlClient.memory();
 
-  // localClient = LibsqlClient("${dir.path}/local.db");
   localClient = LibsqlClient.local("${dir.path}/local.db");
 
-  // remoteClient = LibsqlClient(url, authToken: token);
   remoteClient = LibsqlClient.remote(url, authToken: token);
 
-  // replicaClient = LibsqlClient(
-  //   "${dir.path}/replica.db",
-  //   syncUrl: url,
-  //   authToken: token,
-  //   readYourWrites: true,
-  //   syncIntervalSeconds: 3,
-  // );
   replicaClient = LibsqlClient.replica(
     "${dir.path}/replica.db",
     syncUrl: url,
@@ -50,12 +40,6 @@ Future<void> main() async {
     syncIntervalSeconds: 3,
   );
 
-  // offlineClient = LibsqlClient(
-  //   "${dir.path}/offline.db",
-  //   syncUrl: url,
-  //   authToken: token,
-  //   offline: true,
-  // );
   offlineClient = LibsqlClient.offline(
     "${dir.path}/offline.db",
     syncUrl: offlineUrl,
@@ -64,9 +48,9 @@ Future<void> main() async {
 
   await bootstrapDatabase(memoryClient);
   await bootstrapDatabase(localClient);
-  // await bootstrapDatabase(remoteClient);
-  // await bootstrapDatabase(replicaClient, sync: true);
-  // await bootstrapDatabase(offlineClient, sync: true);
+  await bootstrapDatabase(remoteClient);
+  await bootstrapDatabase(replicaClient, sync: true);
+  await bootstrapDatabase(offlineClient, sync: true);
 
   if (doTestExtension) {
     final extensionTestClient = LibsqlClient("${dir.path}/extension.db");
