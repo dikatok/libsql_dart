@@ -1,6 +1,7 @@
 [package]
 edition = "2024"
 name = "libsql_dart"
+publish = false
 
 [lib]
 crate-type = ["cdylib", "staticlib"]

@@ -1,3 +1,13 @@
+## 0.9.0+0.9.30
+
+- new semver format, added underlying `libsql` rust crate version for easy recognition
+- migrate to Dart `native_assets`, `flutter_rust_bridge` is still used, possibility to migrate to pure ffi as well will be considered
+- remove flutter dependency
+- bump `libsql` crate to 0.9.30
+- smaller app size (yay!)
+![Demo](https://raw.githubusercontent.com/dikatok/libsql_dart/main/assets/native_assets_diff.png)
+
+
 ## 0.8.0
 
 - non-functional: leaner rust side
